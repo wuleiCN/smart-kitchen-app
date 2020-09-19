@@ -9,13 +9,45 @@
 					<view class="grid-text" style="margin-top: 10px">{{value.text}}</view>
 				</u-grid-item>
 			</u-grid>
-			<u-card padding="0" :title="title">
+			<u-card padding="0" :title="title" thumb="/static/comment/spot.png">
 				<view class="u-card-wrap" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
 						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
-						<view class="u-body-item-title info"><span>文晓港</span><span>
-								<u-icon class="error" color="#fa3534" size="28" />未送达</span></view>
-						<view class="u-body-item-title time"><span>22:00</span><span><text>5</text></span></view>
+						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
+								消息未送达</span></view>
+						<view class="u-body-item-title time"><span>22:00</span><span>
+								<p>5</p>
+							</span></view>
+					</view>
+				</view>
+				<view class="u-card-wrap" slot="body">
+					<view class="u-body-item u-flex u-border-bottom u-col-between">
+						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
+					消息未送达</span></view>
+						<view class="u-body-item-title time"><span>22:00</span><span>
+								<p>5</p>
+							</span></view>
+					</view>
+				</view>
+				<view class="u-card-wrap" slot="body">
+					<view class="u-body-item u-flex u-border-bottom u-col-between">
+						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
+								消息未送达</span></view>
+						<view class="u-body-item-title time"><span>22:00</span><span>
+								<p>5</p>
+							</span></view>
+					</view>
+				</view>
+				<view class="u-card-wrap" slot="body">
+					<view class="u-body-item u-flex u-border-bottom u-col-between">
+						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<view class="u-body-item-title info"><span>文晓港</span><span class="news-success">
+								消息已送达</span></view>
+						<view class="u-body-item-title time"><span>22:00</span><span>
+								<p>5</p>
+							</span></view>
 					</view>
 				</view>
 			</u-card>
@@ -133,7 +165,14 @@
 						flex-direction: column;
 						margin-left: 5px;
 
-						span {
+						span:nth-child(1) {
+							color: $u-content-color;
+							font-size: 16px;
+						}
+
+						span:nth-child(2) {
+							font-size: 12px;
+							color: $u-tips-color;
 							margin-top: 5px;
 						}
 					}
@@ -144,15 +183,21 @@
 						text-align: center;
 						margin-left: 50%;
 
-						span {
+						span:nth-child(1) {
+							color: $u-tips-color;
+						}
+
+						span:nth-child(2) {
 							margin-top: 5px;
 
-							text {
+							p {
 								display: block;
-								width: 20px;
-								height: 20px;
+								width: 16px;
+								height: 16px;
+								color: #FFFFFF;
+								font-size: 12px;
 								border-radius: 50%;
-								background: #b2b2b2;
+								background: $u-type-info;
 								transform: translateX(50%);
 							}
 						}
@@ -166,6 +211,13 @@
 					border-radius: 8rpx;
 					margin-left: 12rpx;
 				}
+			}
+			
+			.news-wraning {
+				color: $u-type-warning !important;
+			}
+			.news-success {
+				color: $u-type-success !important;
 			}
 		}
 	}
