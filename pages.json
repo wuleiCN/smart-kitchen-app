@@ -4,39 +4,64 @@
 		// 下载安装方式
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [
-		{
-			"path":"pages/Login",
-			"style": {}
+	"pages": [{
+			"path": "pages/Login",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
 		},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
 			}
 		},
 		{
 			"path": "pages/customer/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
 			}
 		},
 		{
 			"path": "pages/company/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
 			}
 		},
 		{
 			"path": "pages/scan/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
 			}
 		},
 		{
 			"path": "pages/my/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
 			}
 		}
 	],

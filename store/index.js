@@ -6,8 +6,8 @@ const token = uni.getStorageSync('token')
 const user =  uni.getStorageSync('userInfo')
 const store = new Vuex.Store({
 	state: {
-		vuex_user: user,
-		vuex_token: token,
+		vuex_user: user || {},
+		vuex_token: token || '',
 		// 自定义tabbar数据
 		vuex_tabbar: [{
 				pagePath: "/pages/index/index",

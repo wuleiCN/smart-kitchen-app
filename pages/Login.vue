@@ -1,6 +1,8 @@
 <template>
 	<view class="content">
-		<u-image width="100%" height="300rpx" src="http://localhost:8080/static/login/logon.png"></u-image>
+		<view class="Logon">
+			<u-image width="100%" height="150rpx" src="/static/logon.png" mode="aspectFit"></u-image>
+		</view>
 		<u-form :model="model" :rules="rules" ref="uForm">
 			<u-form-item label-position="left" :border-bottom="false" label="账号:" :label-style="{color: '#fff'}" label-align="center"
 			 label-width="135" prop="account">
@@ -17,6 +19,9 @@
 </template>
 
 <script>
+	import {
+		mapState
+	} from "vuex"
 	export default {
 		data() {
 			return {
@@ -52,11 +57,27 @@
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
+		computed: {
+			...mapState(["vuex_token"])
+		},
 		methods: {
-			login() {
+			 login() {
+				 uni
 				this.$u.api.Login({username: this.model.account,password: this.model.password}).then(res => {
+					uni.setStorageSync('token',res.Token)
 					console.log(res)
-				}).catch(err => {})
+				}).catch(err => {
+					console.log(err)
+				})
+				this.$u.api.getInfo().then(res => {
+					uni.setStorageSync('userInfo',res)
+					uni.switchTab({
+					    url: '/pages/index/index'
+					});
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})
 			}
 		}
 	}
@@ -71,7 +92,14 @@
 			margin-right: 15px;
 		}
 	}
-
+	
+	.Logon {
+		width: 100%;
+		height: 170px;
+		::v-deep .u-image {
+			transform: translateY(80%);
+		}
+	}
 	::v-deep .u-input__input {
 		color: #FFFFFF;
 	}

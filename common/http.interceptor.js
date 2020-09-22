@@ -14,7 +14,7 @@ const install = (Vue, vm) => {
 	// 请求拦截，配置Token等参数
 	Vue.prototype.$u.http.interceptor.request = (config) => {
 		// config.header.Token = 'xxxxxx';
-		// config.header.Token = vm.$store.state.vuex_token;
+		config.header.Token = vm.$store.state.vuex_token;
 		if(config.url == '/login') config.header.noToken = true;
 		return config;
 	}
@@ -22,7 +22,6 @@ const install = (Vue, vm) => {
 	Vue.prototype.$u.http.interceptor.response = (res) => {
 		// 如果把originalData设置为了true，这里得到将会是服务器返回的所有的原始数据
 		// 判断可能变成了res.statueCode，或者res.data.code之类的，请打印查看结果
-		console.log(res,1)
 		if (res.statusCode == 200) {
 			// 如果把originalData设置为了true，这里return回什么，this.$u.post的then回调中就会得到什么
 			return res.data;
