@@ -25,7 +25,7 @@ const install = (Vue, vm) => {
 		if (res.statusCode == 200) {
 			// 如果把originalData设置为了true，这里return回什么，this.$u.post的then回调中就会得到什么
 			return res.data;
-		} else if (res.statusCode== 201) {
+		} else if (res.statusCode== 401) {
 			vm.$u.toast('验证失败，请重新登录');
 			setTimeout(() => {
 				vm.$u.route('/pages/login')

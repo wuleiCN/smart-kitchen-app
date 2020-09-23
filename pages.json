@@ -63,6 +63,56 @@
 					"animationType": "slide-in-right"
 				}
 			}
+		},
+		{
+			"path": "pages/message/New",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/message/Detail",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/Device",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/Device",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/Detail",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
 		}
 	],
 	"globalStyle": {

@@ -14,7 +14,7 @@
 			</u-form-item>
 		</u-form>
 		<u-button type="success" shape="square" :custom-style="customStyle" @tap="login">确 定</u-button>
-
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
@@ -61,23 +61,25 @@
 			...mapState(["vuex_token"])
 		},
 		methods: {
-			 login() {
-				 uni
-				this.$u.api.Login({username: this.model.account,password: this.model.password}).then(res => {
-					uni.setStorageSync('token',res.Token)
-					console.log(res)
-				}).catch(err => {
-					console.log(err)
+			async login() {
+				const res = await this.$u.api.Login({
+					username: this.model.account,
+					password: this.model.password
 				})
-				this.$u.api.getInfo().then(res => {
-					uni.setStorageSync('userInfo',res)
+				const info = await this.$u.api.getInfo()
+				if (res.success) {
+					uni.setStorageSync('userInfo', res)
+					uni.setStorageSync('token', res.Token)
 					uni.switchTab({
-					    url: '/pages/index/index'
+						url: '/pages/index/index'
 					});
-					console.log(res)
-				}).catch(err => {
-					console.log(err)
-				})
+				} else {
+					this.$refs.uToast.show({
+						title: `登录失败,${res.message}`,
+						type: 'error',
+					})
+				}
+				console.log(res)
 			}
 		}
 	}
@@ -89,17 +91,19 @@
 		background-image: linear-gradient(-45deg, rgb(115, 108, 260), rgb(40, 200, 160)) !important;
 
 		::v-deep .u-form-item--right {
-			margin-right: 15px;
+			margin-right: 30rpx;
 		}
 	}
-	
+
 	.Logon {
 		width: 100%;
-		height: 170px;
+		height: 340rpx;
+
 		::v-deep .u-image {
 			transform: translateY(80%);
 		}
 	}
+
 	::v-deep .u-input__input {
 		color: #FFFFFF;
 	}

@@ -4,7 +4,7 @@
 		<view class="text-area">
 			<u-swiper :list="list"></u-swiper>
 			<u-grid :col="4" :border="false">
-				<u-grid-item v-for="(value,index) in gridList" :key="index" :index="index" style="padding: 20px 0 0;">
+				<u-grid-item v-for="(value,index) in gridList" :key="index" :index="index" style="padding: 20px 0 0;" @click="$u.route(value.url)">
 					<u-icon :name="value.icon" :size="56" :color="value.color"></u-icon>
 					<view class="grid-text" style="margin-top: 10px">{{value.text}}</view>
 				</u-grid-item>
@@ -24,7 +24,7 @@
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
 						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
 						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
-					消息未送达</span></view>
+								消息未送达</span></view>
 						<view class="u-body-item-title time"><span>22:00</span><span>
 								<p>5</p>
 							</span></view>
@@ -68,7 +68,6 @@
 					'/static/banners/banner1.jpg',
 					'/static/banners/banner2.jpg',
 					'/static/banners/banner3.jpg'
-
 				],
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
@@ -76,12 +75,14 @@
 				gridList: [{
 						icon: 'bell',
 						text: '报警信息',
-						color: '#fa3534'
+						color: '#fa3534',
+						url: '/pages/message/New'
 					},
 					{
 						icon: 'grid',
 						text: '设备信息',
-						color: '#9932CC'
+						color: '#9932CC',
+						url: '/pages/device/device'
 					},
 					{
 						icon: 'eye',
@@ -143,15 +144,15 @@
 			}
 
 			::v-deep .u-card {
-				margin: 20px 0 !important;
+				margin: 10rpx 0 !important;
 
 				.u-card__head {
-					padding: 10px !important;
+					padding: 5rpx !important;
 				}
 
 				.u-card-wrap {
 					background-color: $u-bg-color;
-					padding: 1px;
+					padding: 1rpx;
 				}
 
 				.u-body-item {
@@ -163,17 +164,17 @@
 					.info {
 						display: flex;
 						flex-direction: column;
-						margin-left: 5px;
+						margin-left: 10rpx;
 
 						span:nth-child(1) {
 							color: $u-content-color;
-							font-size: 16px;
+							font-size: 32rpx;
 						}
 
 						span:nth-child(2) {
-							font-size: 12px;
+							font-size: 24rpx;
 							color: $u-tips-color;
-							margin-top: 5px;
+							margin-top: 10rpx;
 						}
 					}
 
@@ -188,14 +189,14 @@
 						}
 
 						span:nth-child(2) {
-							margin-top: 5px;
+							margin-top: 10rpx;
 
 							p {
 								display: block;
-								width: 16px;
-								height: 16px;
+								width: 32rpx;
+								height: 32rpx;
 								color: #FFFFFF;
-								font-size: 12px;
+								font-size: 24rpx;
 								border-radius: 50%;
 								background: $u-type-info;
 								transform: translateX(50%);
@@ -212,10 +213,11 @@
 					margin-left: 12rpx;
 				}
 			}
-			
+
 			.news-wraning {
 				color: $u-type-warning !important;
 			}
+
 			.news-success {
 				color: $u-type-success !important;
 			}
