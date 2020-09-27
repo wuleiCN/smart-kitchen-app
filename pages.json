@@ -113,6 +113,126 @@
 					"animationType": "slide-in-right"
 				}
 			}
+		},
+		{
+			"path": "pages/order/monitor/list",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/monitor/flow",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/sale/list",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/sale/selectproduct",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/sale/saledevices",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/sale/create",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/customer/selector",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/distribute/list",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/distribute/distribute",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/distribute/devicedistribute",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/install/list",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/install/install",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
 		}
 	],
 	"globalStyle": {

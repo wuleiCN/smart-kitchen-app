@@ -66,10 +66,11 @@
 					username: this.model.account,
 					password: this.model.password
 				})
-				const info = await this.$u.api.getInfo()
+				console.log(res)
 				if (res.success) {
-					uni.setStorageSync('userInfo', res)
 					uni.setStorageSync('token', res.Token)
+					const info = await this.$u.api.getInfo()
+					uni.setStorageSync('userInfo', res)
 					uni.switchTab({
 						url: '/pages/index/index'
 					});
@@ -79,7 +80,7 @@
 						type: 'error',
 					})
 				}
-				console.log(res)
+				console.log(this.vuex_token)
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="警告信息"
 		 :title-width="300" title-color="#ffffff" :background="background" />
-		<u-form :model="form" ref="uForm">
+		<u-form :model="form" ref="uForm" :border-bottom="false" :label-style="{color: '#303133',fontWeight: '600'}">
 			<u-form-item label="设备名称 :" label-width="150" label-align="center">
 				<view>{{form.name}}</view>
 			</u-form-item>

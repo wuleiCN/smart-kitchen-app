@@ -28,7 +28,10 @@ const install = (Vue, vm) => {
 		} else if (res.statusCode== 401) {
 			vm.$u.toast('验证失败，请重新登录');
 			setTimeout(() => {
-				vm.$u.route('/pages/login')
+				vm.$u.route({
+					url: '/pages/login',
+					type: 'redirectTo'
+				})
 			}, 1500)
 			return false;
 		} else return false;

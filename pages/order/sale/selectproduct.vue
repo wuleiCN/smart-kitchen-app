@@ -1,0 +1,211 @@
+<template>
+	<view class="content">
+		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
+		 :title-width="300" title-color="#ffffff" :background="background" />
+		<view class="product" v-for="(item,index) in list" :key="index">
+			<view class="u-flex">
+				<u-image src="/static/devices/device.png" width="200rpx" height="200rpx"></u-image>
+				<view class="_info u-flex-col">
+					<span><strong>设备型号：</strong>{{item.name}}</span>
+					<span><strong>设备类别：</strong>{{item.type}}</span>
+					<span><strong>设备描述：</strong>{{item.mach}}</span>
+				</view>
+			</view>
+			<view class="sale">
+				<u-button type="error" ripple>+加入购物车</u-button>
+			</view>
+		</view>
+		<u-loadmore :status="status" />
+		<view class="_blank" />
+		<view class="customer">
+			<view class="navigation">
+				<view class="left">
+					<view class="item car" @click="$u.route('pages/order/sale/saledevices')">
+						<u-badge class="car-num" :count="9" type="error" :offset="[-3, -6]"></u-badge>
+						<u-icon name="shopping-cart" :size="40" :color="$u.color['contentColor']"></u-icon>
+						<view class="text u-line-1">购物车</view>
+					</view>
+				</view>
+				<view class="right">
+					<view class="cart btn u-line-1" @click="editOrder">修改订单</view>
+					<view class="buy btn u-line-1" @click="dispatchOrder">派单出库</view>
+				</view>
+			</view>
+			<view class="customer_info">
+				<view class="_info u-flex-col">
+					<span><strong>客户单位：</strong>test</span>
+					<span><strong>联系人：</strong>ww</span>
+					<span><strong>联系电话：</strong>1234</span>
+				</view>
+			</view>
+		</view>
+		<u-modal v-model="editShow" :content="content"></u-modal>
+		<u-modal v-model="dispatchShow" :content="dispatch_content" show-cancel-button @confirm="dispatch" @cancel="dispatchNo"></u-modal>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				background: {
+					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
+				},
+				status: 'loadmore',
+				editShow: false,
+				content: '功能未完善！',
+				dispatchShow: false,
+				dispatch_content: '确定立刻派单出库吗？',
+				list: [{
+					name: 'test',
+					type: '002',
+					mach: 'wwwww'
+				}, {
+					name: 'test',
+					type: '002',
+					mach: 'wwwww'
+				}, {
+					name: 'test',
+					type: '002',
+					mach: 'wwwww'
+				}, {
+					name: 'test',
+					type: '002',
+					mach: 'wwwww'
+				}, {
+					name: 'test',
+					type: '002',
+					mach: 'wwwww'
+				}, {
+					name: 'test',
+					type: '002',
+					mach: 'wwwww'
+				}]
+			}
+		},
+		methods: {
+			editOrder() {
+				this.show = true
+			},
+			dispatchOrder() {
+				this.dispatchShow = true
+			},
+			dispatch() {
+				console.log(1)
+			},
+			dispatchNo() {
+				console.log(0)
+			},
+			onReachBottom() {
+				this.status = 'loading';
+				setTimeout(() => {
+					this.status = 'nomore';
+				}, 2000)
+			}
+		}
+	}
+</script>
+
+<style scoped lang="scss">
+	.product {
+		background: #FFFFFF;
+		margin-bottom: 10rpx;
+		height: 304rpx;
+
+		&:last-child {
+			margin: 0 !important;
+		}
+
+		.u-image {
+			margin: 20rpx 0 0 20rpx;
+		}
+
+		._info {
+			span {
+				margin: 20rpx 0 0 10rpx;
+			}
+		}
+
+		.sale {
+			padding-bottom: 20rpx::v-deep .u-btn {
+				width: 200rpx;
+				height: 64rpx;
+				margin-left: 65%;
+			}
+		}
+	}
+
+	._blank {
+		background: #FFFFFF;
+		height: 278rpx;
+	}
+
+	.customer {
+		position: fixed;
+		width: 100%;
+		height: 280rpx;
+		background: #FFFFFF;
+		bottom: 0;
+		z-index: 999;
+
+		.navigation {
+			display: flex;
+			border: solid 2rpx #f2f2f2;
+			background-color: #ffffff;
+			padding: 16rpx 0;
+
+			.left {
+				display: flex;
+				font-size: 20rpx;
+				margin-left: 30%;
+
+				.item {
+					margin: 0 30rpx;
+
+					&.car {
+						text-align: center;
+						position: relative;
+
+						.car-num {
+							position: absolute;
+							top: -10rpx;
+							right: -10rpx;
+						}
+					}
+				}
+			}
+
+			.right {
+				display: flex;
+				font-size: 28rpx;
+				align-items: center;
+
+				.btn {
+					line-height: 66rpx;
+					padding: 0 30rpx;
+					border-radius: 36rpx;
+					color: #ffffff;
+				}
+
+				.cart {
+					background-color: $u-type-error;
+					margin-right: 30rpx;
+				}
+
+				.buy {
+					background-color: #ff7900;
+				}
+			}
+		}
+
+		.customer_info {
+			background: #FFFFFF;
+
+			._info {
+				span {
+					margin: 10rpx 0 0 30rpx;
+				}
+			}
+		}
+	}
+</style>

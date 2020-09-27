@@ -82,27 +82,31 @@
 						icon: 'grid',
 						text: '设备信息',
 						color: '#9932CC',
-						url: '/pages/device/device'
+						url: '/pages/device/Device'
 					},
 					{
 						icon: 'eye',
 						text: '工单监控',
-						color: '#ff9900'
+						color: '#ff9900',
+						url: '/pages/order/monitor/list'
 					},
 					{
 						icon: 'shopping-cart',
 						text: '产品销售',
-						color: '#32CD32'
+						color: '#32CD32',
+						url: '/pages/order/sale/list'
 					},
 					{
 						icon: 'car',
 						text: '销售出库',
-						color: '#48D1CC'
+						color: '#48D1CC',
+						url: 'pages/order/distribute/list'
 					},
 					{
 						icon: 'file-text',
 						text: '施工工单',
-						color: '2F4F4F'
+						color: '2F4F4F',
+						url: 'pages/order/install/list'
 					},
 					{
 						icon: 'calendar',
