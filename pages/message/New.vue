@@ -22,6 +22,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -63,6 +64,19 @@
 					}
 				}]
 			};
+		},
+		onLoad() {
+			this.$u.api.getMessageList({token: this.vuex_token}).then(res => {
+				console.log(res)
+			}).catch(err => {
+				uni.showToast({
+					icon: 'none',
+					title: '获取数据失败！'
+				})
+			})
+		},
+		computed: {
+			...mapState(['vuex_token'])
 		},
 		methods: {
 			open(index) {

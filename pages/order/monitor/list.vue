@@ -37,6 +37,16 @@
 				}
 			}
 		},
+		onLoad() {
+			this.$u.api.getMonitorList().then(res => {
+				console.log(res)
+			}).catch(err => {
+				uni.showToast({
+					icon: 'none',
+					title: '获取数据失败！'
+				})
+			})
+		},
 		methods: {
 			toFlow() {
 				this.$u.route('/pages/order/monitor/flow', {

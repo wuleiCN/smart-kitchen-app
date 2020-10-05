@@ -32,6 +32,7 @@
 				<view>{{form.name}}</view>
 			</u-form-item>
 		</u-form>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
@@ -51,6 +52,18 @@
 					name: 'test'
 				}
 			}
+		},
+		onLoad(option) {
+			this.$u.api.getDevicesInfoById({
+				id: option.id
+			}).then(res => {
+				console.log(res)
+			}).catch(err => {
+				this.$refs.uToast.show({
+					title: '获取设备信息失败！',
+					type: 'error'
+				})
+			})
 		},
 		methods: {}
 	}

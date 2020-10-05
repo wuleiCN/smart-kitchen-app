@@ -25,6 +25,16 @@
 				dveices:{name:'test',model:'001'}
 			}
 		},
+		onLoad() {
+			this.$u.api.getDevicesInfoAll().then(res => {
+				console.log(res)
+			}).catch(err => {
+				uni.showToast({
+					icon: 'none',
+					title: '获取数据失败！'
+				})
+			})
+		},
 		methods: {
 			toDetail() {
 				this.$u.route('pages/device/Detail', {

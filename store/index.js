@@ -9,6 +9,8 @@ const store = new Vuex.Store({
 		vuex_user: user || {},
 		vuex_token: token || '',
 		vuex_customer: {},
+		// 购物车商品
+		vuex_saleCar: [],
 		// 自定义tabbar数据
 		vuex_tabbar: [{
 				pagePath: "/pages/index/index",
@@ -34,6 +36,9 @@ const store = new Vuex.Store({
 	mutations: {
 		setCustomer(state,data) {
 			state.vuex_customer = data
+		},
+		setSaleCar(state,data) {
+			state.vuex_saleCar
 		}
 	}
 })

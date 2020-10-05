@@ -27,7 +27,7 @@
 		</scroll-view>
 		<view class="operation u-flex">
 			<u-button type="primary" size="medium" @click="toDeviceDisribute">设备出库</u-button>
-			<u-button type="success" size="medium">出库回单</u-button>
+			<u-button type="success" size="medium" @click="distributeFinish">出库回单</u-button>
 		</view>
 	</view>
 </template>
@@ -49,7 +49,32 @@
 					Comment: 'c'
 				},
 				status: 'loadmore',
+				optionId: '',
 				devices: [{
+						Model: {
+							Name: 'n',
+							TypeName: 't'
+						},
+						DistributedCount: 90,
+						Count: 5
+					},
+					{
+						Model: {
+							Name: 'n',
+							TypeName: 't'
+						},
+						DistributedCount: 90,
+						Count: 5
+					},
+					{
+						Model: {
+							Name: 'n',
+							TypeName: 't'
+						},
+						DistributedCount: 90,
+						Count: 5
+					},
+					{
 						Model: {
 							Name: 'n',
 							TypeName: 't'
@@ -84,6 +109,19 @@
 				]
 			}
 		},
+		onLoad(option) {
+			this.optionId = option.id
+			this.$u.api.getOrderInfo({
+				id: option.id
+			}).then(res => {
+				console.log(res)
+			}).catch(err => {})
+			this.$u.api.getOrderSaleDevices({
+				id: option.id
+			}).then(res => {
+				console.log(res)
+			}).catch(err => {})
+		},
 		methods: {
 			toLowFun() {
 				this.$u.throttle(this.load, 2000)
@@ -96,8 +134,37 @@
 				console.log("触底事件");
 			},
 			toDeviceDisribute() {
-				this.$u.route('pages/order/distribute/devicedistribute',{
+				this.$u.route('pages/order/distribute/devicedistribute', {
 					id: 123
+				})
+			},
+			distributeFinish() {
+				const canFinish = this.devices.every(v => v.Count > v.DistributedCount)
+				if (canFinish === false) {
+					uni.showModal({
+						title: '提示',
+						content: '设备出库尚未完成',
+						showCancel: false,
+						confirmText: '确定'
+					});
+					return false;
+				}
+				uni.showModal({
+					content: '确定要回单吗？',
+					success: () => {
+						this.$u.api.distributeFinish({order: this.optionId}).then(res => {
+							uni.showToast({
+								icon: 'none',
+								title: '回单成功！'
+							})
+							console.log(res)
+						}).catch(err => {
+							uni.showToast({
+								icon: 'none',
+								title: '回单失败！'
+							})
+						})
+					}
 				})
 			}
 		}
@@ -139,13 +206,15 @@
 		}
 
 		.product {
-			height: 660rpx;
+			height: 900rpx;
+
 			.device {
 				background: #FFFFFF;
 				padding: 15px;
 				border-bottom: 1rpx solid #f5f5f5;
 			}
 		}
+
 		.operation {
 			width: 100%;
 			height: 80rpx;

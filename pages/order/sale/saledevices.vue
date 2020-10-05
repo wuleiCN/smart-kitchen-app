@@ -6,7 +6,7 @@
 			<span class="line" />
 			<span class="_title u-flex">销售信息</span>
 		</view>
-		<view class="info u-flex-col">
+		<view class="info u-flex-col" v-if="order != null">
 			<span><strong>客户单位：</strong>test</span>
 			<span><strong>联系人：</strong>ww</span>
 			<span><strong>联系电话：</strong>1234</span>
@@ -27,7 +27,7 @@
 						<text>设备型号：{{ item.name }}</text>
 						<text class="u-line-2">设备类别：{{ item.model }}</text>
 						<text>设备描述：{{ item.remark}}</text>
-						<u-number-box v-model="item.count" />
+						<u-number-box v-model="item.count" disabled-input :long-press='false' />
 					</view>
 				</view>
 			</u-swipe-action>
@@ -50,6 +50,8 @@
 				},
 				status: 'loadmore',
 				dispatchShow: false,
+				optionId: '',
+				order: {},
 				content: '确定立刻派单出库吗？',
 				list: [{
 						id: 1,
@@ -95,6 +97,33 @@
 						model: '登临送目',
 						images: '/static/devices/warning.png',
 						show: false,
+					},
+					{
+						id: 6,
+						count: 0,
+						name: 'test03',
+						remark: 'remark',
+						model: '登临送目',
+						images: '/static/devices/warning.png',
+						show: false,
+					},
+					{
+						id: 7,
+						count: 0,
+						name: 'test03',
+						remark: 'remark',
+						model: '登临送目',
+						images: '/static/devices/warning.png',
+						show: false,
+					},
+					{
+						id: 8,
+						count: 0,
+						name: 'test03',
+						remark: 'remark',
+						model: '登临送目',
+						images: '/static/devices/warning.png',
+						show: false,
 					}
 				],
 				show: false,
@@ -105,6 +134,15 @@
 					}
 				}]
 			}
+		},
+		onLoad(option) {
+			this.optionId = option.id
+			this.$u.api.getOrderInfo({id: option.id}).then(res => {
+				console.log(res)
+			}).catch(err => {})
+			this.$u.api.getOrderSaleDevices({id: option.id}).then(res => {
+				console.log(res)
+			}).catch(err => {})
 		},
 		methods: {
 			open(index) {
@@ -121,12 +159,18 @@
 				this.dispatchShow = true
 			},
 			dispatch() {
+				this.$u.api.updateOrderSaleDevices({devices: this.list}).then(res => {
+					console.log(res)
+				}).catch(err => {})
 				console.log(1)
 			},
 			dispatchNo() {
 				console.log(0)
 			},
 			toLowFun() {
+				this.$u.throttle(this.load, 2000)
+			},
+			load() {
 				this.status = 'loading';
 				setTimeout(() => {
 					this.status = 'nomore';
@@ -169,7 +213,7 @@
 		}
 
 		.product {
-			height: 660rpx;
+			height: 900rpx;
 
 			.item {
 				display: flex;

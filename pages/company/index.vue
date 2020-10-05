@@ -12,7 +12,7 @@
 			<u-card padding="0" :title="title" thumb="/static/comment/spot.png">
 				<view class="u-card-wrap" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
 						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
 								消息未送达</span></view>
 						<view class="u-body-item-title time"><span>22:00</span><span>
@@ -22,7 +22,7 @@
 				</view>
 				<view class="u-card-wrap" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
 						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
 								消息未送达</span></view>
 						<view class="u-body-item-title time"><span>22:00</span><span>
@@ -32,7 +32,7 @@
 				</view>
 				<view class="u-card-wrap" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
 						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
 								消息未送达</span></view>
 						<view class="u-body-item-title time"><span>22:00</span><span>
@@ -42,7 +42,7 @@
 				</view>
 				<view class="u-card-wrap" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user.png" mode="aspectFill" shape="circle"></image>
+						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
 						<view class="u-body-item-title info"><span>文晓港</span><span class="news-success">
 								消息已送达</span></view>
 						<view class="u-body-item-title time"><span>22:00</span><span>
@@ -190,6 +190,7 @@
 
 						span:nth-child(1) {
 							color: $u-tips-color;
+							font-size: 14px;
 						}
 
 						span:nth-child(2) {
@@ -210,9 +211,9 @@
 				}
 
 				.u-body-item image {
-					width: 120rpx;
-					flex: 0 0 120rpx;
-					height: 120rpx;
+					width: 96rpx;
+					flex: 0 0 96rpx;
+					height: 96rpx;
 					border-radius: 8rpx;
 					margin-left: 12rpx;
 				}

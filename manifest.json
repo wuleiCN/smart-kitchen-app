@@ -78,17 +78,17 @@
 	"h5": {
 		"router": {
 			"mode": "hash"
-		},
-		"devServer": {
-			"proxy": {
-				"/api": {
-					"target": "http://118.190.153.247:9001",
-					// "changeOrigin": true,
-					"pathRewrite": {
-						"^/api": ""
-					}
-				}
-			}
 		}
+		// "devServer": {
+		// 	"proxy": {
+		// 		"/api": {
+		// 			"target": "https://118.190.153.247:9001",
+		// 			"changeOrigin": true,
+		// 			"pathRewrite": {
+		// 				"^/api": ""
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
 }

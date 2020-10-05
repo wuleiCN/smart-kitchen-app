@@ -65,12 +65,19 @@
 				const res = await this.$u.api.Login({
 					username: this.model.account,
 					password: this.model.password
+				}).catch(err => {
+				this.$refs.uToast.show({
+					title: '登录失败,' + err,
+					type: 'error',
 				})
+				console.log(err)
+			})
 				console.log(res)
 				if (res.success) {
 					uni.setStorageSync('token', res.Token)
-					const info = await this.$u.api.getInfo()
-					uni.setStorageSync('userInfo', res)
+					const info = await this.$u.api.getInfo().catch(err => {})
+					uni.setStorageSync('userInfo', info)
+					console.log(info)
 					uni.switchTab({
 						url: '/pages/index/index'
 					});

@@ -7,19 +7,19 @@
 				<text>扫码设备条码/二维码</text>
 				<text>或输入设备编号</text>
 			</view>
-			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle"></u-image>
+			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan"></u-image>
 		</view>
 		<view class="code u-flex">
 			<text>设备编码：</text>
 			<u-input v-model="scanCode" type="text" />
-			<u-button type="success" size="medium">确定</u-button>
+			<u-button type="success" size="medium" @click="distributeByCode">确定</u-button>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">出库设备</span>
 		</view>
 		<view class="info u-flex-col">
-			<span><strong>设备型号：</strong></span>
+			<span><strong>设备型号：</strong>{{device.model}}</span>
 			<span><strong>设备类别：</strong></span>
 			<span><strong>设备编码：</strong></span>
 			<span><strong>设备状态：</strong></span>
@@ -28,16 +28,112 @@
 </template>
 
 <script>
+	import permision from "@/common/permission.js"
 	export default {
 		data() {
 			return {
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				scanCode: ''
+				optionId: '',
+				scanCode: '',
+				device: {
+					model: ''
+				}
 			}
 		},
-		methods: {}
+		onLoad(option) {
+			this.optionId = option.id
+		},
+		methods: {
+			// 编码出库
+			distributeByCode() {
+				if (this.scanCode.length === 0) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入设备编码!'
+					})
+					return;
+				}
+
+				uni.showLoading({
+					title: '正在处理...',
+					mask: false
+				});
+				this.$u.api.orderSaleDeviceDistributeByCode({
+					order: this.optionId,
+					device: this.scanCode
+				}).then(res => {
+					uni.hideLoading()
+					if(res.data.success === true) {
+						uni.showToast({
+							title: '设备出库成功！'
+						})
+					} else {
+						uni.showModal({
+							title: '错误',
+							content: res.data.message,
+							showCancel: false,
+							confirmText: '确定',
+						})
+					}
+				}).catch(err => {})
+			},
+			// 扫码出库
+			async scan() {
+				// #ifdef APP-PLUS
+				const status = await this.checkPermission()
+				if (status !== 1) {
+					return;
+				}
+				// #endif
+				uni.scanCode({
+					success: (res) => {
+						this.device.model = res.result
+					},
+					fail: (err) => {
+						// #ifdef MP
+						uni.getSetting({
+							success: (res) => {
+								let authStatus = res.authSetting['scope.camera'];
+								if (!authStatus) {
+									uni.showModal({
+										title: '授权失败',
+										content: 'Hello uni-app需要使用您的相机，请在设置界面打开相关权限',
+										success: (res) => {
+											if (res.confirm) {
+												uni.openSetting()
+											}
+										}
+									})
+								}
+							}
+						})
+						// #endif
+					}
+				});
+			},
+			// 相机权限
+			async checkPermission(code) {
+				let status = permision.isIOS ? await permision.requestIOS('camera') :
+					await permision.requestAndroid('android.permission.CAMERA');
+
+				if (status === null || status === 1) {
+					status = 1;
+				} else {
+					uni.showModal({
+						content: "需要相机权限",
+						confirmText: "设置",
+						success: function(res) {
+							if (res.confirm) {
+								permision.gotoAppSetting();
+							}
+						}
+					})
+				}
+				return status;
+			}
+		}
 	}
 </script>
 
@@ -102,11 +198,12 @@
 			margin-left: 5%;
 		}
 	}
+
 	.info {
 		height: 260rpx;
 		background: #FFFFFF;
 		padding: 30rpx;
-	
+
 		span {
 			padding-bottom: 10rpx;
 		}

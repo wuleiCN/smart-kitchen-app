@@ -15,10 +15,10 @@
 					<u-button type="success" plain ripple @click="toProduct">产品订购</u-button>
 				</span>
 				<span>
-					<u-button type="primary" plain ripple @click="$u.route('pages/order/sale/saledevices')">销售清单</u-button>
+					<u-button type="primary" plain ripple @click="toSaledevices">销售清单</u-button>
 				</span>
 				<span>
-					<u-button plain ripple>派单出库</u-button>
+					<u-button plain ripple @click="sendToDistribute">派单出库</u-button>
 				</span>
 			</view>
 		</view>
@@ -35,11 +35,42 @@
 				}
 			}
 		},
+		onLoad() {
+			this.$u.api.getOrderSaleList().then(res => {
+				console.log(res)
+			}).catch(err => {
+				uni.showToast({
+					icon: 'none',
+					title: '获取数据失败！'
+				})
+			})
+		},
 		methods: {
 			toProduct() {
 				this.$u.route('pages/order/sale/selectproduct',{
 					id: 123
 				})
+			},
+			toSaledevices() {
+				this.$u.route('pages/order/sale/saledevices',{
+					id: 123
+				})
+			},
+			sendToDistribute() {
+				uni.showModal({
+					title: '提示',
+					content: '确定要派单出库吗',
+					showCancel: true,
+					cancelText: '取消',
+					confirmText: '确定',
+					success: res => {
+						if (res.confirm) {
+							this.$u.api.orderSale({id: 123}).then(res => {
+								console.log(res)
+							}).catch(err => {})
+						}
+					},
+				});
 			}
 		}
 	}

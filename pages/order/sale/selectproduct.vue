@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
+		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="产品销售"
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<view class="product" v-for="(item,index) in list" :key="index">
 			<view class="u-flex">
@@ -9,10 +9,11 @@
 					<span><strong>设备型号：</strong>{{item.name}}</span>
 					<span><strong>设备类别：</strong>{{item.type}}</span>
 					<span><strong>设备描述：</strong>{{item.mach}}</span>
+					<span>已售：{{item.Count}}</span>
 				</view>
 			</view>
 			<view class="sale">
-				<u-button type="error" ripple>+加入购物车</u-button>
+				<u-button type="error" ripple @click="sale(index)">+加入购物车</u-button>
 			</view>
 		</view>
 		<u-loadmore :status="status" />
@@ -20,8 +21,8 @@
 		<view class="customer">
 			<view class="navigation">
 				<view class="left">
-					<view class="item car" @click="$u.route('pages/order/sale/saledevices')">
-						<u-badge class="car-num" :count="9" type="error" :offset="[-3, -6]"></u-badge>
+					<view class="item car" @click="toCart">
+						<u-badge class="car-num" :count="deviceCount" type="error" :offset="[-8, -8]"></u-badge>
 						<u-icon name="shopping-cart" :size="40" :color="$u.color['contentColor']"></u-icon>
 						<view class="text u-line-1">购物车</view>
 					</view>
@@ -56,36 +57,72 @@
 				content: '功能未完善！',
 				dispatchShow: false,
 				dispatch_content: '确定立刻派单出库吗？',
+				optionId: '',
+				deviceCount: 0,
 				list: [{
 					name: 'test',
 					type: '002',
-					mach: 'wwwww'
+					mach: 'wwwww',
+					Model: {Id: 456},
+					Count: 0
 				}, {
 					name: 'test',
 					type: '002',
-					mach: 'wwwww'
+					mach: 'wwwww',
+					Model: {Id: 456},
+					Count: 0
 				}, {
 					name: 'test',
 					type: '002',
-					mach: 'wwwww'
+					mach: 'wwwww',
+					Model: {Id: 456},
+					Count: 0
 				}, {
 					name: 'test',
 					type: '002',
-					mach: 'wwwww'
+					mach: 'wwwww',
+					Model: {Id: 456},
+					Count: 0
 				}, {
 					name: 'test',
 					type: '002',
-					mach: 'wwwww'
+					mach: 'wwwww',
+					Model: {Id: 456},
+					Count: 0
 				}, {
 					name: 'test',
 					type: '002',
-					mach: 'wwwww'
+					mach: 'wwwww',
+					Model: {Id: 456},
+					Count: 0
 				}]
 			}
 		},
+		onLoad(option) {
+			this.optionId = option.id
+			this.$u.api.getSalingDevices({order: option.id}).then(res => {
+				console.log(res)
+			}).catch(err => {})
+			this.$u.api.getOrderSaleDeviceCounts({order: option.id}).then(res => {
+				this.deviceCount = res.data
+				console.log(res)
+			}).catch(err => {})
+		},
 		methods: {
+			sale(index) {
+				this.$u.api.OrderSaleDevice({order: this.optionId,model: this.list[index].Model.Id}).then(res => {
+					if(res.success === false) return res
+					this.deviceCount = res.data.total
+					this.list[index].Count = res.data.count
+				}).then(err => {
+					uni.showToast({
+						title: '添加商品失败！',
+						icon: 'none'
+					})
+				})
+			},
 			editOrder() {
-				this.show = true
+				this.editShow = true
 			},
 			dispatchOrder() {
 				this.dispatchShow = true
@@ -96,11 +133,20 @@
 			dispatchNo() {
 				console.log(0)
 			},
+			toCart() {
+				this.$u.route('pages/order/sale/saledevices',{
+					id: this.optionId
+				})
+			},
 			onReachBottom() {
+				this.$u.throttle(this.load, 2000)
+			},
+			load() {
 				this.status = 'loading';
 				setTimeout(() => {
 					this.status = 'nomore';
 				}, 2000)
+				console.log("触底事件");
 			}
 		}
 	}
@@ -122,7 +168,7 @@
 
 		._info {
 			span {
-				margin: 20rpx 0 0 10rpx;
+				margin: 10rpx 0 0 10rpx;
 			}
 		}
 

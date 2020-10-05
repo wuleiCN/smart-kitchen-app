@@ -9,8 +9,8 @@
 			<view class="customer u-flex" v-for="(value,index) in customers" :key="index" @click="toCreateOrder(value)">
 				<u-image width="80rpx" height="80rpx" shape="circle" :src="value.url" />
 				<view class="_info u-flex-col">
-					<span>{{value.name}}</span>
-					<span>{{value.address}}</span>
+					<span>{{value.Name}}</span>
+					<span>{{value.Address}}</span>
 				</view>
 			</view>
 		</view>
@@ -25,20 +25,19 @@
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				value: '',
-				customers: [{
-					name: 'test',
-					address: 'cswcmqh',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-				}, {
-					name: 'test',
-					address: 'cswcmqh',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-				}, {
-					name: 'test',
-					address: 'cswcmqh',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-				}]
+				customers: []
 			}
+		},
+		onLoad() {
+			this.$u.api.getCustomersList().then(res => {
+				this.customers = res
+				console.log(res)
+			}).catch(err => {
+				uni.showToast({
+					icon: 'none',
+					title: '获取数据失败！'
+				})
+			})
 		},
 		methods: {
 			toCreateOrder(data) {

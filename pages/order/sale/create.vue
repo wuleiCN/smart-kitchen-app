@@ -4,20 +4,20 @@
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<u-form :model="form" ref="uForm">
 			<u-form-item label="客户信息:" label-width="150" label-align="center">
-				<u-input v-model="form.customer" />
+				<u-input v-model="form.Name" />
 				<u-button type="success" @click="$u.route('pages/customer/selector')">选择</u-button>
 			</u-form-item>
 			<u-form-item label="联系人:" label-width="150" label-align="center">
 				<u-input v-model="form.Contact" />
 			</u-form-item>
 			<u-form-item label="联系电话:" label-width="150" label-align="center">
-				<u-input v-model="form.Phone" />
+				<u-input v-model="form.ContactPhone" />
 			</u-form-item>
 			<u-form-item label="收货地址:" label-width="150" label-align="center">
 				<u-input v-model="form.Address" />
 			</u-form-item>
 			<u-form-item label="销售说明:" label-width="150" label-align="center">
-				<u-input v-model="form.Comment" />
+				<u-input v-if="form.Comment" v-model="form.Comment" />
 			</u-form-item>
 		</u-form>
 		<view class="_btn">
@@ -35,19 +35,11 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				form: {
-					CustomerId: '',
-					customer: '',
-					Contact: '',
-					Phone: '',
-					Address: '',
-					Comment: ''
-				}
+				form: {}
 			}
 		},
 		onShow() {
-			this.form.customer =this.vuex_customer.name
-			this.form.Address =this.vuex_customer.address
+			this.form =this.vuex_customer
 			console.log(this.vuex_customer)
 		},
 		onBackPress() {

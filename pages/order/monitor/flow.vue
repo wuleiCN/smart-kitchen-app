@@ -33,6 +33,13 @@
 				}
 			}
 		},
+		onLoad(option) {
+			this.$u.api.getMonitorById({
+				order: option.id
+			}).then(res => {
+				console.log(res)
+			}).catch(err => {})
+		},
 		methods: {}
 	}
 </script>
@@ -52,7 +59,7 @@
 		.info {
 			display: flex;
 			flex-direction: column;
-			margin:20rpx 0 0 10rpx;
+			margin: 20rpx 0 0 10rpx;
 			font-size: 24rpx;
 			color: $u-content-color;
 
