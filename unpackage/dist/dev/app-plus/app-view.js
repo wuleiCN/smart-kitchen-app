@@ -8785,7 +8785,8 @@ __webpack_require__.r(__webpack_exports__);
 var components = {
   uNavbar: __webpack_require__(/*! @/uview-ui/components/u-navbar/u-navbar.vue */ 78).default,
   uImage: __webpack_require__(/*! @/uview-ui/components/u-image/u-image.vue */ 5).default,
-  uButton: __webpack_require__(/*! @/uview-ui/components/u-button/u-button.vue */ 49).default
+  uButton: __webpack_require__(/*! @/uview-ui/components/u-button/u-button.vue */ 49).default,
+  uModal: __webpack_require__(/*! @/uview-ui/components/u-modal/u-modal.vue */ 286).default
 }
 var render = function() {
   var _vm = this
@@ -8796,96 +8797,113 @@ var render = function() {
     { staticClass: _vm._$g(0, "sc"), attrs: { _i: 0 } },
     [
       _c("u-navbar", { attrs: { _i: 1 } }),
-      _c(
-        "v-uni-view",
-        { staticClass: _vm._$g(2, "sc"), attrs: { _i: 2 } },
-        [
-          _c(
-            "v-uni-view",
-            { staticClass: _vm._$g(3, "sc"), attrs: { _i: 3 } },
-            [
-              _c("u-image", { attrs: { _i: 4 } }),
-              _c(
-                "v-uni-view",
-                { staticClass: _vm._$g(5, "sc"), attrs: { _i: 5 } },
-                [
-                  _c("span", { attrs: { _i: 6 } }, [_vm._v("test")]),
-                  _c("span", { attrs: { _i: 7 } }, [
-                    _vm._v("订购时间：" + _vm._$g(7, "t0-0"))
-                  ])
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: _vm._$g(8, "sc"), attrs: { _i: 8 } },
-            [
-              _c(
-                "span",
-                { attrs: { _i: 9 } },
-                [
-                  _c(
-                    "u-button",
-                    {
-                      attrs: { _i: 10 },
-                      on: {
-                        click: function($event) {
-                          return _vm.$handleViewEvent($event)
+      _vm._l(_vm._$g(2, "f"), function(item, index, $20, $30) {
+        return _c(
+          "v-uni-view",
+          {
+            key: item,
+            staticClass: _vm._$g("2-" + $30, "sc"),
+            attrs: { _i: "2-" + $30 }
+          },
+          [
+            _c(
+              "v-uni-view",
+              {
+                staticClass: _vm._$g("3-" + $30, "sc"),
+                attrs: { _i: "3-" + $30 }
+              },
+              [
+                _c("u-image", { attrs: { _i: "4-" + $30 } }),
+                _c(
+                  "v-uni-view",
+                  {
+                    staticClass: _vm._$g("5-" + $30, "sc"),
+                    attrs: { _i: "5-" + $30 }
+                  },
+                  [
+                    _c("span", { attrs: { _i: "6-" + $30 } }, [
+                      _vm._v(_vm._$g("6-" + $30, "t0-0"))
+                    ]),
+                    _c("span", { attrs: { _i: "7-" + $30 } }, [
+                      _vm._v("订购时间：" + _vm._$g("7-" + $30, "t0-0"))
+                    ])
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _c(
+              "v-uni-view",
+              {
+                staticClass: _vm._$g("8-" + $30, "sc"),
+                attrs: { _i: "8-" + $30 }
+              },
+              [
+                _c(
+                  "span",
+                  { attrs: { _i: "9-" + $30 } },
+                  [
+                    _c(
+                      "u-button",
+                      {
+                        attrs: { _i: "10-" + $30 },
+                        on: {
+                          click: function($event) {
+                            return _vm.$handleViewEvent($event)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("产品订购")]
-                  )
-                ],
-                1
-              ),
-              _c(
-                "span",
-                { attrs: { _i: 11 } },
-                [
-                  _c(
-                    "u-button",
-                    {
-                      attrs: { _i: 12 },
-                      on: {
-                        click: function($event) {
-                          return _vm.$handleViewEvent($event)
+                      },
+                      [_vm._v("产品订购")]
+                    )
+                  ],
+                  1
+                ),
+                _c(
+                  "span",
+                  { attrs: { _i: "11-" + $30 } },
+                  [
+                    _c(
+                      "u-button",
+                      {
+                        attrs: { _i: "12-" + $30 },
+                        on: {
+                          click: function($event) {
+                            return _vm.$handleViewEvent($event)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("销售清单")]
-                  )
-                ],
-                1
-              ),
-              _c(
-                "span",
-                { attrs: { _i: 13 } },
-                [
-                  _c(
-                    "u-button",
-                    {
-                      attrs: { _i: 14 },
-                      on: {
-                        click: function($event) {
-                          return _vm.$handleViewEvent($event)
+                      },
+                      [_vm._v("销售清单")]
+                    )
+                  ],
+                  1
+                ),
+                _c(
+                  "span",
+                  { attrs: { _i: "13-" + $30 } },
+                  [
+                    _c(
+                      "u-button",
+                      {
+                        attrs: { _i: "14-" + $30 },
+                        on: {
+                          click: function($event) {
+                            return _vm.$handleViewEvent($event)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("派单出库")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
+                      },
+                      [_vm._v("派单出库")]
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      }),
       _c(
         "u-button",
         {
@@ -8898,9 +8916,22 @@ var render = function() {
           }
         },
         [_vm._v("+新增订单")]
-      )
+      ),
+      _c("u-modal", {
+        attrs: { _i: 16 },
+        on: {
+          confirm: function($event) {
+            return _vm.$handleViewEvent($event)
+          }
+        },
+        model: {
+          value: _vm._$g(16, "v-model"),
+          callback: function() {},
+          expression: "distributeShow"
+        }
+      })
     ],
-    1
+    2
   )
 }
 var recyclableRender = false
@@ -9142,7 +9173,7 @@ var render = function() {
                         _c("strong", { attrs: { _i: "11-" + $30 } }, [
                           _vm._v("设备描述：")
                         ]),
-                        _vm._v(_vm._$g("10-" + $30, "t1-0"))
+                        _vm._v("...")
                       ],
                       1
                     ),
@@ -9207,10 +9238,12 @@ var render = function() {
                       }
                     },
                     [
-                      _c("u-badge", {
-                        staticClass: _vm._$g(21, "sc"),
-                        attrs: { _i: 21 }
-                      }),
+                      _vm._$g(21, "i")
+                        ? _c("u-badge", {
+                            staticClass: _vm._$g(21, "sc"),
+                            attrs: { _i: 21 }
+                          })
+                        : _vm._e(),
                       _c("u-icon", { attrs: { _i: 22 } }),
                       _c(
                         "v-uni-view",
@@ -9274,7 +9307,7 @@ var render = function() {
                       _c("strong", { attrs: { _i: 30 } }, [
                         _vm._v("客户单位：")
                       ]),
-                      _vm._v("test")
+                      _vm._v(_vm._$g(29, "t1-0"))
                     ],
                     1
                   ),
@@ -9283,7 +9316,7 @@ var render = function() {
                     { attrs: { _i: 31 } },
                     [
                       _c("strong", { attrs: { _i: 32 } }, [_vm._v("联系人：")]),
-                      _vm._v("ww")
+                      _vm._v(_vm._$g(31, "t1-0"))
                     ],
                     1
                   ),
@@ -9294,7 +9327,7 @@ var render = function() {
                       _c("strong", { attrs: { _i: 34 } }, [
                         _vm._v("联系电话：")
                       ]),
-                      _vm._v("1234")
+                      _vm._v(_vm._$g(33, "t1-0"))
                     ],
                     1
                   )
@@ -9319,9 +9352,6 @@ var render = function() {
         attrs: { _i: 36 },
         on: {
           confirm: function($event) {
-            return _vm.$handleViewEvent($event)
-          },
-          cancel: function($event) {
             return _vm.$handleViewEvent($event)
           }
         },
@@ -11646,7 +11676,18 @@ var render = function() {
             },
             [_vm._v("重置")]
           ),
-          _c("u-button", { attrs: { _i: 16 } }, [_vm._v("选择")])
+          _c(
+            "u-button",
+            {
+              attrs: { _i: 16 },
+              on: {
+                click: function($event) {
+                  return _vm.$handleViewEvent($event)
+                }
+              }
+            },
+            [_vm._v("确定")]
+          )
         ],
         1
       )
@@ -12341,7 +12382,8 @@ __webpack_require__.r(__webpack_exports__);
 var components = {
   uNavbar: __webpack_require__(/*! @/uview-ui/components/u-navbar/u-navbar.vue */ 78).default,
   uImage: __webpack_require__(/*! @/uview-ui/components/u-image/u-image.vue */ 5).default,
-  uButton: __webpack_require__(/*! @/uview-ui/components/u-button/u-button.vue */ 49).default
+  uButton: __webpack_require__(/*! @/uview-ui/components/u-button/u-button.vue */ 49).default,
+  uModal: __webpack_require__(/*! @/uview-ui/components/u-modal/u-modal.vue */ 286).default
 }
 var render = function() {
   var _vm = this
@@ -12466,6 +12508,19 @@ var render = function() {
           ],
           1
         )
+      }),
+      _c("u-modal", {
+        attrs: { _i: 18 },
+        on: {
+          confirm: function($event) {
+            return _vm.$handleViewEvent($event)
+          }
+        },
+        model: {
+          value: _vm._$g(18, "v-model"),
+          callback: function() {},
+          expression: "shipmentShow"
+        }
       })
     ],
     2

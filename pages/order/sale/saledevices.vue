@@ -161,8 +161,13 @@
 			dispatch() {
 				this.$u.api.updateOrderSaleDevices({devices: this.list}).then(res => {
 					console.log(res)
-				}).catch(err => {})
-				console.log(1)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '派单失败！，' + err
+					})
+					console.log(err)
+				})
 			},
 			dispatchNo() {
 				console.log(0)

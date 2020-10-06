@@ -6,9 +6,9 @@
 			<view class="u-flex">
 				<u-image src="/static/devices/device.png" width="200rpx" height="200rpx"></u-image>
 				<view class="_info u-flex-col">
-					<span><strong>设备型号：</strong>{{item.name}}</span>
-					<span><strong>设备类别：</strong>{{item.type}}</span>
-					<span><strong>设备描述：</strong>{{item.mach}}</span>
+					<span><strong>设备型号：</strong>{{item.ModelId}}</span>
+					<span><strong>设备类别：</strong>{{item.Type}}</span>
+					<span><strong>设备描述：</strong>...</span>
 					<span>已售：{{item.Count}}</span>
 				</view>
 			</view>
@@ -22,7 +22,7 @@
 			<view class="navigation">
 				<view class="left">
 					<view class="item car" @click="toCart">
-						<u-badge class="car-num" :count="deviceCount" type="error" :offset="[-8, -8]"></u-badge>
+						<u-badge v-if="deviceCount" class="car-num" :count="deviceCount" type="error" :offset="[-8, -8]"></u-badge>
 						<u-icon name="shopping-cart" :size="40" :color="$u.color['contentColor']"></u-icon>
 						<view class="text u-line-1">购物车</view>
 					</view>
@@ -34,14 +34,14 @@
 			</view>
 			<view class="customer_info">
 				<view class="_info u-flex-col">
-					<span><strong>客户单位：</strong>test</span>
-					<span><strong>联系人：</strong>ww</span>
-					<span><strong>联系电话：</strong>1234</span>
+					<span><strong>客户单位：</strong>{{Customer.CompanyId}}</span>
+					<span><strong>联系人：</strong>{{Customer.Contact}}</span>
+					<span><strong>联系电话：</strong>{{Customer.Phone}}</span>
 				</view>
 			</view>
 		</view>
 		<u-modal v-model="editShow" :content="content"></u-modal>
-		<u-modal v-model="dispatchShow" :content="dispatch_content" show-cancel-button @confirm="dispatch" @cancel="dispatchNo"></u-modal>
+		<u-modal v-model="dispatchShow" :content="dispatch_content" show-cancel-button @confirm="dispatch"></u-modal>
 	</view>
 </template>
 
@@ -58,67 +58,50 @@
 				dispatchShow: false,
 				dispatch_content: '确定立刻派单出库吗？',
 				optionId: '',
-				deviceCount: 0,
-				list: [{
-					name: 'test',
-					type: '002',
-					mach: 'wwwww',
-					Model: {Id: 456},
-					Count: 0
-				}, {
-					name: 'test',
-					type: '002',
-					mach: 'wwwww',
-					Model: {Id: 456},
-					Count: 0
-				}, {
-					name: 'test',
-					type: '002',
-					mach: 'wwwww',
-					Model: {Id: 456},
-					Count: 0
-				}, {
-					name: 'test',
-					type: '002',
-					mach: 'wwwww',
-					Model: {Id: 456},
-					Count: 0
-				}, {
-					name: 'test',
-					type: '002',
-					mach: 'wwwww',
-					Model: {Id: 456},
-					Count: 0
-				}, {
-					name: 'test',
-					type: '002',
-					mach: 'wwwww',
-					Model: {Id: 456},
-					Count: 0
-				}]
+				deviceCount: 2,
+				Customer: {},
+				list: []
 			}
 		},
 		onLoad(option) {
-			this.optionId = option.id
-			this.$u.api.getSalingDevices({order: option.id}).then(res => {
+			this.optionId = option.Id
+			console.log(option)
+			this.$u.api.getOrderInfo({
+				id: option.Id
+			}).then(res => {
+				this.Customer = res
 				console.log(res)
-			}).catch(err => {})
-			this.$u.api.getOrderSaleDeviceCounts({order: option.id}).then(res => {
-				this.deviceCount = res.data
+			}).catch(err => {
+				console.log(err)
+			})
+			this.$u.api.getSalingDevices({
+				order: option.Id
+			}).then(res => {
+				this.list = res
 				console.log(res)
-			}).catch(err => {})
+			}).catch(err => {
+				console.log(err)
+			})
+			this.getDeviceCount()
 		},
 		methods: {
+			// 加入购物车
 			sale(index) {
-				this.$u.api.OrderSaleDevice({order: this.optionId,model: this.list[index].Model.Id}).then(res => {
-					if(res.success === false) return res
+				this.$u.api.OrderSaleDevice({
+					order: this.optionId,
+					model: this.list[index].Model.Id
+				}).then(res => {
+					if (res.success === false) return res
 					this.deviceCount = res.data.total
 					this.list[index].Count = res.data.count
+					this.getDeviceCount()
+					console.log(res)
 				}).then(err => {
 					uni.showToast({
 						title: '添加商品失败！',
 						icon: 'none'
 					})
+					console.log(err)
 				})
 			},
 			editOrder() {
@@ -127,14 +110,40 @@
 			dispatchOrder() {
 				this.dispatchShow = true
 			},
+			// 派单出库
 			dispatch() {
-				console.log(1)
+				if (this.deviceCount === 0) {
+					uni.showToast({
+						icon: 'none',
+						title: '没有选择任何商品！'
+					});
+					return
+				}
+				this.$u.api.OrderSaled({
+					order: this.optionId
+				}).then(res => {
+					uni.showToast({
+						title: '派单出库成功！'
+					})
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '派单出库失败！'
+					})
+				})
+				console.log(this.deviceCount)
 			},
-			dispatchNo() {
-				console.log(0)
+			// 获取出库数量
+			getDeviceCount() {
+				this.$u.api.getOrderSaleDeviceCounts({
+					order: this.optionId
+				}).then(res => {
+					this.deviceCount = res
+					console.log(res)
+				}).catch(err => {})
 			},
 			toCart() {
-				this.$u.route('pages/order/sale/saledevices',{
+				this.$u.route('pages/order/sale/saledevices', {
 					id: this.optionId
 				})
 			},

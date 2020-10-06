@@ -6,16 +6,16 @@
 			<view class="_info">
 				<u-image src="/static/devices/device.png" width="120rpx" height="120rpx" shape="circle" />
 				<view class="customer">
-					<span>{{item.Customer.Name}}</span>
-					<span>销售时间：{{item.CreatedOn | date}}</span>
-					<span v-if="item.Status === 10">接单时间：{{item.ModiOn | date}}</span>
-					<span v-if="item.Status === 12">派单时间：{{item.ModiOn | date}}</span>
+					<span>{{item.CustomerId}}</span>
+					<span>销售时间：{{item.CreatedOn}}</span>
+					<span v-if="item.Status === 10">接单时间：{{item.ModiOn}}</span>
+					<span v-if="item.Status === 12">派单时间：{{item.ModiOn}}</span>
 				</view>
 			</view>
 			<view class="operation">
 				<span>
 					<u-button v-if="item.Status === 10" type="success" plain ripple @click="accept(index)">接单</u-button>
-					<u-button v-if="item.Status === 12" type="success" plain ripple @click="toProduct">出库</u-button>
+					<u-button v-if="item.Status === 12" type="success" plain ripple @click="toProduct(item.Id)">出库</u-button>
 				</span>
 				<span>
 					<u-button type="warning" plain ripple>退单</u-button>
@@ -25,6 +25,7 @@
 				</span>
 			</view>
 		</view>
+		<u-modal v-model="shipmentShow" :content="shipmentContent" show-cancel-button @confirm="shipment"></u-modal>
 	</view>
 </template>
 
@@ -35,18 +36,15 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				order: [{
-					Customer: {
-						Name: 'n'
-					},
-					CreatedOn: new Date().getTime(),
-					ModiOn: new Date().getTime(),
-					Status: 12
-				}]
+				order: [],
+				shipmentShow: false,
+				shipmentContent: '确定要接单吗？',
+				_index: ''
 			}
 		},
 		onShow() {
 			this.$u.api.getDistributeOrders().then(res => {
+				this.order = res
 				console.log(res)
 			}).catch(err => {
 				uni.showToast({
@@ -57,29 +55,27 @@
 		},
 		methods: {
 			accept(index) {
-				uni.showModal({
-					title: '提示',
-					content: '确定要接单吗？',
-					success: e => {
-						if(e.confirm) {
-							this.$u.api.distributeAccept({
-								id: index
-							}).then(res => {
-								console.log(res)
-							}).catch(err => {})
-						}
-					},
-					fail: () => {
-						uni.showToast({
-							icon: 'none',
-							title: '接单失败！'
-						})
-					}
+				this._index = index
+				this.shipmentShow = true
+			},
+			shipment() {
+				this.$u.api.distributeAccept({
+					id: this.order[this._index].Id
+				}).then(res => {
+					uni.showToast({
+						title: '接单成功！'
+					})
+					console.log(res)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '接单失败！'
+					})
 				})
 			},
-			toProduct() {
+			toProduct(id) {
 				this.$u.route('pages/order/distribute/distribute', {
-					id: 123
+					id
 				})
 			}
 		}

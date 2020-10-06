@@ -2,27 +2,28 @@
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
 		 :title-width="300" title-color="#ffffff" :background="background" />
-		<view class="order">
+		<view class="order" v-for="(item,index) in orderList" :key="index">
 			<view class="_info">
 				<u-image src="/static/devices/1.png" width="120rpx" height="120rpx" shape="circle" />
 				<view class="customer">
-					<span>test</span>
-					<span>订购时间：{{new Date().getTime() | date}}</span>
+					<span>{{item.Contact}}</span>
+					<span>订购时间：{{item.OrderOn}}</span>
 				</view>
 			</view>
 			<view class="operation">
 				<span>
-					<u-button type="success" plain ripple @click="toProduct">产品订购</u-button>
+					<u-button type="success" plain ripple @click="toProduct(item.Id)">产品订购</u-button>
 				</span>
 				<span>
-					<u-button type="primary" plain ripple @click="toSaledevices">销售清单</u-button>
+					<u-button type="primary" plain ripple @click="toSaledevices(item.Id)">销售清单</u-button>
 				</span>
 				<span>
-					<u-button plain ripple @click="sendToDistribute">派单出库</u-button>
+					<u-button plain ripple @click="sendToDistribute(item.Id)">派单出库</u-button>
 				</span>
 			</view>
 		</view>
 		<u-button class="add" type="primary" @click="$u.route('pages/order/sale/create')">+新增订单</u-button>
+		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distribute"></u-modal>
 	</view>
 </template>
 
@@ -32,45 +33,52 @@
 			return {
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				}
+				},
+				distributeContent: '确定要派单出库吗?',
+				distributeShow: false,
+				orderList: []
 			}
 		},
 		onLoad() {
-			this.$u.api.getOrderSaleList().then(res => {
-				console.log(res)
-			}).catch(err => {
-				uni.showToast({
-					icon: 'none',
-					title: '获取数据失败！'
-				})
-			})
+			this.getOrderSaleList()
 		},
 		methods: {
-			toProduct() {
+			toProduct(Id) { 
 				this.$u.route('pages/order/sale/selectproduct',{
-					id: 123
+					Id
 				})
 			},
-			toSaledevices() {
+			toSaledevices(Id) {
 				this.$u.route('pages/order/sale/saledevices',{
-					id: 123
+					Id
 				})
 			},
-			sendToDistribute() {
-				uni.showModal({
-					title: '提示',
-					content: '确定要派单出库吗',
-					showCancel: true,
-					cancelText: '取消',
-					confirmText: '确定',
-					success: res => {
-						if (res.confirm) {
-							this.$u.api.orderSale({id: 123}).then(res => {
-								console.log(res)
-							}).catch(err => {})
-						}
-					},
-				});
+			getOrderSaleList() {
+				this.$u.api.getOrderSaleList().then(res => {
+					this.orderList = res
+					console.log(res,this.orderList)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败！'
+					})
+				})
+			},
+			sendToDistribute(id) {
+				this.distributeShow = true
+			},
+			distribute() {
+				this.$u.api.orderSale({order: id}).then(res => {
+					uni.showToast({
+						title: '派单出库成功！'
+					})
+					this.getOrderSaleList()
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '派单出库失败！'
+					})
+				})
 			}
 		}
 	}
