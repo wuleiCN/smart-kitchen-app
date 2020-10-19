@@ -18,7 +18,7 @@
 					<u-button type="primary" plain ripple @click="toSaledevices(item.Id)">销售清单</u-button>
 				</span>
 				<span>
-					<u-button plain ripple @click="sendToDistribute(item.Id)">派单出库</u-button>
+					<u-button plain ripple @click="sendToDistribute(item)">派单出库</u-button>
 				</span>
 			</view>
 		</view>
@@ -36,7 +36,8 @@
 				},
 				distributeContent: '确定要派单出库吗?',
 				distributeShow: false,
-				orderList: []
+				orderList: [],
+				distributeId: ''
 			}
 		},
 		onLoad() {
@@ -44,14 +45,18 @@
 		},
 		methods: {
 			toProduct(Id) { 
-				this.$u.route('pages/order/sale/selectproduct',{
-					Id
-				})
+				setTimeout(() => {
+					this.$u.route('pages/order/sale/selectproduct',{
+						Id
+					})
+				},200)
 			},
 			toSaledevices(Id) {
-				this.$u.route('pages/order/sale/saledevices',{
-					Id
-				})
+				setTimeout(() => {
+					this.$u.route('pages/order/sale/saledevices',{
+						Id
+					})
+				},200)
 			},
 			getOrderSaleList() {
 				this.$u.api.getOrderSaleList().then(res => {
@@ -65,19 +70,22 @@
 				})
 			},
 			sendToDistribute(id) {
+				this.distributeId = id
 				this.distributeShow = true
 			},
 			distribute() {
-				this.$u.api.orderSale({order: id}).then(res => {
+				this.$u.api.orderSale({order: this.distributeId}).then(res => {
 					uni.showToast({
 						title: '派单出库成功！'
 					})
+					console.log(res)
 					this.getOrderSaleList()
 				}).catch(err => {
 					uni.showToast({
 						icon: 'none',
 						title: '派单出库失败！'
 					})
+					console.log(err)
 				})
 			}
 		}
@@ -88,6 +96,7 @@
 	.order {
 		height: 250rpx;
 		background: #FFFFFF;
+		border-bottom: 1rpx solid #C8C9CC;
 
 		._info {
 			display: flex;

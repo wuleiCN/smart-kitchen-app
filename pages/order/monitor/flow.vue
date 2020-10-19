@@ -35,7 +35,7 @@
 		},
 		onLoad(option) {
 			this.$u.api.getMonitorById({
-				order: option.id
+				order: option.Id
 			}).then(res => {
 				console.log(res)
 			}).catch(err => {})

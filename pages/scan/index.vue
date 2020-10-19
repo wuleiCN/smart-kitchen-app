@@ -2,6 +2,7 @@
 	<view class="content">
 		<u-navbar :is-back="false" title="香道云厨智慧厨房" :title-width="300" title-color="#ffffff" :background="background" />
 		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#aaaaaa" inactive-color="#aaaaaa" :mid-button="true" />
+		<u-modal v-model="show" :content="content" @confirm="back"></u-modal>
 	</view>
 </template>
 
@@ -9,27 +10,100 @@
 	import {
 		mapState
 	} from "vuex"
+	import permision from "@/common/permission.js"
 	export default {
 		data() {
 			return {
 				title: 'scan',
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				}
+				},
+				show: false,
+				content: ''
 			}
 		},
 		onLoad() {
 
 		},
 		onShow() {
-			console.log(2)
+			this.scan()
 		},
 		computed: {
 			...mapState(["vuex_tabbar"])
 		},
 		methods: {
-			scanning() {
-				console.log(2)
+			back() {
+				this.$u.route({
+					url: 'pages/index/index',
+					type: 'switchTab'
+				})
+			},
+			async scan() {
+				// #ifdef APP-PLUS
+				const status = await this.checkPermission()
+				if (status !== 1) {
+					return;
+				}
+				// #endif
+				uni.scanCode({
+					success: (res) => {
+						// this.show = true
+						// this.content = '扫码成功' + res.result
+						// console.log(res)
+					},
+					fail: (err) => {
+						// #ifdef MP
+						uni.getSetting({
+							success: (res) => {
+								let authStatus = res.authSetting['scope.camera'];
+								if (!authStatus) {
+									uni.showModal({
+										title: '授权失败',
+										content: 'Hello uni-app需要使用您的相机，请在设置界面打开相关权限',
+										success: (res) => {
+											if (res.confirm) {
+												uni.openSetting()
+											}
+										}
+									})
+								}
+							}
+						})
+						// #endif
+					},
+					complete: (res) => {
+						if(res.result) {
+							this.show = true
+							this.content = '扫码成功' + res.result
+						} else {
+							this.$u.route({
+								url: 'pages/index/index',
+								type: 'switchTab'
+							})
+						}
+						console.log(res)
+					}
+				});
+			},
+			// 相机权限
+			async checkPermission(code) {
+				let status = permision.isIOS ? await permision.requestIOS('camera') :
+					await permision.requestAndroid('android.permission.CAMERA');
+
+				if (status === null || status === 1) {
+					status = 1;
+				} else {
+					uni.showModal({
+						content: "需要相机权限",
+						confirmText: "设置",
+						success: function(res) {
+							if (res.confirm) {
+								permision.gotoAppSetting();
+							}
+						}
+					})
+				}
+				return status;
 			}
 		}
 	}

@@ -7,30 +7,33 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col" v-if="order != null">
-			<span><strong>客户单位：</strong>test</span>
-			<span><strong>联系人：</strong>ww</span>
-			<span><strong>联系电话：</strong>1234</span>
-			<span><strong>收货地址：</strong>ww</span>
-			<span><strong>销售说明：</strong>1234</span>
+			<span><strong>客户单位：</strong>{{order.CustomerId}}</span>
+			<span><strong>联系人：</strong>{{order.Contact}}</span>
+			<span><strong>联系电话：</strong>{{order.Phone}}</span>
+			<span><strong>收货地址：</strong>{{order.Address}}</span>
+			<span><strong>销售说明：</strong>{{order.Comment}}</span>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">销售清单</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in list" :key="item.id" :options="options"
+			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index" :options="options"
 			 @open="open" @click="alarm">
 				<view class="item u-border-bottom">
-					<image mode="aspectFill" :src="item.images" />
+					<image mode="aspectFill" src="" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 					<view class="title-wrap">
-						<text>设备型号：{{ item.name }}</text>
-						<text class="u-line-2">设备类别：{{ item.model }}</text>
-						<text>设备描述：{{ item.remark}}</text>
-						<u-number-box v-model="item.count" disabled-input :long-press='false' />
+						<text>设备型号：{{ item.ModelId }}</text>
+						<text class="u-line-2">设备类别：{{ item.Type }}</text>
+						<text>设备描述：...</text>
+						<u-number-box v-model="item.Count" disabled-input :long-press='false' />
 					</view>
 				</view>
 			</u-swipe-action>
+			<!-- <view v-for="(item, index) in list" :key="index">
+				{{item.Type}}
+			</view> -->
 			<u-loadmore :status="status" />
 		</scroll-view>
 		<!-- <view class="_blank" /> -->
@@ -48,101 +51,47 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				status: 'loadmore',
+				status: 'nomore',
 				dispatchShow: false,
 				optionId: '',
+				options: [{
+						text: '删除',
+						style: {
+							backgroundColor: '#dd524d'
+						}
+					}],
 				order: {},
 				content: '确定立刻派单出库吗？',
-				list: [{
-						id: 1,
-						count: 0,
-						name: 'test01',
-						remark: 'remark',
-						model: '长安回望绣成堆',
-						images: '/static/devices/device.png',
-						show: false
-					},
-					{
-						id: 2,
-						count: 0,
-						name: 'test02',
-						remark: 'remark',
-						model: '新丰绿树起黄埃',
-						images: '/static/devices/device.png',
-						show: false
-					},
-					{
-						id: 3,
-						count: 0,
-						name: 'test03',
-						remark: 'remark',
-						model: '登临送目',
-						images: '/static/devices/warning.png',
-						show: false,
-					},
-					{
-						id: 4,
-						count: 0,
-						name: 'test03',
-						remark: 'remark',
-						model: '登临送目',
-						images: '/static/devices/warning.png',
-						show: false,
-					},
-					{
-						id: 5,
-						count: 0,
-						name: 'test03',
-						remark: 'remark',
-						model: '登临送目',
-						images: '/static/devices/warning.png',
-						show: false,
-					},
-					{
-						id: 6,
-						count: 0,
-						name: 'test03',
-						remark: 'remark',
-						model: '登临送目',
-						images: '/static/devices/warning.png',
-						show: false,
-					},
-					{
-						id: 7,
-						count: 0,
-						name: 'test03',
-						remark: 'remark',
-						model: '登临送目',
-						images: '/static/devices/warning.png',
-						show: false,
-					},
-					{
-						id: 8,
-						count: 0,
-						name: 'test03',
-						remark: 'remark',
-						model: '登临送目',
-						images: '/static/devices/warning.png',
-						show: false,
-					}
-				],
-				show: false,
-				options: [{
-					text: '删除',
-					style: {
-						backgroundColor: '#dd524d'
-					}
-				}]
+				list: []
 			}
 		},
 		onLoad(option) {
-			this.optionId = option.id
-			this.$u.api.getOrderInfo({id: option.id}).then(res => {
+			this.optionId = option.Id
+			console.log(option)
+		},
+		mounted() {
+			uni.showLoading({
+				title: '加载中...'
+			})
+			this.$u.api.getOrderInfo({id: this.optionId}).then(res => {
+				uni.hideLoading()
+				this.order = res
+			}).catch(err => {
+				uni.showToast({
+					icon: 'none',
+					title: '数据加载失败！'
+				})
+				console.log(err)
+			})
+			this.$u.api.getOrderSaleDevices({id: this.optionId}).then(res => {
+				res.map(v => {
+					v.show = false
+				})
+				this.list = res
 				console.log(res)
-			}).catch(err => {})
-			this.$u.api.getOrderSaleDevices({id: option.id}).then(res => {
-				console.log(res)
-			}).catch(err => {})
+			}).catch(err => {
+				console.log(err)
+			})
 		},
 		methods: {
 			open(index) {
@@ -151,15 +100,21 @@
 					if (index != idx) this.list[idx].show = false;
 				})
 			},
+			// 删除设备
 			alarm(index) {
 				this.list.splice(index, 1);
+				this.list[index].show = false
 				console.log(index)
 			},
 			dispatchOrder() {
 				this.dispatchShow = true
 			},
+			// 派单
 			dispatch() {
 				this.$u.api.updateOrderSaleDevices({devices: this.list}).then(res => {
+					uni.showToast({
+						title: '派单成功！'
+					})
 					console.log(res)
 				}).catch(err => {
 					uni.showToast({
@@ -172,6 +127,7 @@
 			dispatchNo() {
 				console.log(0)
 			},
+			// 上拉加载
 			toLowFun() {
 				this.$u.throttle(this.load, 2000)
 			},

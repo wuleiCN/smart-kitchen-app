@@ -15,6 +15,7 @@
 /*每个页面公共css */
 <style lang="scss">
 	@import "uview-ui/index.scss";
+	// *{touch-action: none;}
 	body {
 		background-color: #f2f2f2f2;
 	}

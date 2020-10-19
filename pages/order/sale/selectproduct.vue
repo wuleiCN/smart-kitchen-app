@@ -89,14 +89,19 @@
 			sale(index) {
 				this.$u.api.OrderSaleDevice({
 					order: this.optionId,
-					model: this.list[index].Model.Id
+					model: this.list[index].ModelId
 				}).then(res => {
-					if (res.success === false) return res
-					this.deviceCount = res.data.total
-					this.list[index].Count = res.data.count
+					console.log(res)
+					if (res.success === false) return
+					this.deviceCount = res.total
+					this.list[index].Count = res.count
+					uni.showToast({
+						icon: 'none',
+						title: '加入购物车成功！'
+					})
 					this.getDeviceCount()
 					console.log(res)
-				}).then(err => {
+				}).catch(err => {
 					uni.showToast({
 						title: '添加商品失败！',
 						icon: 'none'
@@ -143,9 +148,11 @@
 				}).catch(err => {})
 			},
 			toCart() {
-				this.$u.route('pages/order/sale/saledevices', {
-					id: this.optionId
-				})
+				setTimeout(() => {
+					this.$u.route('pages/order/sale/saledevices', {
+						Id: this.optionId
+					})
+				},300)
 			},
 			onReachBottom() {
 				this.$u.throttle(this.load, 2000)

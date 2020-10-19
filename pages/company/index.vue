@@ -137,13 +137,12 @@
 	.content {
 		.text-area {
 
-			// .grid {
-			// 	background-color: #FFFFFF;
-			// 	width: 370px;
-			// }
+			::v-deep .u-grid {
+				background-color: #FFFFFF !important;
+			}
 			.grid-text {
 				font-size: 28rpx;
-				margin-top: 4rpx;
+				margin-top: 20rpx;
 				color: $u-type-info;
 			}
 
@@ -156,7 +155,7 @@
 
 				.u-card-wrap {
 					background-color: $u-bg-color;
-					padding: 1rpx;
+					// padding: 1rpx;
 				}
 
 				.u-body-item {

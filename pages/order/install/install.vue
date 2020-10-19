@@ -17,7 +17,7 @@
 				<text>扫码设备条码/二维码</text>
 				<text>或输入设备编号</text>
 			</view>
-			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle"></u-image>
+			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan"></u-image>
 		</view>
 		<view class="code u-flex">
 			<text>设备编码：</text>
@@ -29,9 +29,9 @@
 			<span class="_title u-flex">设备基本信息</span>
 		</view>
 		<view class="info u-flex-col u-row-around">
-			<span>设备型号：</span>
-			<span>设备类别：</span>
-			<span>设备编码：</span>
+			<span>设备型号：{{device}}</span>
+			<span>设备类别：{{device}}</span>
+			<span>设备编码：{{device}}</span>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
@@ -45,6 +45,14 @@
 			<text>设备名称：</text>
 			<u-input v-model="nameValue" type="text" />
 		</view>
+		<view class="code u-flex">
+			<text>报警设备：</text>
+			<u-input v-model="areaValue" type="select" :select-open="selectShow" @click="selectShow = true" />
+		</view>
+		<view class="code u-flex">
+			<text>防区：</text>
+			<u-input v-model="areaValue" type="select" :select-open="selectShow" @click="selectShow = true" />
+		</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
 		<view class="_submit">
 			<u-button type="success">提交安装信息</u-button>
@@ -53,12 +61,16 @@
 </template>
 
 <script>
+	import permision from "@/common/permission.js"
 	export default {
 		data() {
 			return {
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
+				order: [],
+				device: {},
+				areas: [],
 				scanCode: '',
 				areaValue: '',
 				nameValue: '',
@@ -75,10 +87,82 @@
 						value: '工艺品',
 						label: '工艺品'
 					}
-				]
+				],
+				optionId: ''
 			}
 		},
+		onLoad(option) {
+			this.optionId = option.id
+			// 获取销售信息
+			this.$u.api.getOrderInfo({
+				id: option.id
+			}).then(res => {
+				this.order = res.data
+				console.log(res)
+			}).catch(err => {})
+			// 获得指定客户区域信息
+			this.$u.api.getAreasByCustomer({
+				customer: this.order.CustomerId
+			}).then(res => {
+				this.areas = res.data
+				console.log(res)
+			})
+		},
 		methods: {
+			async scan() {
+				// #ifdef APP-PLUS
+				const status = await this.checkPermission()
+				if (status !== 1) {
+					return;
+				}
+				// #endif
+				uni.scanCode({
+					success: (res) => {
+						this.device = res.result
+						console.log(res)
+					},
+					fail: (err) => {
+						// #ifdef MP
+						uni.getSetting({
+							success: (res) => {
+								let authStatus = res.authSetting['scope.camera'];
+								if (!authStatus) {
+									uni.showModal({
+										title: '授权失败',
+										content: 'Hello uni-app需要使用您的相机，请在设置界面打开相关权限',
+										success: (res) => {
+											if (res.confirm) {
+												uni.openSetting()
+											}
+										}
+									})
+								}
+							}
+						})
+						// #endif
+					}
+				});
+			},
+			// 相机权限
+			async checkPermission(code) {
+				let status = permision.isIOS ? await permision.requestIOS('camera') :
+					await permision.requestAndroid('android.permission.CAMERA');
+
+				if (status === null || status === 1) {
+					status = 1;
+				} else {
+					uni.showModal({
+						content: "需要相机权限",
+						confirmText: "设置",
+						success: function(res) {
+							if (res.confirm) {
+								permision.gotoAppSetting();
+							}
+						}
+					})
+				}
+				return status;
+			},
 			selectConfirm(e) {
 				this.areaValue = '';
 				e.map((val, index) => {
@@ -164,11 +248,11 @@
 	}
 
 	._submit {
-		width: 100%;
+		// width: 100%;
 		// height: 110rpx;
 
 		::v-deep .u-btn {
-			margin: 30rpx 30rpx 0 30rpx;
+			margin: 30rpx 0 0;
 		}
 	}
 </style>
