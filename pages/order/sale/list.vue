@@ -36,7 +36,8 @@
 				},
 				distributeContent: '确定要派单出库吗?',
 				distributeShow: false,
-				orderList: []
+				orderList: [],
+				distributeId: ''
 			}
 		},
 		onLoad() {
@@ -65,13 +66,15 @@
 				})
 			},
 			sendToDistribute(id) {
+				this.distributeId = id
 				this.distributeShow = true
 			},
 			distribute() {
-				this.$u.api.orderSale({order: id}).then(res => {
+				this.$u.api.orderSale({order: this.distributeId}).then(res => {
 					uni.showToast({
 						title: '派单出库成功！'
 					})
+					console.log(res)
 					this.getOrderSaleList()
 				}).catch(err => {
 					uni.showToast({
@@ -88,6 +91,7 @@
 	.order {
 		height: 250rpx;
 		background: #FFFFFF;
+		border-bottom: 1rpx solid #C8C9CC;
 
 		._info {
 			display: flex;

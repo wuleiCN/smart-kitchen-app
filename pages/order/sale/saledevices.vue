@@ -7,11 +7,11 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col" v-if="order != null">
-			<span><strong>客户单位：</strong>test</span>
-			<span><strong>联系人：</strong>ww</span>
-			<span><strong>联系电话：</strong>1234</span>
-			<span><strong>收货地址：</strong>ww</span>
-			<span><strong>销售说明：</strong>1234</span>
+			<span><strong>客户单位：</strong>{{order.CustomerId}}</span>
+			<span><strong>联系人：</strong>{{order.Contact}}</span>
+			<span><strong>联系电话：</strong>{{order.Phone}}</span>
+			<span><strong>收货地址：</strong>{{order.Address}}</span>
+			<span><strong>销售说明：</strong>{{order.Comment}}</span>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
@@ -136,11 +136,12 @@
 			}
 		},
 		onLoad(option) {
-			this.optionId = option.id
-			this.$u.api.getOrderInfo({id: option.id}).then(res => {
+			this.optionId = option.Id
+			this.$u.api.getOrderInfo({id: option.Id}).then(res => {
+				this.order = res
 				console.log(res)
 			}).catch(err => {})
-			this.$u.api.getOrderSaleDevices({id: option.id}).then(res => {
+			this.$u.api.getOrderSaleDevices({id: option.Id}).then(res => {
 				console.log(res)
 			}).catch(err => {})
 		},
