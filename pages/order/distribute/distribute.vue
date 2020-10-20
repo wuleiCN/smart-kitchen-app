@@ -7,7 +7,7 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col">
-			<span><strong>客户单位：</strong>{{order.Customer.Name}}</span>
+			<span><strong>客户单位：</strong></span>
 			<span><strong>销售时间：</strong>{{order.OrderOn}}</span>
 			<span><strong>联系人：</strong>{{order.Contact}}</span>
 			<span><strong>联系电话：</strong>{{order.Phone}}</span>
@@ -39,15 +39,7 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				order: {
-					Customer: {
-						Name: 'a'
-					},
-					OrderOn: '1745852',
-					Contact: 'c',
-					Phone: 'p',
-					Comment: 'c'
-				},
+				order: {},
 				status: 'loadmore',
 				optionId: '',
 				devices: [{
@@ -114,6 +106,7 @@
 			this.$u.api.getOrderInfo({
 				id: option.id
 			}).then(res => {
+				this.order = res
 				console.log(res)
 			}).catch(err => {})
 			this.$u.api.getOrderSaleDevices({

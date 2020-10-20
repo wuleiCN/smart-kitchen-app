@@ -80,10 +80,6 @@
 </script>
 
 <style scoped lang="scss">
-	.product {
-		height: 1490rpx;
-	}
-
 	::v-deep .u-card {
 		margin: 0 !important;
 		position: relative;

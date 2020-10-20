@@ -18,8 +18,8 @@
 			<span class="_title u-flex">销售清单</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index" :options="options"
-			 @open="open" @click="alarm">
+			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index" :options="options" @open="open"
+			 @click="alarm">
 				<view class="item u-border-bottom">
 					<image mode="aspectFill" src="" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
@@ -27,7 +27,7 @@
 						<text>设备型号：{{ item.ModelId }}</text>
 						<text class="u-line-2">设备类别：{{ item.Type }}</text>
 						<text>设备描述：...</text>
-						<u-number-box v-model="item.Count" disabled-input :long-press='false' />
+						<u-number-box v-model="item.Count" disabled-input :long-press='false'/>
 					</view>
 				</view>
 			</u-swipe-action>
@@ -40,7 +40,7 @@
 		<view class="dispatch">
 			<u-button type="success" @click="dispatchOrder">确定派单</u-button>
 		</view>
-		<u-modal v-model="dispatchShow" :content="content" show-cancel-button @confirm="dispatch" @cancel="dispatchNo" />
+		<u-modal v-model="dispatchShow" :content="content" show-cancel-button @confirm="dispatch" />
 	</view>
 </template>
 
@@ -55,11 +55,11 @@
 				dispatchShow: false,
 				optionId: '',
 				options: [{
-						text: '删除',
-						style: {
-							backgroundColor: '#dd524d'
-						}
-					}],
+					text: '删除',
+					style: {
+						backgroundColor: '#dd524d'
+					}
+				}],
 				order: {},
 				content: '确定立刻派单出库吗？',
 				list: []
@@ -67,13 +67,12 @@
 		},
 		onLoad(option) {
 			this.optionId = option.Id
-			console.log(option)
-		},
-		mounted() {
 			uni.showLoading({
 				title: '加载中...'
 			})
-			this.$u.api.getOrderInfo({id: this.optionId}).then(res => {
+			this.$u.api.getOrderInfo({
+				id: this.optionId
+			}).then(res => {
 				uni.hideLoading()
 				this.order = res
 			}).catch(err => {
@@ -83,15 +82,8 @@
 				})
 				console.log(err)
 			})
-			this.$u.api.getOrderSaleDevices({id: this.optionId}).then(res => {
-				res.map(v => {
-					v.show = false
-				})
-				this.list = res
-				console.log(res)
-			}).catch(err => {
-				console.log(err)
-			})
+			this.getOrderList()
+			console.log(option)
 		},
 		methods: {
 			open(index) {
@@ -100,10 +92,42 @@
 					if (index != idx) this.list[idx].show = false;
 				})
 			},
+			// 更新设备
+			onBackPress() {
+				this.updataOrder()
+			},
+			updataOrder() {
+				this.$u.api.updateOrderSaleDevices({
+					devices: this.list
+				}).then(res => {
+					this.getOrderList()
+					console.log(res)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '更新失败！，' + err
+					})
+					console.log(err)
+				})
+			},
+			// 获取设备清单
+			getOrderList() {
+				this.$u.api.getOrderSaleDevices({
+					id: this.optionId
+				}).then(res => {
+					res.map(v => {
+						v.show = false
+					})
+					this.list = res
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})
+			},
 			// 删除设备
 			alarm(index) {
 				this.list.splice(index, 1);
-				this.list[index].show = false
+				// this.list[index].show = false
 				console.log(index)
 			},
 			dispatchOrder() {
@@ -111,21 +135,19 @@
 			},
 			// 派单
 			dispatch() {
-				this.$u.api.updateOrderSaleDevices({devices: this.list}).then(res => {
+				this.$u.api.orderSale({order: this.distributeId}).then(res => {
 					uni.showToast({
-						title: '派单成功！'
+						title: '派单出库成功！'
 					})
 					console.log(res)
+					this.getOrderSaleList()
 				}).catch(err => {
 					uni.showToast({
 						icon: 'none',
-						title: '派单失败！，' + err
+						title: '派单出库失败！'
 					})
 					console.log(err)
 				})
-			},
-			dispatchNo() {
-				console.log(0)
 			},
 			// 上拉加载
 			toLowFun() {

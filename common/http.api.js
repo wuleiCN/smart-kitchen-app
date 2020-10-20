@@ -38,11 +38,11 @@ const install = (Vue, vm) => {
 	// 销售出库回单
 	let distributeFinish = (params = {}) => vm.$u.post('api/OrderSale/DistributeFinish',params)
 	// 获得销售出库工单列表
-	let getDistributeOrders = (params = {}) => vm.$u.get('api/OrderSale/GetDistributeOrders',params)
+	let getDistributeOrders = (params = {}) => vm.$u.get('api/Sales/GetSaleOrders',params)
 	// 销售出库接单
-	let distributeAccept = (params = {}) => vm.$u.post('api/OrderSale/DistributeAccept',params)
+	let distributeAccept = (params = {}) => vm.$u.post('api/Sales/SaleOrderDistributeAccept',params)
 	// 销售设备出库
-	let orderSaleDeviceDistribute = (params = {}) => vm.$u.post('api/OrderSale/OrderSaleDeviceDistribute',params)
+	let orderSaleDeviceDistribute = (params = {}) => vm.$u.post('api/Sales/SaleOrderDistribute',params)
 	// 按设备编码出库设备
 	let orderSaleDeviceDistributeByCode = (params = {}) => vm.$u.post('api/OrderSale/OrderSaleDeviceDistributeByCode',params)
 	// 获得销售安装工单列表
