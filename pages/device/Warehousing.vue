@@ -43,6 +43,7 @@
 				warehousContent: '确定要入库设备吗？',
 				// 入库设备标识
 				arrValue: null,
+				ModelId: '',
 				warehousShow: false,
 				scanShow: false,
 				selectList: [{
@@ -94,6 +95,7 @@
 				uni.scanCode({
 					success: (res) => {
 						this.scanShow = true
+						this.ModelId = res.result
 						console.log(res)
 					},
 					fail: (err) => {
@@ -142,11 +144,7 @@
 					switch (this.arrValue[0].value) {
 						// 报警设备入库
 						case 1:
-							this.$u.api.StockInAlertDevice({
-								ComNumber: 13907310001,
-								ModelId: '2370bf13-513c-4f1b-a643-947d2438147f',
-								Code: ''
-							}).then((res) => {
+							this.$u.api.StockInAlertDevice({ModelId:this.ModelId}).then((res) => {
 								console.log(res);
 							}).catch(err => {
 								console.log(err);

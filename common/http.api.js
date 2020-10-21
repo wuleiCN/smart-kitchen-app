@@ -25,6 +25,8 @@ const install = (Vue, vm) => {
 	let OrderSaleDevice = (params = {}) => vm.$u.post('api/OrderSale/SaleDevice',params)
 	// 立刻派单
 	let OrderSaled = (params = {}) => vm.$u.post('api/OrderSale/Saled',params)
+	// 获得指定客户信息
+	let getCustomer = (params = {}) => vm.$u.get('api/Customers/GetCustomer',params)
 	// 获取销售信息
 	let getOrderInfo = (params = {}) => vm.$u.get('api/OrderSale/GetOrderInfo',params)
 	// 获得指定销售工单销售产品清单
@@ -85,6 +87,7 @@ const install = (Vue, vm) => {
 		getOrderSaleDevices,
 		updateOrderSaleDevices,
 		getCustomersList,
+		getCustomer,
 		createOrderSale,
 		distributeFinish,
 		getDistributeOrders,

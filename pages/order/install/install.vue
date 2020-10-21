@@ -93,11 +93,17 @@
 		},
 		onLoad(option) {
 			this.optionId = option.id
+			// 获得指定客户信息
+			this.$u.api.getCustomer({
+				id: option.id
+			}).then(res => {
+				console.log(res)
+			})
 			// 获取销售信息
 			this.$u.api.getOrderInfo({
 				id: option.id
 			}).then(res => {
-				this.order = res.data
+				this.order = res
 				console.log(res)
 			}).catch(err => {})
 			// 获得指定客户区域信息

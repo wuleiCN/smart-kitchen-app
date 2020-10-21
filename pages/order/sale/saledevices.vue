@@ -27,7 +27,7 @@
 						<text>设备型号：{{ item.ModelId }}</text>
 						<text class="u-line-2">设备类别：{{ item.Type }}</text>
 						<text>设备描述：...</text>
-						<u-number-box v-model="item.Count" disabled-input :long-press='false'/>
+						<u-number-box v-model="item.Count" disabled-input :long-press='false' />
 					</view>
 				</view>
 			</u-swipe-action>
@@ -135,7 +135,9 @@
 			},
 			// 派单
 			dispatch() {
-				this.$u.api.orderSale({order: this.distributeId}).then(res => {
+				this.$u.api.orderSale({
+					order: this.distributeId
+				}).then(res => {
 					uni.showToast({
 						title: '派单出库成功！'
 					})
@@ -201,6 +203,10 @@
 			.item {
 				display: flex;
 				padding: 20rpx;
+
+				::v-deep .u-numberbox {
+					touch-action: none;
+				}
 			}
 
 			image {
