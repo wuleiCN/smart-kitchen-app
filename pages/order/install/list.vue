@@ -23,7 +23,7 @@
 						<u-button v-if="item.Status === 20" type="error" plain ripple>退单</u-button>
 					</span>
 					<span>
-						<u-button plain @click="toOrderDetail(item.Id)">详情</u-button>
+						<u-button plain @click="toOrderDetail(item)">详情</u-button>
 					</span>
 				</view>
 			</view>
@@ -127,9 +127,9 @@
 					id
 				})
 			},
-			toOrderDetail(id) {
+			toOrderDetail(item) {
 				this.$u.route('pages/order/monitor/order_detail', {
-					id
+					item: JSON.stringify(item)
 				})
 			},
 			toLowFun() {

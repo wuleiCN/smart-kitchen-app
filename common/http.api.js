@@ -45,6 +45,8 @@ const install = (Vue, vm) => {
 	let distributeAccept = (params = {}) => vm.$u.post('api/Sales/SaleOrderDistributeAccept',params)
 	// 销售设备出库
 	let orderSaleDeviceDistribute = (params = {}) => vm.$u.post('api/Sales/SaleOrderDistribute',params)
+	// 获得指定销售订单销售设备信息
+	let getSaleOrderDevices = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDevices',params)
 	// 按设备编码出库设备
 	let orderSaleDeviceDistributeByCode = (params = {}) => vm.$u.post('api/OrderSale/OrderSaleDeviceDistributeByCode',params)
 	// 获得销售安装工单列表
@@ -55,6 +57,8 @@ const install = (Vue, vm) => {
 	let canInstallFinish = (params = {}) => vm.$u.get('api/Orders/CanInstallFinish',params)
 	// 获得指定客户区域信息
 	let getAreasByCustomer = (params = {}) => vm.$u.get('api/Customers/GetAreas',params)
+	// 获得指定客户所有设备信息
+	let getCustomerDevices = (params = {}) => vm.$u.get('api/Devices/GetCustomerDevices',params)
 	// 报警设备入库
 	let StockInAlertDevice = (params = {}) => vm.$u.post('api/Storages/StockInAlertDevice',params)
 	// 灭火设备入库（未集成报警设备）
@@ -69,6 +73,27 @@ const install = (Vue, vm) => {
 	let StockInCamera = (params = {}) => vm.$u.post('api/Storages/StockInCamera',params)
 	// 设备出库
 	let StockOutDevice = (params = {}) => vm.$u.post('api/Storages/StockOutDevice',params)
+	// 数据字典
+	// 设备类别
+	let getDeviceType = (params = {}) => vm.$u.get('api/Dictionary/DeviceType',params)
+	// 设备状态
+	let getDeviceStatus = (params = {}) => vm.$u.get('api/Dictionary/DeviceStatus',params)
+	// 摄像机/NVR品牌
+	let getCameraBrand= (params = {}) => vm.$u.get('api/Dictionary/CameraBrand',params)
+	// 公司类别
+	let getCompanyType = (params = {}) => vm.$u.get('api/Dictionary/CompanyType',params)
+	// 公司状态
+	let getCompanyStatus = (params = {}) => vm.$u.get('api/Dictionary/CompanyStatus',params)
+	// 客户状态
+	let getCustomerStatus = (params = {}) => vm.$u.get('api/Dictionary/CustomerStatus',params)
+	// 员工类别
+	let getEmployeeType = (params = {}) => vm.$u.get('api/Dictionary/EmployeeType',params)
+	// 员工状态
+	let getEmployeeStatus = (params = {}) => vm.$u.get('api/Dictionary/EmployeeStatus',params)
+	// 工单类别
+	let getOrderType = (params = {}) => vm.$u.get('api/Dictionary/OrderType',params)
+	// 工单状态
+	let getOrderStatus = (params = {}) => vm.$u.get('api/Dictionary/OrderStatus',params)
 	vm.$u.api = {
 		Login,
 		getInfo,
@@ -93,18 +118,30 @@ const install = (Vue, vm) => {
 		getDistributeOrders,
 		distributeAccept,
 		orderSaleDeviceDistribute,
+		getSaleOrderDevices,
 		orderSaleDeviceDistributeByCode,
 		getInstallOrders,
 		installAccept,
 		canInstallFinish,
 		getAreasByCustomer,
+		getCustomerDevices,
 		StockInAlertDevice,
 		StockInFireDevice,
 		StockInFireDeviceWithAlert,
 		StockInGateway,
 		StockInNvr,
 		StockInCamera,
-		StockOutDevice
+		StockOutDevice,
+		getDeviceType,
+		getDeviceStatus,
+		getCameraBrand,
+		getCompanyType,
+		getCompanyStatus,
+		getCustomerStatus,
+		getEmployeeType,
+		getEmployeeStatus,
+		getOrderType,
+		getOrderStatus
 	};
 }
 

@@ -40,57 +40,9 @@
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				order: {},
-				status: 'loadmore',
+				status: 'nomore',
 				optionId: '',
 				devices: [{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					},
-					{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					},
-					{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					},
-					{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					},
-					{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					},
-					{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					},
-					{
 						Model: {
 							Name: 'n',
 							TypeName: 't'
@@ -109,7 +61,7 @@
 				this.order = res
 				console.log(res)
 			}).catch(err => {})
-			this.$u.api.getOrderSaleDevices({
+			this.$u.api.getSaleOrderDevices({
 				id: option.id
 			}).then(res => {
 				console.log(res)

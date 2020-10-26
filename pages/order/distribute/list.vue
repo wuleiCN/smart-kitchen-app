@@ -7,9 +7,9 @@
 				<u-image src="/static/devices/device.png" width="120rpx" height="120rpx" shape="circle" />
 				<view class="customer">
 					<span>联系人：{{item.Contact}}</span>
-					<span>销售时间：{{item.CreatedOn}}</span>
-					<span v-if="item.Status === 10">接单时间：{{item.ModiOn}}</span>
-					<span v-if="item.Status === 12">派单时间：{{item.ModiOn}}</span>
+					<span>销售时间：{{item.OrderOn}}</span>
+					<span v-if="item.Status === 10">接单时间：{{item.SendOn}}</span>
+					<span v-if="item.Status === 12">派单时间：{{item.ArrivedOn}}</span>
 				</view>
 			</view>
 			<view class="operation">
@@ -82,8 +82,7 @@
 			// 出库
 			toProduct(item) {
 				this.$u.route('pages/order/distribute/distribute', {
-					id: item.Id,
-					order: item.OrderId
+					id: item.Id
 				})
 			}
 		}
