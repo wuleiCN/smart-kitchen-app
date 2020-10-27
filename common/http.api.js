@@ -44,7 +44,7 @@ const install = (Vue, vm) => {
 	// 销售出库接单
 	let distributeAccept = (params = {}) => vm.$u.post('api/Sales/SaleOrderDistributeAccept',params)
 	// 销售设备出库
-	let orderSaleDeviceDistribute = (params = {}) => vm.$u.post('api/Sales/SaleOrderDistribute',params)
+	let orderSaleDeviceDistribute = (params = {}) => vm.$u.post('api/OrderSale/OrderSaleDeviceDistribute',params)
 	// 获得指定销售订单销售设备信息
 	let getSaleOrderDevices = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDevices',params)
 	// 按设备编码出库设备

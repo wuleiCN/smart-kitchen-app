@@ -67,9 +67,17 @@
 				this.$u.api.distributeAccept({
 					id: this.order[this._index].Id
 				}).then(res => {
-					uni.showToast({
-						title: '接单成功！'
-					})
+					if(res.success) {
+						uni.showToast({
+							title: '接单成功！'
+						})
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: '接单失败！'
+						})
+						return false
+					}
 					this.getOrderInfo()
 					console.log(res)
 				}).catch(err => {

@@ -25,7 +25,7 @@
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 					<view class="title-wrap">
 						<text>设备型号：{{ item.ModelId }}</text>
-						<text class="u-line-2">设备类别：{{ item.Type }}</text>
+						<text class="u-line-2">设备类别：{{ item.Name }}</text>
 						<text>设备描述：...</text>
 						<u-number-box v-model="item.Count" disabled-input :long-press='false' />
 					</view>
@@ -62,7 +62,8 @@
 				}],
 				order: {},
 				content: '确定立刻派单出库吗？',
-				list: []
+				list: [],
+				DeviceType: uni.getStorageSync('DeviceType')
 			}
 		},
 		onLoad(option) {
@@ -117,6 +118,12 @@
 				}).then(res => {
 					res.map(v => {
 						v.show = false
+					})
+					res.map(v => {
+						this.DeviceType.forEach(i => {
+							if(v.Type === i.value) v.Name = i.name
+						})
+						
 					})
 					this.list = res
 					console.log(res)

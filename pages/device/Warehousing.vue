@@ -43,7 +43,7 @@
 				warehousContent: '确定要入库设备吗？',
 				// 入库设备标识
 				arrValue: null,
-				ModelId: '',
+				Code: '',
 				warehousShow: false,
 				scanShow: false,
 				selectList: [{
@@ -95,7 +95,7 @@
 				uni.scanCode({
 					success: (res) => {
 						this.scanShow = true
-						this.ModelId = res.result
+						this.Code = res.result
 						console.log(res)
 					},
 					fail: (err) => {
@@ -144,18 +144,25 @@
 					switch (this.arrValue[0].value) {
 						// 报警设备入库
 						case 1:
-							this.$u.api.StockInAlertDevice({ModelId:this.ModelId}).then((res) => {
+							this.$u.api.StockInAlertDevice({
+								Code: this.Code
+							}).then((res) => {
+								this.finishCB(res)
 								console.log(res);
 							}).catch(err => {
+								uni.showToast({
+									icon: 'none',
+									title: '发生错误!'
+								})
 								console.log(err);
 							})
 							break;
 							// 灭火设备入库（未集成报警设备）
 						case 2:
 							this.$u.api.StockInFireDevice({
-								ModelId: '8b69df5f-2991-43cd-b2d7-cb430f4f3b26',
-								Code: ''
+								Code: this.Code
 							}).then((res) => {
+								this.finishCB(res)
 								console.log(res);
 							}).catch(err => {
 								console.log(err);
@@ -164,12 +171,9 @@
 							// 灭火设备入库（集成报警设备）
 						case 3:
 							this.$u.api.StockInFireDeviceWithAlert({
-								AlertDeviceModel: 'c4e01995-3139-445d-ab9a-59cdeb09fd30',
-								ComNumber: 13907310001,
-								DefenceAreaNo: '',
-								ModelId: '2370bf13-513c-4f1b-a643-947d2438147f',
-								Code: ''
+								Code: this.Code
 							}).then((res) => {
+								this.finishCB(res)
 								console.log(res);
 							}).catch(err => {
 								console.log(err);
@@ -178,9 +182,9 @@
 							// 智能网关设备入库
 						case 4:
 							this.$u.api.StockInGateway({
-								ModelId: '2bb8951b-2b17-4654-abc6-74cf849aaafc',
-								Code: ''
+								Code: this.Code
 							}).then((res) => {
+								this.finishCB(res)
 								console.log(res);
 							}).catch(err => {
 								console.log(err);
@@ -189,10 +193,9 @@
 							// NVR设备入库
 						case 5:
 							this.$u.api.StockInNvr({
-								ComNumber: 13907310001,
-								ModelId: '596f6d62-c82c-47b2-b47e-259ef6567846',
-								Code: ''
+								Code: this.Code
 							}).then((res) => {
+								this.finishCB(res)
 								console.log(res);
 							}).catch(err => {
 								console.log(err);
@@ -201,16 +204,27 @@
 							// 摄像机设备入库
 						case 6:
 							this.$u.api.StockInCamera({
-								ComNumber: 13907310001,
-								ModelId: '8c1a55f9-66e3-47a5-9400-ead84b1fd7c2',
-								Code: ''
+								Code: this.Code
 							}).then((res) => {
+								this.finishCB(res)
 								console.log(res);
 							}).catch(err => {
 								console.log(err);
 							})
 							break;
 					}
+				}
+			},
+			finishCB(res) {
+				if(res.success) {
+					uni.showToast({
+						title: '设备入库成功！'
+					})
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: '设备入库失败！'
+					})
 				}
 			},
 			// 相机权限

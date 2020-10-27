@@ -55,7 +55,6 @@
 			}
 		},
 		onShow() {
-			this.getDictionary()
 			console.log(123)
 		},
 		onReady() {
@@ -81,7 +80,7 @@
 					uni.setStorageSync('token', res.Token)
 					const info = await this.$u.api.getInfo().catch(err => {})
 					uni.setStorageSync('userInfo', info)
-					console.log(info)
+					this.getDictionary()
 					uni.switchTab({
 						url: '/pages/index/index'
 					});
