@@ -70,7 +70,7 @@
 					password: this.model.password
 				}).catch(err => {
 				this.$refs.uToast.show({
-					title: '登录失败,' + err,
+					title: '登录失败,' + err.message,
 					type: 'error',
 				})
 				console.log(err)
@@ -86,7 +86,7 @@
 					});
 				} else {
 					this.$refs.uToast.show({
-						title: `登录失败,${res.Message}`,
+						title: `登录失败,${res.message}`,
 						type: 'error',
 					})
 				}

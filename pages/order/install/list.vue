@@ -74,19 +74,17 @@
 							order: this.list[index].Id
 						}).then(res => {
 							console.log(res)
-							if (res.data.success === true) {
-								this.list[index].Status = 20
-								uni.showToast({
-									title: '接单成功！'
-								})
-								this.getInstallOrderList()
-							} else {
-								uni.showToast({
-									icon: 'none',
-									title: '接单失败！'
-								})
-							}
-						}).catch(err => {})
+							this.list[index].Status = 20
+							uni.showToast({
+								title: '接单成功！'
+							})
+							this.getInstallOrderList()
+						}).catch(err => {
+							uni.showToast({
+								icon: 'none',
+								title: '接单失败！'
+							})
+						})
 					}
 				})
 			},

@@ -18,17 +18,17 @@
 			<span class="_title u-flex">出库设备</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<view class="device u-flex-col" v-for="(item,index) in devices" :key="index">
-				<span><strong>设备型号：</strong>{{item.Model.Name}}</span>
-				<span><strong>设备类别：</strong>{{item.Model.TypeName}}</span>
+			<view class="device u-flex-col" v-for="(item,index) in devices" :key="index" @click="toDeviceDisribute(item.OrderId)">
+				<span><strong>设备型号：</strong>{{item.ModelId}}</span>
+				<span><strong>设备类别：</strong>{{item.Name}}</span>
 				<span><strong>出库数量：</strong>{{item.DistributedCount}} / {{item.Count}}</span>
 			</view>
 			<u-loadmore :status="status" />
 		</scroll-view>
-		<view class="operation u-flex">
-			<u-button type="primary" size="medium" @click="toDeviceDisribute">设备出库</u-button>
-			<u-button type="success" size="medium" @click="distributeFinish">出库回单</u-button>
+		<view class="operation">
+			<u-button type="success" @click="distributeShow">出库回单</u-button>
 		</view>
+		<u-modal v-model="distributeShow" :content="content" show-cancel-button @confirm="distributed" />
 	</view>
 </template>
 
@@ -42,15 +42,10 @@
 				order: {},
 				status: 'nomore',
 				optionId: '',
-				devices: [{
-						Model: {
-							Name: 'n',
-							TypeName: 't'
-						},
-						DistributedCount: 90,
-						Count: 5
-					}
-				]
+				devices: [],
+				content: '确定要回单吗？',
+				distributeShow: false,
+				DeviceType: uni.getStorageSync('DeviceType')
 			}
 		},
 		onLoad(option) {
@@ -64,6 +59,12 @@
 			this.$u.api.getSaleOrderDevices({
 				id: option.id
 			}).then(res => {
+				res.map(v => {
+					this.DeviceType.forEach(i => {
+						if (v.Type === i.value) v.Name = i.name
+					})
+				})
+				this.devices = res
 				console.log(res)
 			}).catch(err => {})
 		},
@@ -78,40 +79,35 @@
 				}, 2000)
 				console.log("触底事件");
 			},
-			toDeviceDisribute() {
+			toDeviceDisribute(id) {
 				setTimeout(() => {
 					this.$u.route('pages/order/distribute/devicedistribute', {
-						id: 123
-					},200)
+						id
+					}, 200)
 				})
 			},
-			distributeFinish() {
+			distributed() {
 				const canFinish = this.devices.every(v => v.Count > v.DistributedCount)
 				if (canFinish === false) {
-					uni.showModal({
-						title: '提示',
-						content: '设备出库尚未完成',
-						showCancel: false,
-						confirmText: '确定'
+					uni.showToast({
+						icon: 'none',
+						title: '设备出库尚未完成！'
 					});
 					return false;
 				}
-				uni.showModal({
-					content: '确定要回单吗？',
-					success: () => {
-						this.$u.api.distributeFinish({order: this.optionId}).then(res => {
-							uni.showToast({
-								icon: 'none',
-								title: '回单成功！'
-							})
-							console.log(res)
-						}).catch(err => {
-							uni.showToast({
-								icon: 'none',
-								title: '回单失败！'
-							})
-						})
-					}
+				this.$u.api.distributeFinish({
+					order: this.optionId
+				}).then(res => {
+					uni.showToast({
+						icon: 'none',
+						title: '回单成功！'
+					})
+					console.log(res)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '回单失败！'
+					})
 				})
 			}
 		}

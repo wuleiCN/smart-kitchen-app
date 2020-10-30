@@ -108,6 +108,12 @@ text {
 	flex-direction: column;
 }
 
+.u-col-line {
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis; 
+}
+
 // 定义flex等分
 @for $i from 0 through 12 {
 	.u-flex-#{$i} {

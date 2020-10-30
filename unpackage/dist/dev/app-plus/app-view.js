@@ -9733,21 +9733,60 @@ var render = function() {
         "v-uni-view",
         { staticClass: _vm._$g(8, "sc"), attrs: { _i: 8 } },
         [
+          _c("v-uni-text", { attrs: { _i: 9 } }, [_vm._v("设备型号：")]),
+          _vm._$g(10, "i")
+            ? _c("u-input", {
+                attrs: { _i: 10 },
+                on: {
+                  click: function($event) {
+                    return _vm.$handleViewEvent($event)
+                  }
+                },
+                model: {
+                  value: _vm._$g(10, "v-model"),
+                  callback: function() {},
+                  expression: "modelValue"
+                }
+              })
+            : _vm._e()
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: _vm._$g(11, "sc"), attrs: { _i: 11 } },
+        [
+          _c("v-uni-text", { attrs: { _i: 12 } }, [_vm._v("通讯号码：")]),
+          _c("u-input", {
+            attrs: { _i: 13 },
+            model: {
+              value: _vm._$g(13, "v-model"),
+              callback: function() {},
+              expression: "ComNumber"
+            }
+          })
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: _vm._$g(14, "sc"), attrs: { _i: 14 } },
+        [
           _c(
             "v-uni-view",
-            { staticClass: _vm._$g(9, "sc"), attrs: { _i: 9 } },
+            { staticClass: _vm._$g(15, "sc"), attrs: { _i: 15 } },
             [
-              _c("v-uni-text", { attrs: { _i: 10 } }, [
+              _c("v-uni-text", { attrs: { _i: 16 } }, [
                 _vm._v("扫码设备条码/二维码")
               ]),
-              _c("v-uni-text", { attrs: { _i: 11 } }, [
+              _c("v-uni-text", { attrs: { _i: 17 } }, [
                 _vm._v("或输入设备编号")
               ])
             ],
             1
           ),
           _c("u-image", {
-            attrs: { _i: 12 },
+            attrs: { _i: 18 },
             on: {
               click: function($event) {
                 return _vm.$handleViewEvent($event)
@@ -9759,13 +9798,13 @@ var render = function() {
       ),
       _c(
         "v-uni-view",
-        { staticClass: _vm._$g(13, "sc"), attrs: { _i: 13 } },
+        { staticClass: _vm._$g(19, "sc"), attrs: { _i: 19 } },
         [
-          _c("v-uni-text", { attrs: { _i: 14 } }, [_vm._v("设备编码：")]),
+          _c("v-uni-text", { attrs: { _i: 20 } }, [_vm._v("设备编码：")]),
           _c("u-input", {
-            attrs: { _i: 15 },
+            attrs: { _i: 21 },
             model: {
-              value: _vm._$g(15, "v-model"),
+              value: _vm._$g(21, "v-model"),
               callback: function() {},
               expression: "scanCode"
             }
@@ -9773,7 +9812,7 @@ var render = function() {
           _c(
             "u-button",
             {
-              attrs: { _i: 16 },
+              attrs: { _i: 22 },
               on: {
                 click: function($event) {
                   return _vm.$handleViewEvent($event)
@@ -9785,42 +9824,55 @@ var render = function() {
         ],
         1
       ),
-      _c("v-uni-view", { attrs: { _i: 17 } }, [_vm._v(_vm._$g(17, "t0-0"))]),
+      _c("v-uni-view", { attrs: { _i: 23 } }, [_vm._v(_vm._$g(23, "t0-0"))]),
       _c("u-select", {
-        attrs: { _i: 18 },
+        attrs: { _i: 24 },
         on: {
           confirm: function($event) {
             return _vm.$handleViewEvent($event)
           }
         },
         model: {
-          value: _vm._$g(18, "v-model"),
+          value: _vm._$g(24, "v-model"),
           callback: function() {},
           expression: "selectShow"
         }
       }),
-      _c("u-modal", {
-        attrs: { _i: 19 },
+      _c("u-select", {
+        attrs: { _i: 25 },
         on: {
           confirm: function($event) {
             return _vm.$handleViewEvent($event)
           }
         },
         model: {
-          value: _vm._$g(19, "v-model"),
+          value: _vm._$g(25, "v-model"),
+          callback: function() {},
+          expression: "modelShow"
+        }
+      }),
+      _c("u-modal", {
+        attrs: { _i: 26 },
+        on: {
+          confirm: function($event) {
+            return _vm.$handleViewEvent($event)
+          }
+        },
+        model: {
+          value: _vm._$g(26, "v-model"),
           callback: function() {},
           expression: "warehousShow"
         }
       }),
       _c("u-modal", {
-        attrs: { _i: 20 },
+        attrs: { _i: 27 },
         on: {
           confirm: function($event) {
             return _vm.$handleViewEvent($event)
           }
         },
         model: {
-          value: _vm._$g(20, "v-model"),
+          value: _vm._$g(27, "v-model"),
           callback: function() {},
           expression: "scanShow"
         }

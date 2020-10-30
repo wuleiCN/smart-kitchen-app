@@ -9,6 +9,8 @@ const install = (Vue, vm) => {
 	let getDevicesInfoAll = (params = {}) => vm.$u.get('api/Devices/CustomerDevices')
 	// 获取指定设备信息
 	let getDevicesInfoById = (params = {}) => vm.$u.get('api/Devices/GetById',params)
+	// 获得所有设备型号列表
+	let DeviceModelsList = (params = {}) => vm.$u.get('api/DeviceModels/List',params)
 	// 获取工单监控列表
 	let getMonitorList = (params = {}) => vm.$u.get('api/Order/GetMonitorList')
 	// 获取指定工单信息
@@ -100,6 +102,7 @@ const install = (Vue, vm) => {
 		getMessageList,
 		getDevicesInfoAll,
 		getDevicesInfoById,
+		DeviceModelsList,
 		getMonitorList,
 		getMonitorById,
 		getOrderSaleList,
