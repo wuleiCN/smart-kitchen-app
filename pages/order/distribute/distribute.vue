@@ -18,15 +18,15 @@
 			<span class="_title u-flex">出库设备</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<view class="device u-flex-col" v-for="(item,index) in devices" :key="index" @click="toDeviceDisribute(item.OrderId)">
-				<span><strong>设备型号：</strong>{{item.ModelId}}</span>
+			<view class="device u-flex-col" v-for="(item,index) in devices" :key="index" @click="toDeviceDisribute(item.OrderId,item.Count,item.DistributedCount)">
+				<span><strong>设备型号：</strong>{{item.modelName}}</span>
 				<span><strong>设备类别：</strong>{{item.Name}}</span>
 				<span><strong>出库数量：</strong>{{item.DistributedCount}} / {{item.Count}}</span>
 			</view>
 			<u-loadmore :status="status" />
 		</scroll-view>
 		<view class="operation">
-			<u-button type="success" @click="distributeShow">出库回单</u-button>
+			<u-button type="success" @click="distributeShow = true">出库回单</u-button>
 		</view>
 		<u-modal v-model="distributeShow" :content="content" show-cancel-button @confirm="distributed" />
 	</view>
@@ -45,27 +45,35 @@
 				devices: [],
 				content: '确定要回单吗？',
 				distributeShow: false,
-				DeviceType: uni.getStorageSync('DeviceType')
+				DeviceType: uni.getStorageSync('DeviceType'),
+				modelList: uni.getStorageSync('GetAllModle')
 			}
 		},
 		onLoad(option) {
 			this.optionId = option.id
+		},
+		onShow() {
 			this.$u.api.getOrderInfo({
-				id: option.id
+				id: this.optionId
 			}).then(res => {
 				this.order = res
 				console.log(res)
 			}).catch(err => {})
 			this.$u.api.getSaleOrderDevices({
-				id: option.id
+				id: this.optionId
 			}).then(res => {
 				res.map(v => {
 					this.DeviceType.forEach(i => {
 						if (v.Type === i.value) v.Name = i.name
 					})
 				})
+				res.map(v => {
+					this.modelList.forEach(i => {
+						if (v.ModelId === i.Id) v.modelName = i.Name
+					})
+				})
 				this.devices = res
-				console.log(res)
+				console.log(res, this.modelList)
 			}).catch(err => {})
 		},
 		methods: {
@@ -79,15 +87,24 @@
 				}, 2000)
 				console.log("触底事件");
 			},
-			toDeviceDisribute(id) {
-				setTimeout(() => {
-					this.$u.route('pages/order/distribute/devicedistribute', {
-						id
-					}, 200)
-				})
+			toDeviceDisribute(id,Count,distributeCount) {
+				if (Count !== distributeCount) {
+					setTimeout(() => {
+						this.$u.route('pages/order/distribute/devicedistribute', {
+							id
+						}, 200)
+					})
+				} else {
+					uni.showToast({
+						icon: 'none',
+						title: '已出库,请选择未出库的设备！'
+					})
+				}
 			},
+			// 出库回单
 			distributed() {
-				const canFinish = this.devices.every(v => v.Count > v.DistributedCount)
+				const canFinish = this.devices.every(v => v.Count === v.DistributedCount)
+				console.log(canFinish)
 				if (canFinish === false) {
 					uni.showToast({
 						icon: 'none',
@@ -109,7 +126,7 @@
 						title: '回单失败！'
 					})
 				})
-			}
+			},
 		}
 	}
 </script>

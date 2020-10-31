@@ -24,19 +24,15 @@
 					<image mode="aspectFill" src="" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 					<view class="title-wrap">
-						<text>设备型号：{{ item.ModelId }}</text>
+						<text>设备型号：{{ item.modelName }}</text>
 						<text class="u-line-2">设备类别：{{ item.Name }}</text>
 						<text>设备描述：...</text>
 						<u-number-box v-model="item.Count" disabled-input :long-press='false' />
 					</view>
 				</view>
 			</u-swipe-action>
-			<!-- <view v-for="(item, index) in list" :key="index">
-				{{item.Type}}
-			</view> -->
 			<u-loadmore :status="status" />
 		</scroll-view>
-		<!-- <view class="_blank" /> -->
 		<view class="dispatch">
 			<u-button type="success" @click="dispatchOrder">确定派单</u-button>
 		</view>
@@ -63,7 +59,8 @@
 				order: {},
 				content: '确定立刻派单出库吗？',
 				list: [],
-				DeviceType: uni.getStorageSync('DeviceType')
+				DeviceType: uni.getStorageSync('DeviceType'),
+				modelList: uni.getStorageSync('GetAllModle')
 			}
 		},
 		onLoad(option) {
@@ -86,6 +83,17 @@
 			this.getOrderList()
 			console.log(option)
 		},
+		watch: {
+			list: {
+				handler(val,old) {
+					if(old.length !== 0) {
+						this.updataOrder()
+						console.log(val,old)
+					}
+				},
+				deep: true
+			}
+		},
 		methods: {
 			open(index) {
 				this.list[index].show = true;
@@ -94,14 +102,11 @@
 				})
 			},
 			// 更新设备
-			onBackPress() {
-				this.updataOrder()
-			},
 			updataOrder() {
 				this.$u.api.updateOrderSaleDevices({
 					devices: this.list
 				}).then(res => {
-					this.getOrderList()
+					// this.getOrderList()
 					console.log(res)
 				}).catch(err => {
 					uni.showToast({
@@ -125,6 +130,11 @@
 						})
 						
 					})
+					res.map(v => {
+						this.modelList.forEach(i => {
+							if(v.ModelId === i.Id) v.modelName = i.Name
+						})
+					})
 					this.list = res
 					console.log(res)
 				}).catch(err => {
@@ -135,7 +145,7 @@
 			alarm(index) {
 				this.list.splice(index, 1);
 				// this.list[index].show = false
-				console.log(index)
+				console.log(this.list)
 			},
 			dispatchOrder() {
 				this.dispatchShow = true

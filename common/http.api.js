@@ -50,7 +50,7 @@ const install = (Vue, vm) => {
 	// 获得指定销售订单销售设备信息
 	let getSaleOrderDevices = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDevices',params)
 	// 按设备编码出库设备
-	let orderSaleDeviceDistributeByCode = (params = {}) => vm.$u.post('api/OrderSale/OrderSaleDeviceDistributeByCode',params)
+	let orderSaleDeviceDistributeByCode = (params = {}) => vm.$u.post('api/Storages/StockOutDevice',params)
 	// 获得销售安装工单列表
 	let getInstallOrders = (params = {}) => vm.$u.get('api/OrderSale/GetInstallOrders',params)
 	// 施工接单
@@ -96,6 +96,8 @@ const install = (Vue, vm) => {
 	let getOrderType = (params = {}) => vm.$u.get('api/Dictionary/OrderType',params)
 	// 工单状态
 	let getOrderStatus = (params = {}) => vm.$u.get('api/Dictionary/OrderStatus',params)
+	// 获得所有设备型号信息
+	let GetAllModle = (params = {}) => vm.$u.get('api/Models/GetAll',params)
 	vm.$u.api = {
 		Login,
 		getInfo,
@@ -144,7 +146,8 @@ const install = (Vue, vm) => {
 		getEmployeeType,
 		getEmployeeStatus,
 		getOrderType,
-		getOrderStatus
+		getOrderStatus,
+		GetAllModle
 	};
 }
 

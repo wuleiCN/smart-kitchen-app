@@ -4,11 +4,11 @@
 		<view class="text-area">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
 				<view class="u-m-r-10">
-					<u-avatar :src="vuex_user.Avatar" size="140"></u-avatar>
+					<u-avatar :src="user.Avatar" size="140"></u-avatar>
 				</view>
 				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20">{{vuex_user.Name}}</view>
-					<view class="u-font-14 u-tips-color">微信号:{{vuex_user.WeChat}}</view>
+					<view class="u-font-18 u-p-b-20">{{user.Name}}</view>
+					<view class="u-font-14 u-tips-color">微信号:{{user.WeChat}}</view>
 				</view>
 				<view class="u-m-l-10">
 					<view class="u-font-18" @tap="setting">设置</view>
@@ -39,7 +39,7 @@
 	export default {
 		data() {
 			return {
-				user: {},
+				user: uni.getStorageSync('userInfo'),
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
@@ -47,11 +47,8 @@
 				show: true
 			}
 		},
-		onLoad() {
-			console.log(this.vuex_user)
-		},
 		computed: {
-			...mapState(["vuex_tabbar", "vuex_user"])
+			...mapState(["vuex_tabbar"])
 		},
 		methods: {
 			setting() {

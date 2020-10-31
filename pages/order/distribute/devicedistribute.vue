@@ -63,15 +63,10 @@
 					return;
 				}
 
-				uni.showLoading({
-					title: '正在处理...',
-					mask: false
-				});
 				this.$u.api.orderSaleDeviceDistributeByCode({
 					order: this.optionId,
-					device: this.scanCode
+					code: this.scanCode
 				}).then(res => {
-					uni.hideLoading()
 					if(res.success === true) {
 						this.show = true
 						this.content = '设备出库成功！'

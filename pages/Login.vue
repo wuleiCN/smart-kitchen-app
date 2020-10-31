@@ -144,6 +144,11 @@
 					uni.setStorageSync('OrderStatus',res)
 					console.log(res)
 				}).catch(err => {})
+				// 设备类别
+				this.$u.api.GetAllModle().then(res => {
+					uni.setStorageSync('GetAllModle',res)
+					console.log(res)
+				})
 			}
 		}
 	}

@@ -258,11 +258,15 @@
 					uni.showToast({
 						title: '设备入库成功！'
 					})
+					this.ComNumber = ''
+					this.Code = ''
 				} else {
 					uni.showToast({
 						icon: 'none',
 						title: '设备入库失败！'
 					})
+					this.ComNumber = ''
+					this.Code = ''
 				}
 			},
 			// 相机权限
