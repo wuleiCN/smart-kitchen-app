@@ -7,7 +7,7 @@
 				<u-image src="/static/devices/device.png" width="200rpx" height="200rpx"></u-image>
 				<view class="_info u-flex-col">
 					<span><strong>设备型号：</strong>{{item.ModelId}}</span>
-					<span><strong>设备类别：</strong>{{item.Type}}</span>
+					<span><strong>设备类别：</strong>{{item.Name}}</span>
 					<span><strong>设备描述：</strong>...</span>
 					<span>已售：{{item.Count}}</span>
 				</view>
@@ -60,7 +60,8 @@
 				optionId: '',
 				deviceCount: 2,
 				Customer: {},
-				list: []
+				list: [],
+				DeviceType: uni.getStorageSync('DeviceType')
 			}
 		},
 		onLoad(option) {
@@ -77,6 +78,11 @@
 			this.$u.api.getSalingDevices({
 				order: option.Id
 			}).then(res => {
+				res.map(v => {
+					this.DeviceType.forEach(i => {
+						if(v.Type === i.value) v.Name = i.name
+					})
+				})
 				this.list = res
 				console.log(res)
 			}).catch(err => {

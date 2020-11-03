@@ -18,7 +18,7 @@
 					<u-button type="primary" plain ripple @click="toSaledevices(item.Id)">销售清单</u-button>
 				</span>
 				<span>
-					<u-button plain ripple @click="sendToDistribute(item)">派单出库</u-button>
+					<u-button plain ripple @click="sendToDistribute(item.Id)">派单出库</u-button>
 				</span>
 			</view>
 		</view>
@@ -71,7 +71,21 @@
 			},
 			sendToDistribute(id) {
 				this.distributeId = id
-				this.distributeShow = true
+				this.$u.api.getOrderSaleDevices({id}).then(res => {
+					if(res.length) {
+						this.distributeShow = true
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: '请至少选择一个产品!'
+						})
+					}
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '发生错误，派单失败!'
+					})
+				})
 			},
 			distribute() {
 				this.$u.api.orderSale({order: this.distributeId}).then(res => {

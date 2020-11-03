@@ -4,13 +4,13 @@
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<view class="section u-flex">
 			<span class="line" />
-			<span class="_title u-flex">设备基本信息</span>
+			<span class="_title u-flex">工单基本信息</span>
 		</view>
 		<view class="info u-flex-col u-row-around">
-			<span>客户单位：002</span>
-			<span>创建时间：{{new Date().getTime() | date}}</span>
-			<span>工单类别：123</span>
-			<span>工单状态：123</span>
+			<span>客户单位：{{order.CustomerId}}</span>
+			<span>创建时间：{{order.CreatedOn}}</span>
+			<span>工单类别：{{order.Type}}</span>
+			<span>工单状态：{{order.Status}}</span>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
@@ -41,6 +41,10 @@
 				devices: []
 			}
 		},
+		onLoad(option) {
+			this.order = JSON.parse(option.item)
+			console.log(option.item)
+		}
 	}
 </script>
 

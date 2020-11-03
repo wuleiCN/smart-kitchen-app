@@ -54,6 +54,9 @@
 				}
 			}
 		},
+		onShow() {
+			console.log(123)
+		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
@@ -67,7 +70,7 @@
 					password: this.model.password
 				}).catch(err => {
 				this.$refs.uToast.show({
-					title: '登录失败,' + err,
+					title: '登录失败,' + err.message,
 					type: 'error',
 				})
 				console.log(err)
@@ -77,17 +80,75 @@
 					uni.setStorageSync('token', res.Token)
 					const info = await this.$u.api.getInfo().catch(err => {})
 					uni.setStorageSync('userInfo', info)
-					console.log(info)
+					this.getDictionary()
 					uni.switchTab({
 						url: '/pages/index/index'
 					});
 				} else {
 					this.$refs.uToast.show({
-						title: `登录失败,${res.Message}`,
+						title: `登录失败,${res.message}`,
 						type: 'error',
 					})
 				}
 				console.log(this.vuex_token)
+			},
+			// 数据字典
+			getDictionary() {
+				// 设备类别
+				this.$u.api.getDeviceType().then(res => {
+					uni.setStorageSync('DeviceType',res)
+					console.log(res)
+				}).catch(err => {})
+				// 设备状态
+				this.$u.api.getDeviceStatus().then(res => {
+					uni.setStorageSync('DeviceStatus',res)
+					console.log(res)
+				}).catch(err => {})
+				// 摄像机/NVR品牌
+				this.$u.api.getCameraBrand().then(res => {
+					uni.setStorageSync('CameraBrand',res)
+					console.log(res)
+				}).catch(err => {})
+				// 公司类别
+				this.$u.api.getCompanyType().then(res => {
+					uni.setStorageSync('CompanyType',res)
+					console.log(res)
+				}).catch(err => {})
+				// 公司状态
+				this.$u.api.getCompanyStatus().then(res => {
+					uni.setStorageSync('CompanyStatus',res)
+					console.log(res)
+				}).catch(err => {})
+				// 客户状态
+				this.$u.api.getCustomerStatus().then(res => {
+					uni.setStorageSync('CustomerStatus',res)
+					console.log(res)
+				}).catch(err => {})
+				// 员工类别
+				this.$u.api.getEmployeeType().then(res => {
+					uni.setStorageSync('EmployeeType',res)
+					console.log(res)
+				}).catch(err => {})
+				// 员工状态
+				this.$u.api.getEmployeeStatus().then(res => {
+					uni.setStorageSync('EmployeeStatus',res)
+					console.log(res)
+				}).catch(err => {})
+				// 工单类别
+				this.$u.api.getOrderType().then(res => {
+					uni.setStorageSync('OrderType',res)
+					console.log(res)
+				}).catch(err => {})
+				// 工单状态
+				this.$u.api.getOrderStatus().then(res => {
+					uni.setStorageSync('OrderStatus',res)
+					console.log(res)
+				}).catch(err => {})
+				// 设备类别
+				this.$u.api.GetAllModle().then(res => {
+					uni.setStorageSync('GetAllModle',res)
+					console.log(res)
+				})
 			}
 		}
 	}

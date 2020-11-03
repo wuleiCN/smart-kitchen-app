@@ -1,16 +1,16 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备出库"
+		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备安装"
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">订单信息</span>
 		</view>
 		<view class="info u-flex-col">
-			<span><strong>客户名称：</strong></span>
-			<span><strong>联系人：</strong></span>
-			<span><strong>联系电话：</strong></span>
-			<span><strong>销售说明：</strong></span>
+			<span><strong>客户名称：</strong>{{order.CustomerId}}</span>
+			<span><strong>联系人：</strong>{{order.Contact}}</span>
+			<span><strong>联系电话：</strong>{{order.Phone}}</span>
+			<span><strong>销售说明：</strong>{{order.Comment}}</span>
 		</view>
 		<view class="scan u-flex u-row-around">
 			<view class="describe u-flex-col">
@@ -47,13 +47,15 @@
 		</view>
 		<view class="code u-flex">
 			<text>报警设备：</text>
-			<u-input v-model="areaValue" type="select" :select-open="selectShow" @click="selectShow = true" />
+			<u-input v-model="deviceValue" type="select" :select-open="deviceShow" @click="deviceShow = true" />
 		</view>
 		<view class="code u-flex">
 			<text>防区：</text>
-			<u-input v-model="areaValue" type="select" :select-open="selectShow" @click="selectShow = true" />
+			<u-input v-model="sectorValue" type="select" :select-open="sectorShow" @click="sectorShow = true" />
 		</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm"></u-select>
+		<u-select mode="single-column" :list="deviceList" v-model="deviceShow" @confirm="deviceConfirm"></u-select>
+		<u-select mode="single-column" :list="sectorList" v-model="sectorShow" @confirm="sectorConfirm"></u-select>
 		<view class="_submit">
 			<u-button type="success">提交安装信息</u-button>
 		</view>
@@ -68,45 +70,49 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				order: [],
+				order: {},
 				device: {},
 				areas: [],
 				scanCode: '',
 				areaValue: '',
 				nameValue: '',
+				deviceValue: '',
+				sectorValue: '',
 				selectShow: false,
-				selectList: [{
-						value: '电子产品',
-						label: '电子产品'
-					},
-					{
-						value: '服装',
-						label: '服装'
-					},
-					{
-						value: '工艺品',
-						label: '工艺品'
-					}
-				],
+				deviceShow: false,
+				sectorShow: false,
+				selectList: [],
+				deviceList: [],
+				sectorList: [],
 				optionId: ''
 			}
 		},
 		onLoad(option) {
 			this.optionId = option.id
+			// 获得指定客户信息
+			this.$u.api.getCustomer({
+				id: option.id
+			}).then(res => {
+				console.log(res)
+			})
 			// 获取销售信息
 			this.$u.api.getOrderInfo({
 				id: option.id
 			}).then(res => {
-				this.order = res.data
-				console.log(res)
+				this.order = res
+				console.log(res,this.order)
 			}).catch(err => {})
 			// 获得指定客户区域信息
-			this.$u.api.getAreasByCustomer({
-				customer: this.order.CustomerId
-			}).then(res => {
-				this.areas = res.data
-				console.log(res)
-			})
+			setTimeout(() => {
+				this.$u.api.getAreasByCustomer({
+					customer: this.order.CustomerId
+				}).then(res => {
+					this.areas = res
+					console.log(res)
+				}).catch(err => {
+					console.log(err)
+				})
+			},300)
 		},
 		methods: {
 			async scan() {
@@ -167,6 +173,18 @@
 				this.areaValue = '';
 				e.map((val, index) => {
 					this.areaValue += this.areaValue == '' ? val.label : '-' + val.label;
+				})
+			},
+			deviceConfirm(e) {
+				this.deviceValue = '';
+				e.map((val, index) => {
+					this.deviceValue += this.deviceValue == '' ? val.label : '-' + val.label;
+				})
+			},
+			sectorConfirm(e) {
+				this.sectorValue = '';
+				e.map((val, index) => {
+					this.sectorValue += this.sectorValue == '' ? val.label : '-' + val.label;
 				})
 			}
 		}

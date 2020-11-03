@@ -6,11 +6,10 @@
 			<view class="u-card-wrap" slot="body">
 				<view class="u-body-item u-flex u-border-bottom u-col-between">
 					<image src="/static/devices/1.png" mode="aspectFill" shape="circle"></image>
-					<view class="u-body-item-title info _info"><span>工单类别：{{item.Type}}</span>
-						<span>客户单位：{{item.CoutomerId}}</span></view>
+					<view class="u-body-item-title u-col-line info _info"><span>工单类别：{{item.Name}}</span>
+						<span>客户单位：{{item.CustomerId}}</span></view>
 					<view class="u-body-item-title info">
-						<span>状态：
-							<u-icon name="bell-fill" color="#fa3534" /></span>
+						<span>状态：{{item.EmployeeName}}</span>
 						<span class="_date">{{item.CreatedOn}}</span>
 					</view>
 					<view class="u-body-item-title _icon">
@@ -29,11 +28,21 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				order: []
+				order: [],
+				OrderType: uni.getStorageSync('OrderType'),
+				EmployeeStatus: uni.getStorageSync('EmployeeStatus')
 			}
 		},
 		onLoad() {
 			this.$u.api.getMonitorList().then(res => {
+				res.map(v => {
+					this.OrderType.forEach(i => {
+						if (v.Type === i.value) v.Name = i.name
+					})
+					this.EmployeeStatus.forEach(i => {
+						if (v.Type === i.value) v.EmployeeName = i.name
+					})
+				})
 				this.order = res
 				console.log(res)
 			}).catch(err => {

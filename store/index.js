@@ -30,7 +30,7 @@ const store = new Vuex.Store({
 				iconPath: "/static/tabbar/user.png",
 				selectedIconPath: "/static/tabbar/userSelected.png",
 				text: "我的"
-			}
+			},
 		]
 	},
 	mutations: {
@@ -40,7 +40,8 @@ const store = new Vuex.Store({
 		setSaleCar(state,data) {
 			state.vuex_saleCar
 		}
-	}
+	},
+	actions: {}
 })
 
 export default store

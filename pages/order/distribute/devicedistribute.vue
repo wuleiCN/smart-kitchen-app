@@ -25,6 +25,7 @@
 			<span><strong>设备状态：</strong></span>
 		</view>
 		<u-modal v-model="show" :content="content" @confirm="define"></u-modal>
+		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distributed"></u-modal>
 	</view>
 </template>
 
@@ -42,7 +43,10 @@
 					model: ''
 				},
 				show: false,
-				content: ''
+				content: '',
+				distributeShow: false,
+				distributeContent: '确定要出库吗？',
+				Code: ''
 			}
 		},
 		onLoad(option) {
@@ -59,15 +63,10 @@
 					return;
 				}
 
-				uni.showLoading({
-					title: '正在处理...',
-					mask: false
-				});
 				this.$u.api.orderSaleDeviceDistributeByCode({
 					order: this.optionId,
-					device: this.scanCode
+					code: this.scanCode
 				}).then(res => {
-					uni.hideLoading()
 					if(res.success === true) {
 						this.show = true
 						this.content = '设备出库成功！'
@@ -95,7 +94,8 @@
 				// #endif
 				uni.scanCode({
 					success: (res) => {
-						this.device.model = res.result
+						this.Code = res.result
+						this.distributeShow = true
 					},
 					fail: (err) => {
 						// #ifdef MP
@@ -118,6 +118,26 @@
 						// #endif
 					}
 				});
+			},
+			distributed() {
+				this.$u.api.orderSaleDeviceDistribute({code: this.Code}).then(res => {
+					if(res.success !== 'false') {
+						uni.showToast({
+							title: '出库成功！'
+						})
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: '出库失败！'
+						})
+					}
+					console.log(res)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '出库失败！'
+					})
+				})
 			},
 			// 相机权限
 			async checkPermission(code) {

@@ -6,16 +6,16 @@
 			<view class="_info">
 				<u-image src="/static/devices/device.png" width="120rpx" height="120rpx" shape="circle" />
 				<view class="customer">
-					<span>{{item.CustomerId}}</span>
-					<span>销售时间：{{item.CreatedOn}}</span>
-					<span v-if="item.Status === 10">接单时间：{{item.ModiOn}}</span>
-					<span v-if="item.Status === 12">派单时间：{{item.ModiOn}}</span>
+					<span>联系人：{{item.Contact}}</span>
+					<span>销售时间：{{item.OrderOn}}</span>
+					<span v-if="item.Status === 10">接单时间：{{item.SendOn}}</span>
+					<span v-if="item.Status === 12">派单时间：{{item.ArrivedOn}}</span>
 				</view>
 			</view>
 			<view class="operation">
 				<span>
 					<u-button v-if="item.Status === 10" type="success" plain ripple @click="accept(index)">接单</u-button>
-					<u-button v-if="item.Status === 12" type="success" plain ripple @click="toProduct(item.Id)">出库</u-button>
+					<u-button v-if="item.Status === 12" type="success" plain ripple @click="toProduct(item)">出库</u-button>
 				</span>
 				<span>
 					<u-button type="warning" plain ripple>退单</u-button>
@@ -43,18 +43,21 @@
 			}
 		},
 		onShow() {
-			// 获取订单信息
-			this.$u.api.getDistributeOrders().then(res => {
-				this.order = res
-				console.log(res)
-			}).catch(err => {
-				uni.showToast({
-					icon: 'none',
-					title: '获取数据失败！'
-				})
-			})
+			this.getOrderInfo()
 		},
 		methods: {
+			getOrderInfo() {
+				// 获取订单信息
+				this.$u.api.getDistributeOrders().then(res => {
+					this.order = res
+					console.log(res)
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '获取数据失败！'
+					})
+				})
+			},
 			accept(index) {
 				this._index = index
 				this.shipmentShow = true
@@ -64,9 +67,18 @@
 				this.$u.api.distributeAccept({
 					id: this.order[this._index].Id
 				}).then(res => {
-					uni.showToast({
-						title: '接单成功！'
-					})
+					if(res.success) {
+						uni.showToast({
+							title: '接单成功！'
+						})
+					} else {
+						uni.showToast({
+							icon: 'none',
+							title: '接单失败！'
+						})
+						return false
+					}
+					this.getOrderInfo()
 					console.log(res)
 				}).catch(err => {
 					uni.showToast({
@@ -76,9 +88,9 @@
 				})
 			},
 			// 出库
-			toProduct(id) {
+			toProduct(item) {
 				this.$u.route('pages/order/distribute/distribute', {
-					id
+					id: item.Id
 				})
 			}
 		}
@@ -89,10 +101,14 @@
 	.order {
 		height: 270rpx;
 		background: #FFFFFF;
+		border-bottom: 1px solid #f5f5f5;
 
 		._info {
 			display: flex;
 			padding: 20rpx;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 
 			.customer {
 				display: flex;
