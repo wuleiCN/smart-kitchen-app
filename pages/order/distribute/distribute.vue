@@ -134,8 +134,10 @@
 				console.log("触底事件");
 			},
 			toDeviceDisribute() {
-				this.$u.route('pages/order/distribute/devicedistribute', {
-					id: 123
+				setTimeout(() => {
+					this.$u.route('pages/order/distribute/devicedistribute', {
+						id: 123
+					},200)
 				})
 			},
 			distributeFinish() {

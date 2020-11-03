@@ -7,9 +7,10 @@
 				<view class="u-body-item u-flex u-border-bottom u-col-between">
 					<image src="/static/devices/1.png" mode="aspectFill" shape="circle"></image>
 					<view class="u-body-item-title info _info"><span>工单类别：{{item.Type}}</span>
-						<span>客户单位：{{item.CustomerId}}</span></view>
+						<span>客户单位：{{item.CoutomerId}}</span></view>
 					<view class="u-body-item-title info">
-						<span>状态: {{item.Status}}</span>
+						<span>状态：
+							<u-icon name="bell-fill" color="#fa3534" /></span>
 						<span class="_date">{{item.CreatedOn}}</span>
 					</view>
 					<view class="u-body-item-title _icon">
@@ -43,9 +44,9 @@
 			})
 		},
 		methods: {
-			toFlow(id) {
+			toFlow(Id) {
 				this.$u.route('/pages/order/monitor/flow', {
-					id
+					Id
 				})
 			}
 		}
@@ -71,11 +72,11 @@
 			display: flex;
 			flex-direction: column;
 			margin-left: 10rpx;
+			margin-right: 40rpx;
 			font-size: 24rpx;
 			color: $u-content-color;
 
 			span {
-				width: 160rpx;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;

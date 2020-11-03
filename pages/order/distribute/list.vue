@@ -43,6 +43,7 @@
 			}
 		},
 		onShow() {
+			// 获取订单信息
 			this.$u.api.getDistributeOrders().then(res => {
 				this.order = res
 				console.log(res)
@@ -58,6 +59,7 @@
 				this._index = index
 				this.shipmentShow = true
 			},
+			// 接单
 			shipment() {
 				this.$u.api.distributeAccept({
 					id: this.order[this._index].Id
@@ -73,6 +75,7 @@
 					})
 				})
 			},
+			// 出库
 			toProduct(id) {
 				this.$u.route('pages/order/distribute/distribute', {
 					id

@@ -24,6 +24,7 @@
 			<span><strong>设备编码：</strong></span>
 			<span><strong>设备状态：</strong></span>
 		</view>
+		<u-modal v-model="show" :content="content" @confirm="define"></u-modal>
 	</view>
 </template>
 
@@ -39,7 +40,9 @@
 				scanCode: '',
 				device: {
 					model: ''
-				}
+				},
+				show: false,
+				content: ''
 			}
 		},
 		onLoad(option) {
@@ -65,19 +68,22 @@
 					device: this.scanCode
 				}).then(res => {
 					uni.hideLoading()
-					if(res.data.success === true) {
-						uni.showToast({
-							title: '设备出库成功！'
-						})
+					if(res.success === true) {
+						this.show = true
+						this.content = '设备出库成功！'
 					} else {
-						uni.showModal({
-							title: '错误',
-							content: res.data.message,
-							showCancel: false,
-							confirmText: '确定',
-						})
+						this.show = true
+						this.content = '设备出库失败！' + res.message
 					}
-				}).catch(err => {})
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '出现错误！'
+					})
+				})
+			},
+			define() {
+				this.content = ''
 			},
 			// 扫码出库
 			async scan() {

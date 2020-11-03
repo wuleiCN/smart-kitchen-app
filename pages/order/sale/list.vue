@@ -18,7 +18,7 @@
 					<u-button type="primary" plain ripple @click="toSaledevices(item.Id)">销售清单</u-button>
 				</span>
 				<span>
-					<u-button plain ripple @click="sendToDistribute(item.Id)">派单出库</u-button>
+					<u-button plain ripple @click="sendToDistribute(item)">派单出库</u-button>
 				</span>
 			</view>
 		</view>
@@ -45,14 +45,18 @@
 		},
 		methods: {
 			toProduct(Id) { 
-				this.$u.route('pages/order/sale/selectproduct',{
-					Id
-				})
+				setTimeout(() => {
+					this.$u.route('pages/order/sale/selectproduct',{
+						Id
+					})
+				},200)
 			},
 			toSaledevices(Id) {
-				this.$u.route('pages/order/sale/saledevices',{
-					Id
-				})
+				setTimeout(() => {
+					this.$u.route('pages/order/sale/saledevices',{
+						Id
+					})
+				},200)
 			},
 			getOrderSaleList() {
 				this.$u.api.getOrderSaleList().then(res => {
@@ -81,6 +85,7 @@
 						icon: 'none',
 						title: '派单出库失败！'
 					})
+					console.log(err)
 				})
 			}
 		}

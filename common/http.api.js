@@ -51,6 +51,22 @@ const install = (Vue, vm) => {
 	let installAccept = (params = {}) => vm.$u.post('api/OrderSale/InstallAccept',params)
 	// 工单是否可以施工回单
 	let canInstallFinish = (params = {}) => vm.$u.get('api/Orders/CanInstallFinish',params)
+	// 获得指定客户区域信息
+	let getAreasByCustomer = (params = {}) => vm.$u.get('api/Customers/GetAreas',params)
+	// 报警设备入库
+	let StockInAlertDevice = (params = {}) => vm.$u.post('api/Storages/StockInAlertDevice',params)
+	// 灭火设备入库（未集成报警设备）
+	let StockInFireDevice = (params = {}) => vm.$u.post('api/Storage/StockInFireDevice',params)
+	// 灭火设备入库（集成报警设备）
+	let StockInFireDeviceWithAlert = (params = {}) => vm.$u.post('api/Storages/StockInFireDeviceWithAlert',params)
+	// 智能网关设备入库
+	let StockInGateway = (params = {}) => vm.$u.post('api/Storages/StockInGateway',params)
+	// NVR设备入库
+	let StockInNvr = (params = {}) => vm.$u.post('api/Storages/StockInNvr',params)
+	// 摄像机设备入库
+	let StockInCamera = (params = {}) => vm.$u.post('api/Storages/StockInCamera',params)
+	// 设备出库
+	let StockOutDevice = (params = {}) => vm.$u.post('api/Storages/StockOutDevice',params)
 	vm.$u.api = {
 		Login,
 		getInfo,
@@ -78,6 +94,14 @@ const install = (Vue, vm) => {
 		getInstallOrders,
 		installAccept,
 		canInstallFinish,
+		getAreasByCustomer,
+		StockInAlertDevice,
+		StockInFireDevice,
+		StockInFireDeviceWithAlert,
+		StockInGateway,
+		StockInNvr,
+		StockInCamera,
+		StockOutDevice
 	};
 }
 

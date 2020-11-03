@@ -115,6 +115,16 @@
 			}
 		},
 		{
+			"path": "pages/device/Warehousing",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/order/monitor/list",
 			"style": {
 				"app-plus": {
