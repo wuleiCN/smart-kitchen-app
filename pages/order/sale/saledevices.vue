@@ -153,7 +153,7 @@
 			// 派单
 			dispatch() {
 				this.$u.api.orderSale({
-					order: this.distributeId
+					order: this.optionId
 				}).then(res => {
 					uni.showToast({
 						title: '派单出库成功！'

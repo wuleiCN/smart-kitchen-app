@@ -30,7 +30,7 @@ const install = (Vue, vm) => {
 	// 获得指定客户信息
 	let getCustomer = (params = {}) => vm.$u.get('api/Customers/GetCustomer',params)
 	// 获取销售信息
-	let getOrderInfo = (params = {}) => vm.$u.get('api/OrderSale/GetOrderInfo',params)
+	let getOrderInfo = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderById',params)
 	// 获得指定销售工单销售产品清单
 	let getOrderSaleDevices = (params = {}) => vm.$u.get('api/OrderSale/GetOrderSaleDevices',params)
 	// 更新销售工单产品信息
@@ -98,6 +98,36 @@ const install = (Vue, vm) => {
 	let getOrderStatus = (params = {}) => vm.$u.get('api/Dictionary/OrderStatus',params)
 	// 获得所有设备型号信息
 	let GetAllModle = (params = {}) => vm.$u.get('api/Models/GetAll',params)
+	// 查询销售订单设备详情
+	let getSaleOrderDeviceDetails = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDeviceDetails',params)
+	// 查询安装区域
+	let getSaleOrderDevicesByType = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDevicesByType',params)
+	// 获得指定设备信息
+	let getById = (params = {}) => vm.$u.get('api/Devices/GetById',params)
+	// 获得指定灭火设备信息
+	let getFireDeviceById = (params = {}) => vm.$u.get('api/Devices/GetFireDeviceById',params)
+	// 获得指定报警设备信息
+	let getAlertDeviceById = (params = {}) => vm.$u.get('api/Devices/GetAlertDeviceById',params)
+	// 获得指定摄像机设备信息
+	let getAlarms = (params = {}) => vm.$u.get('api/Alarms/GetAlarms',params)
+	// 获得当前登录用户所属公司/客户单位所有报警设备信息
+	let getCamerasById = (params = {}) => vm.$u.get('api/Devices/GetCameraByCustomerArea',params)
+	// 获得当前登录用户所属单位NVR信息
+	let getByNvrsCompany = (params = {}) => vm.$u.get('api/Nvrs/GetByCurrentCompany',params)
+	// 获得当前登录用户所属单位智能网关信息
+	let getByGatewaysCompany = (params = {}) => vm.$u.get('api/Gateways/GetByCurrentCompany',params)
+	// 安装灭火设备（集成报警设备）
+	let InstallFireDeviceCombineAlert = (params = {}) => vm.$u.post('api/Installs/InstallFireDeviceCombineAlert',params)
+	// 安装灭火设备（未集成）
+	let InstallFireDevice = (params = {}) => vm.$u.post('api/Installs/InstallFireDevice',params)
+	// 安装智能网关设备
+	let InstallGateway = (params = {}) => vm.$u.post('api/Installs/InstallGateway',params)
+	// 安装NVR
+	let InstallNvr = (params = {}) => vm.$u.post('api/Installs/InstallNvr',params)
+	// 安装摄像机
+	let InstallCamera = (params = {}) => vm.$u.post('api/Installs/InstallCamera',params)
+	// 安装报警设备
+	let InstallAlertDevice = (params = {}) => vm.$u.post('api/Installs/InstallAlertDevice',params)
 	vm.$u.api = {
 		Login,
 		getInfo,
@@ -147,7 +177,22 @@ const install = (Vue, vm) => {
 		getEmployeeStatus,
 		getOrderType,
 		getOrderStatus,
-		GetAllModle
+		GetAllModle,
+		getSaleOrderDeviceDetails,
+		getSaleOrderDevicesByType,
+		getFireDeviceById,
+		getAlertDeviceById,
+		getAlarms,
+		getByNvrsCompany,
+		getByGatewaysCompany,
+		getCamerasById,
+		getById,
+		InstallFireDeviceCombineAlert,
+		InstallFireDevice,
+		InstallGateway,
+		InstallNvr,
+		InstallCamera,
+		InstallAlertDevice
 	};
 }
 

@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar title="我的" :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="false" title="我的" :title-width="300" title-color="#ffffff" :background="background" />
 		<view class="text-area">
 			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
 				<view class="u-m-r-10">
@@ -39,13 +39,16 @@
 	export default {
 		data() {
 			return {
-				user: uni.getStorageSync('userInfo'),
+				user: '',
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				pic: 'https://uviewui.com/common/logo.png',
 				show: true
 			}
+		},
+		onLoad() {
+			this.user = uni.getStorageSync('userInfo')
 		},
 		computed: {
 			...mapState(["vuex_tabbar"])

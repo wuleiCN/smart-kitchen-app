@@ -9,8 +9,8 @@
 		<view class="info u-flex-col u-row-around">
 			<span>客户单位：{{order.CustomerId}}</span>
 			<span>创建时间：{{order.CreatedOn}}</span>
-			<span>工单类别：{{order.Type}}</span>
-			<span>工单状态：{{order.Status}}</span>
+			<span>工单类别：{{order.TypeName}}</span>
+			<span>工单状态：{{order.StatusName}}</span>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
@@ -43,7 +43,6 @@
 		},
 		onLoad(option) {
 			this.order = JSON.parse(option.item)
-			console.log(option.item)
 		}
 	}
 </script>
