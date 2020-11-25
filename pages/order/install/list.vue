@@ -2,7 +2,7 @@
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="施工工单"
 		 :title-width="300" title-color="#ffffff" :background="background" />
-		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
+		<scroll-view class="product u-col-line" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
 			<view class="order" v-for="(item,index) in list" :key="index">
 				<view class="customer">
 					<span><strong>客户名称：</strong>{{item.CustomerId}}</span>
@@ -29,6 +29,8 @@
 			</view>
 			<u-loadmore :status="status" />
 		</scroll-view>
+		<u-modal v-model="acceptShow" :content="acceptContent" title="提示" show-cancel-button @confirm="accepted"></u-modal>
+		<u-modal v-model="finishShow" :content="finishIdContent" title="提示" show-cancel-button @confirm="finished"></u-modal>
 	</view>
 </template>
 
@@ -40,7 +42,16 @@
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				status: 'nomore',
-				list: []
+				acceptShow: false,
+				finishShow: false,
+				acceptContent: '确定要接单吗？',
+				finishIdContent: '确定要回单吗？',
+				list: [],
+				orderId: '',
+				_status: '',
+				finishId: '',
+				OrderType: uni.getStorageSync('OrderType'),
+				OrderStatus: uni.getStorageSync('OrderStatus')
 			}
 		},
 		onShow() {
@@ -55,6 +66,14 @@
 				});
 				this.$u.api.getInstallOrders().then(res => {
 					uni.hideLoading()
+					res.map(v => {
+						this.OrderType.forEach(i => {
+							if(v.Type === i.value) v.TypeName = i.name
+						})
+						this.OrderStatus.forEach(i => {
+							if(v.Status === i.value) v.StatusName = i.name
+						})
+					})
 					this.list = res
 					console.log(res)
 				}).catch(err => {
@@ -66,62 +85,57 @@
 				})
 			},
 			accept(index) {
-				uni.showModal({
-					title: '提示',
-					content: '确定要接单吗？',
-					success: () => {
-						this.$u.api.installAccept({
-							order: this.list[index].Id
-						}).then(res => {
-							console.log(res)
-							this.list[index].Status = 20
-							uni.showToast({
-								title: '接单成功！'
-							})
-							this.getInstallOrderList()
-						}).catch(err => {
-							uni.showToast({
-								icon: 'none',
-								title: '接单失败！'
-							})
-						})
-					}
+				this.orderId = this.list[index].Id
+				this._status = this.list[index].Status
+				this.acceptShow = true
+			},
+			accepted() {
+				this.$u.api.installAccept({
+					order: this.orderId
+				}).then(res => {
+					console.log(res)
+					this.Status = 20
+					uni.showToast({
+						title: '接单成功！'
+					})
+					this.getInstallOrderList()
+				}).catch(err => {
+					uni.showToast({
+						icon: 'none',
+						title: '接单失败！'
+					})
 				})
 			},
 			finish(index) {
-				const id = this.list[index].Id
+				this.finishId = this.list[index].Id
+				this.finishShow = true
+			},
+			finished() {
 				this.$u.api.canInstallFinish({
-					order: id
+					order: this.finishId
 				}).then(res => {
 					console.log(res)
-					if (res.data.flag === true) {
-						uni.showModal({
-							content: '确定要回单吗？',
-							success: (res) => {
-								if (res.confirm) {
-									this.$u.api.distributeFinish({
-										order: id
-									}).then(res => {
-										if (res.data.success) {
-											uni.showToast({
-												title: '回单成功！'
-											})
-											this.getInstallOrderList()
-										} else {
-											uni.showToast({
-												icon: 'none',
-												title: '回单失败！'
-											})
-										}
-									}).catch(err => {})
-								}
+					if (res.flag === true) {
+						this.$u.api.distributeFinish({
+							order: this.finishId
+						}).then(res => {
+							if (res.success) {
+								uni.showToast({
+									title: '回单成功！'
+								})
+								this.getInstallOrderList()
+							} else {
+								uni.showToast({
+									icon: 'none',
+									title: '回单失败！'
+								})
 							}
-						})
+						}).catch(err => {})
 					}
 				}).catch(err => {})
 			},
 			toProduct(id) {
-				this.$u.route('pages/order/install/install', {
+				this.$u.route('pages/order/install/installDevice', {
 					id
 				})
 			},

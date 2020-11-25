@@ -5,8 +5,8 @@
 		<view class="product" v-for="(item,index) in list" :key="index">
 			<view class="u-flex">
 				<u-image src="/static/devices/device.png" width="200rpx" height="200rpx"></u-image>
-				<view class="_info u-flex-col">
-					<span><strong>设备型号：</strong>{{item.ModelId}}</span>
+				<view class="_info u-flex-col u-col-line">
+					<span><strong>设备型号：</strong>{{item.modelName}}</span>
 					<span><strong>设备类别：</strong>{{item.Name}}</span>
 					<span><strong>设备描述：</strong>...</span>
 					<span>已售：{{item.Count}}</span>
@@ -61,7 +61,8 @@
 				deviceCount: 2,
 				Customer: {},
 				list: [],
-				DeviceType: uni.getStorageSync('DeviceType')
+				DeviceType: uni.getStorageSync('DeviceType'),
+				modelList: uni.getStorageSync('GetAllModle')
 			}
 		},
 		onLoad(option) {
@@ -81,6 +82,9 @@
 				res.map(v => {
 					this.DeviceType.forEach(i => {
 						if(v.Type === i.value) v.Name = i.name
+					})
+					this.modelList.forEach(i => {
+						if (v.ModelId === i.Id) v.modelName = i.Name
 					})
 				})
 				this.list = res
