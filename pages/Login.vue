@@ -14,6 +14,10 @@
 			</u-form-item>
 		</u-form>
 		<u-button type="success" shape="square" :custom-style="customStyle" @tap="login">确 定</u-button>
+		<view class="register">
+			<a>注册新用户</a>
+			<a>忘记密码</a>
+		</view>
 		<u-toast ref="uToast" />
 	</view>
 </template>
@@ -66,20 +70,20 @@
 					username: this.model.account,
 					password: this.model.password
 				}).catch(err => {
-				this.$refs.uToast.show({
-					title: '登录失败,' + err.message,
-					type: 'error',
+					this.$refs.uToast.show({
+						title: '登录失败,' + err.data.Message,
+						type: 'error',
+					})
+					console.log(err)
 				})
-				console.log(err)
-			})
 				console.log(res)
-				if (res.success) {
+				if (res !== undefined) {
 					uni.setStorageSync('token', res.Token)
 					const info = await this.$u.api.getInfo().catch(err => {
 						console.log(err)
 					})
 					console.log(info)
-					if(info !== 'undefined') {
+					if (info !== 'undefined') {
 						uni.setStorageSync('userInfo', info)
 						this.getDictionary()
 						uni.switchTab({
@@ -87,57 +91,54 @@
 						});
 					}
 				} else {
-					this.$refs.uToast.show({
-						title: `登录失败,${res.message}`,
-						type: 'error',
-					})
+					return false
 				}
 			},
 			// 数据字典
 			getDictionary() {
 				// 设备类别
 				this.$u.api.getDeviceType().then(res => {
-					uni.setStorageSync('DeviceType',res)
+					uni.setStorageSync('DeviceType', res)
 				}).catch(err => {})
 				// 设备状态
 				this.$u.api.getDeviceStatus().then(res => {
-					uni.setStorageSync('DeviceStatus',res)
+					uni.setStorageSync('DeviceStatus', res)
 				}).catch(err => {})
 				// 摄像机/NVR品牌
 				this.$u.api.getCameraBrand().then(res => {
-					uni.setStorageSync('CameraBrand',res)
+					uni.setStorageSync('CameraBrand', res)
 				}).catch(err => {})
 				// 公司类别
 				this.$u.api.getCompanyType().then(res => {
-					uni.setStorageSync('CompanyType',res)
+					uni.setStorageSync('CompanyType', res)
 				}).catch(err => {})
 				// 公司状态
 				this.$u.api.getCompanyStatus().then(res => {
-					uni.setStorageSync('CompanyStatus',res)
+					uni.setStorageSync('CompanyStatus', res)
 				}).catch(err => {})
 				// 客户状态
 				this.$u.api.getCustomerStatus().then(res => {
-					uni.setStorageSync('CustomerStatus',res)
+					uni.setStorageSync('CustomerStatus', res)
 				}).catch(err => {})
 				// 员工类别
 				this.$u.api.getEmployeeType().then(res => {
-					uni.setStorageSync('EmployeeType',res)
+					uni.setStorageSync('EmployeeType', res)
 				}).catch(err => {})
 				// 员工状态
 				this.$u.api.getEmployeeStatus().then(res => {
-					uni.setStorageSync('EmployeeStatus',res)
+					uni.setStorageSync('EmployeeStatus', res)
 				}).catch(err => {})
 				// 工单类别
 				this.$u.api.getOrderType().then(res => {
-					uni.setStorageSync('OrderType',res)
+					uni.setStorageSync('OrderType', res)
 				}).catch(err => {})
 				// 工单状态
 				this.$u.api.getOrderStatus().then(res => {
-					uni.setStorageSync('OrderStatus',res)
+					uni.setStorageSync('OrderStatus', res)
 				}).catch(err => {})
 				// 设备类别
 				this.$u.api.GetAllModle().then(res => {
-					uni.setStorageSync('GetAllModle',res)
+					uni.setStorageSync('GetAllModle', res)
 				})
 			}
 		}
@@ -165,5 +166,15 @@
 
 	::v-deep .u-input__input {
 		color: #FFFFFF;
+	}
+
+	.register {
+		display: flex;
+		justify-content: space-around;
+
+		a {
+			font-size: 16px;
+			color: #f4f4f4
+		}
 	}
 </style>
