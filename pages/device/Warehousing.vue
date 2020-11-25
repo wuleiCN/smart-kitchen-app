@@ -69,7 +69,6 @@
 				// 入库设备标识
 				arrValue: null,
 				CMValue: null,
-				// 设备编码
 				Code: '',
 				warehousShow: false,
 				scanShow: false,
