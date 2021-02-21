@@ -5,14 +5,13 @@
 		<view class="_body-item u-flex u-col-between">
 			<image src="/static/devices/1.png" mode="aspectFill" shape="circle"></image>
 			<view class="info">
-				<view><span>工单环节：</span><span>{{dveices.name}}</span></view>
-				<view><span>派单时间：</span><span>{{dveices.model}}</span></view>
-				<view><span>工单环节：</span><span>{{dveices.name}}</span></view>
-				<view><span>派单时间：</span><span>{{dveices.model}}</span></view>
-				<view><span>工单环节：</span><span>{{dveices.name}}</span></view>
-				<view><span>派单时间：</span><span>{{dveices.model}}</span></view>
-				<view><span>工单环节：</span><span>{{dveices.name}}</span></view>
-				<view><span>派单时间：</span><span>{{dveices.model}}</span></view>
+				<view><span>工单序号：</span><span>{{dveices.No}}</span></view>
+				<view><span>客户单位：</span><span>{{dveices.CustomerName}}</span></view>
+				<view><span>工单类别：</span><span>{{dveices.Name}}</span></view>
+  				<view><span>工单状态：</span><span>{{dveices.OrderStatus}}</span></view>
+				<view><span>创建日期：</span><span>{{dveices.CreatedOn}}</span></view>
+				<view v-if="dveices.ModiById"><span>修改日期：</span><span>{{dveices.ModiOn}}</span></view>
+				<view v-if="dveices.Type === 95"><span>退单原因：</span><span>{{dveices.model}}</span></view>
 			</view>
 		</view>
 	</view>
@@ -25,20 +24,11 @@
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
-				dveices: {
-					name: 'test',
-					model: '九江市大好时机科技有限公司',
-					time: new Date().getTime(),
-					status: 1
-				}
+				dveices: {}
 			}
 		},
-		onLoad(option) {
-			this.$u.api.getMonitorById({
-				id: option.Id
-			}).then(res => {
-				console.log(res)
-			}).catch(err => {})
+		onLoad(e) {
+			this.dveices = JSON.parse(e.params)
 		},
 		methods: {}
 	}

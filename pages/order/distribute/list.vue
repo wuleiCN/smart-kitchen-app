@@ -25,12 +25,17 @@
 				</span>
 			</view>
 		</view>
-		<u-modal v-model="shipmentShow" :content="shipmentContent" show-cancel-button @confirm="shipment"></u-modal>
+		<u-modal v-model="shipmentShow" :content="shipmentContent" show-cancel-button @confirm="shipment" />
+		<Modal />
 	</view>
 </template>
 
 <script>
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {

@@ -81,7 +81,7 @@
 			}).then(res => {
 				res.map(v => {
 					this.DeviceType.forEach(i => {
-						if(v.Type === i.value) v.Name = i.name
+						if (v.Type === i.value) v.Name = i.name
 					})
 					this.modelList.forEach(i => {
 						if (v.ModelId === i.Id) v.modelName = i.Name
@@ -140,13 +140,17 @@
 					uni.showToast({
 						title: '派单出库成功！'
 					})
+					this.$u.route({
+						type: 'navigateBack',
+						url: 'pages/order/sale/list',
+						delta: 1
+					})
 				}).catch(err => {
 					uni.showToast({
 						icon: 'none',
 						title: '派单出库失败！'
 					})
 				})
-				console.log(this.deviceCount)
 			},
 			// 获取出库数量
 			getDeviceCount() {
@@ -162,7 +166,7 @@
 					this.$u.route('pages/order/sale/saledevices', {
 						Id: this.optionId
 					})
-				},300)
+				}, 300)
 			},
 			onReachBottom() {
 				this.$u.throttle(this.load, 2000)

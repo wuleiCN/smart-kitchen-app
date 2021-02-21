@@ -159,7 +159,12 @@
 						title: '派单出库成功！'
 					})
 					console.log(res)
-					this.getOrderSaleList()
+					this.getOrderList()
+					this.$u.route({
+						type: 'navigateBack',
+						url: 'pages/order/sale/list',
+						delta: 1
+					})
 				}).catch(err => {
 					uni.showToast({
 						icon: 'none',

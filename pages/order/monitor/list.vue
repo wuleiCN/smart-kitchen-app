@@ -2,14 +2,14 @@
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="工单监控"
 		 :title-width="300" title-color="#ffffff" :background="background" />
-		<u-card v-for="(item,index) in order" :key="index" padding="0" @click="toFlow(item.Id)">
+		<u-card v-for="(item,index) in order" :key="index" padding="0" @click="toFlow(item)">
 			<view class="u-card-wrap" slot="body">
 				<view class="u-body-item u-flex u-border-bottom u-col-between">
 					<image src="/static/devices/1.png" mode="aspectFill" shape="circle"></image>
 					<view class="u-body-item-title u-col-line info _info"><span>工单类别：{{item.Name}}</span>
-						<span>客户单位：{{item.CustomerId}}</span></view>
+						<span>客户单位：{{item.CustomerName}}</span></view>
 					<view class="u-body-item-title info">
-						<span>状态：{{item.EmployeeName}}</span>
+						<span>状态：{{item.OrderStatus}}</span>
 						<span class="_date">{{item.CreatedOn}}</span>
 					</view>
 					<view class="u-body-item-title _icon">
@@ -30,7 +30,8 @@
 				},
 				order: [],
 				OrderType: uni.getStorageSync('OrderType'),
-				EmployeeStatus: uni.getStorageSync('EmployeeStatus')
+				OrderStatus: uni.getStorageSync('OrderStatus'),
+				Customer: uni.getStorageSync('GetCustomersList')
 			}
 		},
 		onLoad() {
@@ -39,8 +40,12 @@
 					this.OrderType.forEach(i => {
 						if (v.Type === i.value) v.Name = i.name
 					})
-					this.EmployeeStatus.forEach(i => {
-						if (v.Type === i.value) v.EmployeeName = i.name
+					this.OrderStatus.forEach(i => {
+						if (v.Status === i.value) v.OrderStatus = i.name
+					})
+					this.Customer.forEach(i => {
+						if(v.CustomerId === i.Id) v.CustomerName = i.name
+						else v.CustomerName = '精安科技'
 					})
 				})
 				this.order = res
@@ -53,9 +58,9 @@
 			})
 		},
 		methods: {
-			toFlow(Id) {
+			toFlow(item) {
 				this.$u.route('/pages/order/monitor/flow', {
-					Id
+					params: JSON.stringify(item)
 				})
 			}
 		}

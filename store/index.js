@@ -4,13 +4,16 @@ Vue.use(Vuex)
 
 const token = uni.getStorageSync('token')
 const user =  uni.getStorageSync('userInfo')
+// uni.setStorageSync('warnInfo',[])
 const store = new Vuex.Store({
 	state: {
 		vuex_user: user || {},
 		vuex_token: token || '',
 		vuex_customer: {},
 		// 购物车商品
-		vuex_saleCar: [],
+		// vuex_saleCar: [],
+		// 警报弹出框
+		vuex_popupShow: false,
 		// 自定义tabbar数据
 		vuex_tabbar: [{
 				pagePath: "/pages/index/index",
@@ -37,8 +40,10 @@ const store = new Vuex.Store({
 		setCustomer(state,data) {
 			state.vuex_customer = data
 		},
-		setSaleCar(state,data) {
-			state.vuex_saleCar
+		setWarning(state,data) {
+			const arr = uni.getStorageSync('warnInfo')
+			if(data.v !== null) uni.setStorageSync('warnInfo', [data.v, ...arr])
+			state.vuex_popupShow = data.t
 		}
 	},
 	actions: {}

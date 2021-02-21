@@ -105,12 +105,17 @@
 		<u-select mode="single-column" :list="areas" v-model="selectShow" value-name="Id" label-name="Name" @confirm="areasConfirm" />
 		<u-modal v-model="installShow" :content="installContent" show-cancel-button @confirm="installed" />
 		<u-modal v-model="scanShow" :content="installContent" title="扫描成功" show-cancel-button @confirm="installed" />
+		<Modal />
 	</view>
 </template>
 
 <script>
 	import permision from "@/common/permission.js"
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {

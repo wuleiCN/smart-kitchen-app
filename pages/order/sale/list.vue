@@ -40,7 +40,8 @@
 				distributeId: ''
 			}
 		},
-		onLoad() {
+		onLoad() {},
+		onShow() {
 			this.getOrderSaleList()
 		},
 		methods: {

@@ -2,11 +2,11 @@ import Vue from 'vue'
 import App from './App'
 import uView from 'uview-ui';
 import store from '@/store'
-
+import date from 'common/date.js'
 Vue.use(uView);
 
 Vue.config.productionTip = false
-
+Vue.prototype.$date = date
 App.mpType = 'app'
 
 const app = new Vue({

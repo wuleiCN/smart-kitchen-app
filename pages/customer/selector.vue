@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
+		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="选择客户"
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<view class="_top">
 			<u-search placeholder="请输入关键字" v-model="value" />
@@ -14,30 +14,35 @@
 				</view>
 			</view>
 		</view>
+		<Modal />
 	</view>
 </template>
 
 <script>
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				value: '',
-				customers: []
+				customers: uni.getStorageSync('GetCustomersList')
 			}
 		},
 		onLoad() {
-			this.$u.api.getCustomersList().then(res => {
-				this.customers = res
-				console.log(res)
-			}).catch(err => {
-				uni.showToast({
-					icon: 'none',
-					title: '获取数据失败！'
-				})
-			})
+			// this.$u.api.getCustomersList().then(res => {
+			// 	this.customers = res
+			// 	console.log(res)
+			// }).catch(err => {
+			// 	uni.showToast({
+			// 		icon: 'none',
+			// 		title: '获取数据失败！'
+			// 	})
+			// })
 		},
 		methods: {
 			toCreateOrder(data) {

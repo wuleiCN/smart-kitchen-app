@@ -42,15 +42,20 @@
 		<view>{{arrValue === null ? [] : arrValue[0].value}}</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" value-name="Type" label-name="TypeName"
 		 @confirm="selectConfirm"></u-select>
-		<u-select mode="single-column" :list="modelList" v-model="modelShow" value-name="Type" label-name="Name" @confirm="CMJSConfirm"></u-select>
-		<u-modal v-model="warehousShow" :content="warehousContent" show-cancel-button @confirm="warehoused"></u-modal>
-		<u-modal v-model="scanShow" :content="warehousContent" title="扫描成功" show-cancel-button @confirm="warehoused"></u-modal>
+		<u-select mode="single-column" :list="modelList" v-model="modelShow" value-name="Type" label-name="Name" @confirm="CMJSConfirm" />
+		<u-modal v-model="warehousShow" :content="warehousContent" show-cancel-button @confirm="warehoused" />
+		<u-modal v-model="scanShow" :content="warehousContent" title="扫描成功" show-cancel-button @confirm="warehoused" />
+		<Modal />
 	</view>
 </template>
 
 <script>
 	import permision from "@/common/permission.js"
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {

@@ -27,8 +27,9 @@
 				</u-cell-group>
 			</view>
 		</view>
-		<u-button type="error" shape="circle" size="default" style="margin: 10px;">退出登录</u-button>
+		<u-button type="error" shape="circle" size="default" style="margin: 10px;" @click="signOut">退出登录</u-button>
 		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#0081ff" inactive-color="#aaaaaa" :mid-button="true" />
+		<u-modal v-model="sign" content="确定要退出吗？" title="提示" show-cancel-button @confirm="handle" />
 	</view>
 </template>
 
@@ -44,10 +45,10 @@
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				pic: 'https://uviewui.com/common/logo.png',
-				show: true
+				sign: false
 			}
 		},
-		onLoad() {
+		onShow() {
 			this.user = uni.getStorageSync('userInfo')
 		},
 		computed: {
@@ -56,6 +57,14 @@
 		methods: {
 			setting() {
 				console.log('set')
+			},
+			signOut() {
+				this.sign = true
+			},
+			handle() {
+				console.log('===> out')
+				uni.clearStorageSync()
+				this.$u.route('pages/Login')
 			}
 		}
 	}

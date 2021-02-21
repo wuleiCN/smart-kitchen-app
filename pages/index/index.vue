@@ -1,29 +1,79 @@
 <template>
 	<view>
-		<company></company>
+		<company v-if="type === 2"></company>
+		<customer v-if="type === 3"></customer>
 	</view>
 </template>
 
 <script>
-	// import {
-	// 	mapState
-	// } from "vuex"
+	// import mqtt from 'mqtt'
 	import company from "@/pages/company/index.vue"
+	import customer from "@/pages/customer/index.vue"
+	var mqtt = require('mqtt/dist/mqtt.js')
+	var client
+	// const options = {
+	// 	connectTimeout: 40000,
+	// 	clientId: '',
+	// 	// username: '',
+	// 	// password: '',
+	// 	clean: true
+	// }
+	// #ifdef H5
+	client = mqtt.connect('tcp://118.190.153.247:61614')
+	// #endif
+	// #ifdef MP-WEIXIN||APP-PLUS
+	client = mqtt.connect('wx://118.190.153.247:61614')
+	// #endif
+	// client = mqtt.connect('wx://118.190.153.247:61614')
 	export default {
 		data() {
-			return {}
+			return {
+				statusBarHeight: uni.getSystemInfoSync().statusBarHeight,
+				type: null,
+				logs: []
+			}
 		},
 		components: {
-			company
+			company,
+			customer
 		},
-		onLoad() {
-
+		created() {
+			this.mqqtMsg()
+			this.type = uni.getStorageSync('userInfo').Type
 		},
-		// computed: {
-		// 	...mapState(["vuex_tabbar"])
-		// },
+		onLoad() {},
 		methods: {
-
+			mqqtMsg() {
+				var self = this
+				const _id = uni.getStorageSync('userInfo').CompOrCustId
+				console.log(_id)
+				client.on('connect', () => {
+					console.log('====>  成功连接服务器!')
+					client.subscribe(_id, (err) => {
+						if (!err) {
+							// client.publish(_id, 'Hello mqtt')
+							console.log('订阅成功')
+						} else {
+							console.log('订阅失败')
+						}
+					})
+				}).on('message', (topic, message) => {
+					// uni.setStorageSync('warningInfo', self.warningArr)
+					const msg = JSON.parse(message.toString())
+					self.$store.commit('setWarning', {v:msg,t:true})
+					client.end()
+					console.log(self.$store.state.vuex_popupShow, msg)
+					console.log('收到来自', topic, '的消息 ===>', message.toString())
+				}).on('reconnect', (err) => {
+					console.log('重新连接', err)
+				}).on('err', () => {
+					console.log('连接失败', err)
+				})
+			},
+			push() {
+				const _id = uni.getStorageSync('userInfo').CompOrCustId
+				client.publish(_id, 'pull')
+			}
 		}
 	}
 </script>

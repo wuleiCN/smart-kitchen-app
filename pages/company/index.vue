@@ -9,50 +9,21 @@
 					<view class="grid-text" style="margin-top: 10px">{{value.text}}</view>
 				</u-grid-item>
 			</u-grid>
-			<u-card padding="0" :title="title" thumb="/static/comment/spot.png">
-				<view class="u-card-wrap" slot="body">
-					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
-						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
-								消息未送达</span></view>
-						<view class="u-body-item-title time"><span>22:00</span><span>
-								<p>5</p>
-							</span></view>
-					</view>
+			<scroll-view show-scrollbar :scroll-y="true" :lower-threshold="5" :style="{height: screenHeight}">
+				<u-alert-tips type="warning" :title="title" show-icon></u-alert-tips>
+				<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+				<view class="title-wrap" v-for="(item, index) in warning" :key="index">
+					<image mode="aspectFill" src="@/static/devices/fire.png" />
+					<text class="name">{{ item.Type }}</text>
+					<text class="title u-line-2">{{ item.Content }}</text>
+					<text class="time">{{ $date.dateFormat('YY-mm-dd HH:MM', item.DisposedOn) }}</text>
+					<span>详情>></span>
 				</view>
-				<view class="u-card-wrap" slot="body">
-					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
-						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
-								消息未送达</span></view>
-						<view class="u-body-item-title time"><span>22:00</span><span>
-								<p>5</p>
-							</span></view>
-					</view>
-				</view>
-				<view class="u-card-wrap" slot="body">
-					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
-						<view class="u-body-item-title info"><span>文晓港</span><span class="news-wraning">
-								消息未送达</span></view>
-						<view class="u-body-item-title time"><span>22:00</span><span>
-								<p>5</p>
-							</span></view>
-					</view>
-				</view>
-				<view class="u-card-wrap" slot="body">
-					<view class="u-body-item u-flex u-border-bottom u-col-between">
-						<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
-						<view class="u-body-item-title info"><span>文晓港</span><span class="news-success">
-								消息已送达</span></view>
-						<view class="u-body-item-title time"><span>22:00</span><span>
-								<p>5</p>
-							</span></view>
-					</view>
-				</view>
-			</u-card>
+				<u-empty v-if="warning.length === 0" text="暂无报警记录" mode="list"></u-empty>
+			</scroll-view>
 		</view>
 		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#0081ff" inactive-color="#aaaaaa" :mid-button="true" />
+		<Modal />
 	</view>
 </template>
 
@@ -60,10 +31,16 @@
 	import {
 		mapState
 	} from "vuex"
+	import Modal from "../components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				title: '通知公告',
+				warning: [],
+				screenHeight: null,
 				list: [
 					'/static/banners/banner1.jpg',
 					'/static/banners/banner2.jpg',
@@ -121,14 +98,25 @@
 				]
 			}
 		},
-		onLoad() {
-
+		mounted() {
+			uni.getSystemInfo({
+				success: (res) => {
+					this.screenHeight = res.windowHeight + 'rpx'
+					console.log(res)
+				}
+			})
+			console.log(this.warning, uni.getStorageSync('warnInfo'))
+		},
+		watch: {
+			'$store.state.vuex_popupShow': {
+				handler() {
+					this.warning = uni.getStorageSync('warnInfo')
+				},
+				immediate: true
+			}
 		},
 		computed: {
 			...mapState(["vuex_tabbar"])
-		},
-		methods: {
-
 		}
 	}
 </script>
@@ -140,6 +128,7 @@
 			::v-deep .u-grid {
 				background-color: #FFFFFF !important;
 			}
+
 			.grid-text {
 				font-size: 28rpx;
 				margin-top: 20rpx;
@@ -164,47 +153,38 @@
 					padding: 20rpx 10rpx;
 					background: #FFFFFF;
 
-					.info {
-						display: flex;
-						flex-direction: column;
-						margin-left: 10rpx;
+					.title-wrap {
+						width: 100%;
 
-						span:nth-child(1) {
-							color: $u-content-color;
-							font-size: 32rpx;
+						image {
+							width: 100rpx;
+							flex: 0 0 100rpx;
+							height: 100rpx;
+							margin-right: 20rpx;
+							border-radius: 12rpx;
 						}
 
-						span:nth-child(2) {
+						.name {
+							font-size: 28rpx;
+							color: $u-type-info;
+						}
+
+						.title {
+							text-align: left;
+							font-size: 24rpx;
+							color: $u-type-info-dark;
+							margin-top: 10rpx;
+						}
+
+						.time {
 							font-size: 24rpx;
 							color: $u-tips-color;
-							margin-top: 10rpx;
-						}
-					}
-
-					.time {
-						flex-direction: column;
-						display: flex;
-						text-align: center;
-						margin-left: 50%;
-
-						span:nth-child(1) {
-							color: $u-tips-color;
-							font-size: 14px;
 						}
 
-						span:nth-child(2) {
-							margin-top: 10rpx;
-
-							p {
-								display: block;
-								width: 32rpx;
-								height: 32rpx;
-								color: #FFFFFF;
-								font-size: 24rpx;
-								border-radius: 50%;
-								background: $u-type-info;
-								transform: translateX(50%);
-							}
+						span {
+							font-size: 24rpx;
+							color: $u-type-info-dark;
+							margin-left: 49%;
 						}
 					}
 				}
@@ -225,6 +205,13 @@
 			.news-success {
 				color: $u-type-success !important;
 			}
+		}
+
+		::v-deep .u-fixed-placeholder {
+			height: calc(74rpx) !important;
+		}
+		::v-deep .u-empty {
+			height: 300rpx !important;
 		}
 	}
 </style>

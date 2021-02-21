@@ -2,42 +2,44 @@
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备详情"
 		 :title-width="300" title-color="#ffffff" :background="background" />
-		<view class="head">
+<!-- 		<view class="head">
 			<u-image width="120rpx" height="120rpx" src="/static/devices/1.png"></u-image>
-		</view>
+		</view> -->
 		<u-swiper :list="list" :autoplay="false"></u-swiper>
 		<u-form :model="form" ref="uForm" :border-bottom="false" :label-style="{color: '#303133',fontWeight: '600'}">
 			<u-form-item label="设备名称 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
+				<view>{{form.Name}}</view>
 			</u-form-item>
 			<u-form-item label="设备编码 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
+				<view>{{form.Code}}</view>
 			</u-form-item>
 			<u-form-item label="设备类别 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="设备型号 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
+				<view>{{form.DeviceName}}</view>
 			</u-form-item>
 			<u-form-item label="设备状态 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
+				<view>{{status}}</view>
 			</u-form-item>
-			<u-form-item label="安装地点 :" label-width="150" label-align="center">
+<!-- 			<u-form-item label="安装地点 :" label-width="150" label-align="center">
 				<view>{{form.name}}</view>
+			</u-form-item> -->
+			<u-form-item :label="status + '时间 :'" label-width="150" label-align="center">
+				<view>{{form.InstalledOn}}</view>
 			</u-form-item>
-			<u-form-item label="安装时间 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="下次维保时间 :" label-width="200">
-				<view>{{form.name}}</view>
+			<u-form-item v-if="form.Status === 3" label="下次维保时间 :" label-width="200">
+				<view>{{form.NextMaintAt}}</view>
 			</u-form-item>
 		</u-form>
 		<u-toast ref="uToast" />
+		<Modal />
 	</view>
 </template>
 
 <script>
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {
@@ -48,22 +50,16 @@
 					'/static/banners/banner2.jpg',
 					'/static/banners/banner3.jpg'
 				],
-				form: {
-					name: 'test'
-				}
+				status: '',
+				form: {}
 			}
 		},
-		onLoad(option) {
-			this.$u.api.getDevicesInfoById({
-				id: option.id
-			}).then(res => {
-				console.log(res)
-			}).catch(err => {
-				this.$refs.uToast.show({
-					title: '获取设备信息失败！',
-					type: 'error'
-				})
+		onLoad(e) {
+			this.form = JSON.parse(e.params)
+			uni.getStorageSync('DeviceStatus').map(v=> {
+				if(this.form.Status === v.value) this.status = v.name
 			})
+			console.log(this.form)
 		},
 		methods: {}
 	}

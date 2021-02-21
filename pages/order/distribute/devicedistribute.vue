@@ -24,14 +24,19 @@
 			<span><strong>设备编码：</strong></span>
 			<span><strong>设备状态：</strong></span>
 		</view>
-		<u-modal v-model="show" :content="content" @confirm="define"></u-modal>
-		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distributed"></u-modal>
+		<u-modal v-model="show" :content="content" @confirm="define" />
+		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distributed" />
+		<Modal />
 	</view>
 </template>
 
 <script>
 	import permision from "@/common/permission.js"
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {

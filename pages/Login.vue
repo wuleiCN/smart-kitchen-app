@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="Logon">
-			<u-image width="100%" height="150rpx" src="/static/logon.png" mode="aspectFit"></u-image>
+			<u-image width="100%" height="150rpx" src="/static/logon.png" mode="aspectFit" />
 		</view>
 		<u-form :model="model" :rules="rules" ref="uForm">
 			<u-form-item label-position="left" :border-bottom="false" label="账号:" :label-style="{color: '#fff'}" label-align="center"
@@ -33,6 +33,7 @@
 					account: '',
 					password: ''
 				},
+				user: uni.getStorageSync('userInfo'),
 				customStyle: {
 					margin: '5px 15px',
 					'font-size': '19px'
@@ -58,6 +59,14 @@
 				}
 			}
 		},
+		onLoad() {
+			if (this.user !== '') {
+				// this.user = ''
+				uni.switchTab({
+					url: '/pages/index/index'
+				});
+			}
+		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
@@ -70,20 +79,18 @@
 					username: this.model.account,
 					password: this.model.password
 				}).catch(err => {
-					this.$refs.uToast.show({
-						title: '登录失败,' + err.data.Message,
-						type: 'error',
-					})
 					console.log(err)
 				})
-				console.log(res)
+				if (!res.success) {
+					this.$u.toast(res.message + ', 请重新登录');
+				}
 				if (res !== undefined) {
 					uni.setStorageSync('token', res.Token)
 					const info = await this.$u.api.getInfo().catch(err => {
 						console.log(err)
 					})
 					console.log(info)
-					if (info !== 'undefined') {
+					if (info !== undefined) {
 						uni.setStorageSync('userInfo', info)
 						this.getDictionary()
 						uni.switchTab({
@@ -91,6 +98,7 @@
 						});
 					}
 				} else {
+					this.$u.toast('发生错误，请重新登陆！')
 					return false
 				}
 			},
@@ -140,6 +148,10 @@
 				this.$u.api.GetAllModle().then(res => {
 					uni.setStorageSync('GetAllModle', res)
 				})
+				// 客户单位列表
+				this.$u.api.getCustomersList().then(res => {
+					uni.setStorageSync('GetCustomersList', res)
+				}).catch(() => {})
 			}
 		}
 	}

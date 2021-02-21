@@ -15,6 +15,7 @@ const install = (Vue, vm) => {
 	Vue.prototype.$u.http.interceptor.request = (config) => {
 		// config.header.Token = 'xxxxxx';
 		config.header.Token = uni.getStorageSync('token');
+		config.header['Access-Control-Allow-Origin'] = 'http://127.0.0.1:8080';
 		if (config.url == '/login') config.header.noToken = true;
 		return config;
 	}
@@ -26,7 +27,6 @@ const install = (Vue, vm) => {
 			// 如果把originalData设置为了true，这里return回什么，this.$u.post的then回调中就会得到什么
 			return res.data;
 		} else if (res.statusCode == 401) {
-			vm.$u.toast('验证失败，请重新登录');
 			vm.$u.debounce(() => {
 				vm.$u.route({
 					url: 'pages/Login',

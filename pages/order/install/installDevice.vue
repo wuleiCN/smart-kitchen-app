@@ -29,11 +29,16 @@
 			<u-button type="success" @click="distributeShow = true">出库回单</u-button>
 		</view>
 		<u-modal v-model="distributeShow" :content="content" show-cancel-button @confirm="distributed" />
+		<Modal />
 	</view>
 </template>
 
 <script>
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {

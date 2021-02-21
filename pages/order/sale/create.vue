@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
+		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="新增工单"
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<u-form :model="form" ref="uForm">
 			<u-form-item label="客户信息:" label-width="150" label-align="center">
@@ -83,8 +83,10 @@
 							uni.showToast({
 								title: '新增工单成功！'
 							})
-							uni.navigateTo({
-								url: 'list'
+							this.$u.route({
+								type: 'navigateBack',
+								url: 'pages/order/sale/list',
+								delta: 1
 							})
 						}).catch(err => {
 							uni.showToast({

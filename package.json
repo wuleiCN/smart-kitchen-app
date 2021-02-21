@@ -1,0 +1,19 @@
+{
+  "name": "xiangdao-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "mqtt": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/wuliLL950902/smart-kitchen-app.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

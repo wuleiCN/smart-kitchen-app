@@ -35,11 +35,16 @@
 			</u-form-item>
 		</u-form>
 		<u-button type="primary" style="margin: 0 20rpx;">消警</u-button>
+		<Modal />
 	</view>
 </template>
 
 <script>
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {

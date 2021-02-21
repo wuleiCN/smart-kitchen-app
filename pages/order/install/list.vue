@@ -5,9 +5,9 @@
 		<scroll-view class="product u-col-line" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
 			<view class="order" v-for="(item,index) in list" :key="index">
 				<view class="customer">
-					<span><strong>客户名称：</strong>{{item.CustomerId}}</span>
+					<span><strong>客户名称：</strong>{{item.CustomerName}}</span>
 					<span><strong>销售时间：</strong>{{item.CreatedOn}}</span>
-					<span><strong>派单人：</strong>{{item.ModiById}}</span>
+					<span><strong>派单人：</strong>{{ModiName}}</span>
 				</view>
 				<view class="operation">
 					<span>
@@ -31,11 +31,16 @@
 		</scroll-view>
 		<u-modal v-model="acceptShow" :content="acceptContent" title="提示" show-cancel-button @confirm="accepted"></u-modal>
 		<u-modal v-model="finishShow" :content="finishIdContent" title="提示" show-cancel-button @confirm="finished"></u-modal>
+		<Modal />
 	</view>
 </template>
 
 <script>
+	import Modal from "@/pages/components/modal.vue"
 	export default {
+		components: {
+			Modal
+		},
 		data() {
 			return {
 				background: {
@@ -51,7 +56,9 @@
 				_status: '',
 				finishId: '',
 				OrderType: uni.getStorageSync('OrderType'),
-				OrderStatus: uni.getStorageSync('OrderStatus')
+				OrderStatus: uni.getStorageSync('OrderStatus'),
+				Customer: uni.getStorageSync('GetCustomersList'),
+				ModiName: uni.getStorageSync('userInfo').Name
 			}
 		},
 		onShow() {
@@ -72,6 +79,10 @@
 						})
 						this.OrderStatus.forEach(i => {
 							if(v.Status === i.value) v.StatusName = i.name
+						})
+						this.Customer.forEach(i => {
+							if(v.CustomerId === i.Id) v.CustomerName = i.name
+							else v.CustomerName = '精安科技'
 						})
 					})
 					this.list = res

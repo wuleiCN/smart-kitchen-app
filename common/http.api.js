@@ -3,10 +3,14 @@ const install = (Vue, vm) => {
 	let Login = (params = {}) => vm.$u.get('api/Account/Login', params);
 	// 当前用户信息
 	let getInfo = (params = {}) => vm.$u.get('api/Users/GetLoginUserInfo');
+	// 获取员工信息
+	let getEmployees = (params = {}) => vm.$u.get('api/Employees/GetAll');
+	// 创建员工信息
+	let employeesRegister = (params = {}) => vm.$u.post('api/Employees/Create', params);
 	// 报警信息
 	let getMessageList = (params = {}) => vm.$u.get('api/Messages/List', params)
 	// 获取所有设备信息
-	let getDevicesInfoAll = (params = {}) => vm.$u.get('api/Devices/CustomerDevices')
+	let getDevicesInfoAll = (params = {}) => vm.$u.get('api/Devices/GetData',params)
 	// 获取指定设备信息
 	let getDevicesInfoById = (params = {}) => vm.$u.get('api/Devices/GetById',params)
 	// 获得所有设备型号列表
@@ -131,6 +135,8 @@ const install = (Vue, vm) => {
 	vm.$u.api = {
 		Login,
 		getInfo,
+		getEmployees,
+		employeesRegister,
 		getMessageList,
 		getDevicesInfoAll,
 		getDevicesInfoById,
