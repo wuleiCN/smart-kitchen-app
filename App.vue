@@ -4,6 +4,11 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
+			setTimeout(()=>{
+				// #ifdef APP-PLUS 
+				plus.navigator.closeSplashscreen()
+				// #endif
+			}, 2000)
 			console.log('App Show')
 		},
 		onHide: function() {

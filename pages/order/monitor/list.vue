@@ -4,7 +4,7 @@
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<u-card v-for="(item,index) in order" :key="index" padding="0" @click="toFlow(item)">
 			<view class="u-card-wrap" slot="body">
-				<view class="u-body-item u-flex u-border-bottom u-col-between">
+				<view class="u-body-item u-flex u-col-between">
 					<image src="/static/devices/1.png" mode="aspectFill" shape="circle"></image>
 					<view class="u-body-item-title u-col-line info _info"><span>工单类别：{{item.Name}}</span>
 						<span>客户单位：{{item.CustomerName}}</span></view>

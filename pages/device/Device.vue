@@ -43,7 +43,7 @@
 				status: 'nomore'
 			}
 		},
-		onShow() {
+		onLoad() {
 			this.getDveices()
 		},
 		methods: {

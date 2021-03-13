@@ -3,7 +3,7 @@
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="施工工单"
 		 :title-width="300" title-color="#ffffff" :background="background" />
 		<scroll-view class="product u-col-line" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<view class="order" v-for="(item,index) in list" :key="index">
+			<view class="order u-border-bottom" v-for="(item,index) in list" :key="index">
 				<view class="customer">
 					<span><strong>客户名称：</strong>{{item.CustomerName}}</span>
 					<span><strong>销售时间：</strong>{{item.CreatedOn}}</span>

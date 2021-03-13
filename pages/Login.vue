@@ -74,33 +74,37 @@
 			...mapState(["vuex_token"])
 		},
 		methods: {
-			async login() {
-				const res = await this.$u.api.Login({
-					username: this.model.account,
-					password: this.model.password
-				}).catch(err => {
-					console.log(err)
-				})
-				if (!res.success) {
-					this.$u.toast(res.message + ', 请重新登录');
-				}
-				if (res !== undefined) {
-					uni.setStorageSync('token', res.Token)
-					const info = await this.$u.api.getInfo().catch(err => {
-						console.log(err)
-					})
-					console.log(info)
-					if (info !== undefined) {
-						uni.setStorageSync('userInfo', info)
-						this.getDictionary()
-						uni.switchTab({
-							url: '/pages/index/index'
-						});
+			login() {
+				this.$refs.uForm.validate(async vaild => {
+					if(vaild) {
+						const res = await this.$u.api.Login({
+							username: this.model.account,
+							password: this.model.password
+						}).catch(err => {
+							console.log(err)
+						})
+						if (!res.success) {
+							this.$u.toast(res.message + ', 请重新登录');
+						}
+						if (res !== undefined) {
+							uni.setStorageSync('token', res.Token)
+							const info = await this.$u.api.getInfo().catch(err => {
+								console.log(err)
+							})
+							console.log(info)
+							if (info !== undefined) {
+								uni.setStorageSync('userInfo', info)
+								this.getDictionary()
+								uni.switchTab({
+									url: '/pages/index/index'
+								});
+							}
+						} else {
+							this.$u.toast('发生错误，请重新登陆！')
+							return false
+						}
 					}
-				} else {
-					this.$u.toast('发生错误，请重新登陆！')
-					return false
-				}
+				})
 			},
 			// 数据字典
 			getDictionary() {

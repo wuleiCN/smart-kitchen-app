@@ -2,7 +2,7 @@
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
 		 :title-width="300" title-color="#ffffff" :background="background" />
-		<view class="order" v-for="(item,index) in orderList" :key="index">
+		<view class="order u-border-bottom" v-for="(item,index) in orderList" :key="index">
 			<view class="_info">
 				<u-image src="/static/devices/1.png" width="120rpx" height="120rpx" shape="circle" />
 				<view class="customer">
@@ -111,7 +111,6 @@
 	.order {
 		height: 250rpx;
 		background: #FFFFFF;
-		border-bottom: 1rpx solid #C8C9CC;
 
 		._info {
 			display: flex;
