@@ -1,31 +1,92 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="false" title="香道云厨智慧厨房" :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="false" title="首页" :title-width="300" title-color="#000000" :title-size="36" />
 		<view class="text-area">
-			<u-swiper :list="list"></u-swiper>
-			<u-grid :col="4" :border="false">
-				<u-grid-item v-for="(value,index) in gridList" :key="index" :index="index" style="padding: 20px 0 0;" @click="$u.route(value.url)">
-					<u-icon :name="value.icon" :size="56" :color="value.color"></u-icon>
-					<view class="grid-text" style="margin-top: 10px">{{value.text}}</view>
-				</u-grid-item>
-			</u-grid>
-			<scroll-view show-scrollbar :scroll-y="true" :lower-threshold="5" :style="{height: screenHeight}">
-				<u-alert-tips type="warning" :title="title" show-icon></u-alert-tips>
-				<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
-				<view class="title-wrap" v-for="(item, index) in warning" :key="index">
-					<image mode="aspectFill" src="@/static/devices/fire.png" />
-					<text class="name">{{ item.Type }}</text>
-					<text class="title u-line-2">{{ item.Content }}</text>
-					<text class="time">{{ $date.dateFormat('YY-mm-dd HH:MM', item.DisposedOn) }}</text>
-					<span>详情>></span>
+			<u-swiper :list="list" :height="351"></u-swiper>
+			<view class="menu">
+				<view v-for="(v, i) in gridList" :key="i" @click="$u.route(v.url)">
+					<u-image width="102rpx" height="102rpx" :src="v.src" shape="circle" />
+					<span>{{v.text}}</span>
 				</view>
-				<u-empty v-if="warning.length === 0" text="暂无报警记录" mode="list"></u-empty>
-			</scroll-view>
-		</view>
-		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#0081ff" inactive-color="#aaaaaa" :mid-button="true" />
-		<Modal />
+			</view>
+			<view class="info_card">
+				<view class="info">信息展板</view>
+				<scroll-view class="scroll-view" :scroll-x="true">
+					<view class="scroll-view-item" v-for="(v, i) in 5" :key="i">
+						<view class="info_block">
+							<u-image src="/static/icon/Text01.png" />
+							<view class="info_box">
+								<view class="info_header">
+									我是信息标题{{v}}
+								</view>
+								<view class="info_center">
+									{{i}}我是内容我是内容我是内容我是内容我是内容我是内容
+								</view>
+							</view>
+						</view>
+						<view class="info_ck">
+							<button class="see_btn">查看</button>
+							<span>发布时间：2021-03-22</span>
+						</view>
+					</view>
+				</scroll-view>
+				<view class="info_block_b">
+					<view style="background-image: url(../../static/background/WaringInfo.png);"
+						class="info_block_b_box" />
+					<view style="background-image: url(../../static/background/Notice.png);"
+						class="info_block_b_box" />
+					<view style="background-image: url(../../static/background/MainInfo.png);"
+						class="info_block_b_box" />
+				</view>
+				<view class="info">报表统计</view>
+				<view class="info_block_c">
+					<!-- #ifdef APP-PLUS || H5 -->
+					<view @click="echarts.onClick" :prop="option" :change:prop="echarts.updateEcharts" id="echarts"
+						class="echarts" />
+					<!-- #endif -->
+				</view>
+			</view>
+	</view>
+	<u-tabbar :list="vuex_tabbar" bg-color="#ffffff" active-color="#FC7930" inactive-color="#aaaaaa" :mid-button="true"
+		:border-top="false" />
+	<Modal />
 	</view>
 </template>
+
+<script module="echarts" lang="renderjs">
+	let myChart
+	export default {
+		mounted() {
+			if (typeof window.echarts === 'function') {
+				this.initEcharts()
+			} else {
+				// 动态引入较大类库避免影响页面展示
+				const script = document.createElement('script')
+				// view 层的页面运行在 www 根目录，其相对路径相对于 www 计算
+				script.src = 'static/echarts.js'
+				script.onload = this.initEcharts.bind(this)
+				document.head.appendChild(script)
+			}
+		},
+		methods: {
+			initEcharts() {
+				myChart = echarts.init(document.getElementById('echarts'))
+				// 观测更新的数据在 view 层可以直接访问到
+				myChart.setOption(this.option)
+			},
+			updateEcharts(newValue, oldValue, ownerInstance, instance) {
+				// 监听 service 层数据变更
+				myChart.setOption(newValue)
+			},
+			onClick(event, ownerInstance) {
+				// 调用 service 层的方法
+				ownerInstance.callMethod('onViewClick', {
+					test: 'test'
+				})
+			}
+		}
+	}
+</script>
 
 <script>
 	import {
@@ -40,72 +101,61 @@
 			return {
 				title: '通知公告',
 				warning: [],
-				screenHeight: null,
 				list: [
 					'/static/banners/banner1.jpg',
 					'/static/banners/banner2.jpg',
 					'/static/banners/banner3.jpg'
 				],
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
+				option: {
+					color: '#409EFF',
+					legend: {
+						data: ['报警统计']
+					},
+					xAxis: {
+						type: 'category',
+						data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+					},
+					yAxis: {
+						type: 'value'
+					},
+					series: [{
+						name: '报警统计',
+						type: 'bar',
+						data: [120, 200, 150, 80, 70, 110, 130],
+						showBackground: true,
+						backgroundStyle: {
+							color: 'rgba(180, 180, 180, 0.2)'
+						}
+					}]
 				},
 				gridList: [{
-						icon: 'bell',
-						text: '报警信息',
-						color: '#fa3534',
-						url: '/pages/message/New'
+						text: '客户管理',
+						src: '../../static/icon/Customer.png',
+						url: 'pages/customer/index'
 					},
 					{
-						icon: 'grid',
-						text: '设备信息',
-						color: '#9932CC',
-						url: '/pages/device/Device'
+						text: '权限管理',
+						src: '../../static/icon/Authority.png',
+						url: 'pages/autManagement/index'
 					},
 					{
-						icon: 'eye',
-						text: '工单监控',
-						color: '#ff9900',
-						url: '/pages/order/monitor/list'
+						text: '设备管理',
+						src: '../../static/icon/Device.png',
+						url: 'pages/order/index'
 					},
 					{
-						icon: 'shopping-cart',
-						text: '产品销售',
-						color: '#32CD32',
-						url: '/pages/order/sale/list'
+						text: '日志管理',
+						src: '../../static/icon/Log.png'
 					},
 					{
-						icon: 'car',
-						text: '销售出库',
-						color: '#48D1CC',
-						url: 'pages/order/distribute/list'
-					},
-					{
-						icon: 'file-text',
-						text: '施工工单',
-						color: '2F4F4F',
-						url: 'pages/order/install/list'
-					},
-					{
-						icon: 'calendar',
-						text: '维修工单',
-						color: '#9932CC'
-					},
-					{
-						icon: 'phone',
-						text: '维保工单',
-						color: '#9400D3'
+						text: '订单管理',
+						src: '../../static/icon/Order.png'
 					}
 				]
 			}
 		},
 		mounted() {
-			uni.getSystemInfo({
-				success: (res) => {
-					this.screenHeight = res.windowHeight + 'rpx'
-					console.log(res)
-				}
-			})
-			console.log(this.warning, uni.getStorageSync('warnInfo'))
+			console.log(this.warning, this.vuex_tabbar)
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {
@@ -117,84 +167,163 @@
 		},
 		computed: {
 			...mapState(["vuex_tabbar"])
+		},
+		methods: {
+			onViewClick(options) {
+				console.log(options)
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.content {
-		.text-area {
+		::v-deep .text-area {
+			.u-swiper-wrap {
+				border-radius: 20rpx !important;
+				margin: 24rpx 20rpx;
 
-			::v-deep .u-grid {
-				background-color: #FFFFFF !important;
+				.uni-swiper {
+					height: 351rpx;
+				}
 			}
 
-			.grid-text {
-				font-size: 28rpx;
-				margin-top: 20rpx;
-				color: $u-type-info;
+			.menu {
+				width: 702rpx;
+				height: 180rpx;
+				background: #FFFFFF;
+				border-radius: 20rpx;
+				margin: 0 24rpx;
+				padding: 0 20rpx;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+
+				.u-image {
+					margin-left: 50%;
+					transform: translateX(-50%);
+				}
 			}
 
-			::v-deep .u-card {
-				margin: 10rpx 0 !important;
+			.info_card {
+				width: 100%;
+				height: 100%;
 
-				.u-card__head {
-					padding: 5rpx !important;
-				}
-
-				.u-card-wrap {
-					background-color: $u-bg-color;
-					// padding: 1rpx;
-				}
-
-				.u-body-item {
+				.info {
+					margin: 25rpx 0 12rpx 24rpx;
+					height: 31rpx;
 					font-size: 32rpx;
-					color: #333;
-					padding: 20rpx 10rpx;
-					background: #FFFFFF;
+					font-family: Source Han Sans CN;
+					font-weight: 600;
+					color: #333333;
+				}
 
-					.title-wrap {
-						width: 100%;
+				.scroll-view {
+					width: 100%;
+					height: 220rpx;
+					white-space: nowrap;
 
-						image {
-							width: 100rpx;
-							flex: 0 0 100rpx;
-							height: 100rpx;
-							margin-right: 20rpx;
-							border-radius: 12rpx;
+					.scroll-view-item {
+						display: inline-block;
+						background: #FFFFFF;
+						width: 530rpx;
+						height: 200rpx;
+						background: #fff;
+						margin: 12rpx 0 0 24rpx;
+						border-radius: 20rpx;
+
+						.info_block {
+							display: flex;
+							justify-content: space-around;
+							transform: translate(20rpx, 20rpx);
+
+							.u-image {
+								width: 120rpx !important;
+								height: 120rpx !important;
+							}
+
+							.info_box {
+								width: 358rpx;
+								height: 120rpx;
+
+								.info_header {
+									font-size: 28rpx;
+									font-weight: 600;
+									color: #333333;
+									line-height: 36rpx;
+								}
+
+								.info_center {
+									height: 80rpx;
+									font-size: 24rpx;
+									line-height: 80rpx;
+									width: 320rpx;
+									color: #333333;
+									overflow: hidden;
+									text-overflow: ellipsis;
+								}
+							}
 						}
 
-						.name {
-							font-size: 28rpx;
-							color: $u-type-info;
-						}
-
-						.title {
-							text-align: left;
-							font-size: 24rpx;
-							color: $u-type-info-dark;
-							margin-top: 10rpx;
-						}
-
-						.time {
-							font-size: 24rpx;
-							color: $u-tips-color;
-						}
-
-						span {
-							font-size: 24rpx;
-							color: $u-type-info-dark;
-							margin-left: 49%;
+						.info_ck {
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							transform: translateY(50%);
+							
+							.see_btn {
+								color: #FFFFFF;
+								margin-right: 30rpx;
+								font-size: 20rpx;
+								line-height: 36rpx;
+								width: 88rpx;
+								height: 36rpx;
+								background: #FC7930;
+								border-radius: 18rpx;
+							}
+							span {
+								font-size: 20rpx;
+								color: #CCCCCC;
+								margin-right: 20rpx;
+							}
 						}
 					}
 				}
+			}
 
-				.u-body-item image {
-					width: 96rpx;
-					flex: 0 0 96rpx;
-					height: 96rpx;
-					border-radius: 8rpx;
-					margin-left: 12rpx;
+			.info_block_b {
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				width: 702rpx;
+				height: 266rpx;
+				background: #FFFFFF;
+				border: 1rpx solid #FFFFFF;
+				border-radius: 20rpx;
+				transform: translateX(-50%);
+				margin-left: 50%;
+				margin-top: 20rpx;
+
+				.info_block_b_box {
+					width: 206rpx;
+					height: 206rpx;
+					background-size: 206rpx;
+				}
+			}
+
+			.info_block_c {
+				width: 702rpx;
+				height: 447rpx;
+				background: #FFFFFF;
+				border: 1rpx solid #FFFFFF;
+				border-radius: 20rpx;
+				transform: translateX(-50%);
+				margin-left: 50%;
+				margin-top: 20rpx;
+				margin-bottom: 40rpx;
+
+				.echarts {
+					height: 447rpx;
 				}
 			}
 
@@ -210,6 +339,7 @@
 		::v-deep .u-fixed-placeholder {
 			height: calc(74rpx) !important;
 		}
+
 		::v-deep .u-empty {
 			height: 300rpx !important;
 		}

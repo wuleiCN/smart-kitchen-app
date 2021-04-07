@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售清单"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="销售清单" :title-width="300" />
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">销售信息</span>
@@ -18,8 +17,8 @@
 			<span class="_title u-flex">销售清单</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index" :options="options" @open="open"
-			 @click="alarm">
+			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index"
+				:options="options" @open="open" @click="alarm">
 				<view class="item u-border-bottom">
 					<image mode="aspectFill" src="" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
@@ -44,9 +43,6 @@
 	export default {
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				status: 'nomore',
 				dispatchShow: false,
 				optionId: '',
@@ -85,10 +81,10 @@
 		},
 		watch: {
 			list: {
-				handler(val,old) {
-					if(old.length !== 0) {
+				handler(val, old) {
+					if (old.length !== 0) {
 						this.updataOrder()
-						console.log(val,old)
+						console.log(val, old)
 					}
 				},
 				deep: true
@@ -126,13 +122,13 @@
 					})
 					res.map(v => {
 						this.DeviceType.forEach(i => {
-							if(v.Type === i.value) v.Name = i.name
+							if (v.Type === i.value) v.Name = i.name
 						})
-						
+
 					})
 					res.map(v => {
 						this.modelList.forEach(i => {
-							if(v.ModelId === i.Id) v.modelName = i.Name
+							if (v.ModelId === i.Id) v.modelName = i.Name
 						})
 					})
 					this.list = res

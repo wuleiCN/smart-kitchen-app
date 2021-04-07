@@ -16,6 +16,26 @@
 			}
 		},
 		{
+			"path": "pages/SendSms",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/FindPwd",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"app-plus": {
@@ -57,6 +77,46 @@
 		},
 		{
 			"path": "pages/customer/employees",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/autManagement/index",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/autManagement/correspondLevels",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/autManagement/role",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/autManagement/user",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
@@ -156,6 +216,16 @@
 			}
 		},
 		{
+			"path": "pages/order/index",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/order/monitor/list",
 			"style": {
 				"app-plus": {
@@ -167,6 +237,16 @@
 		},
 		{
 			"path": "pages/order/monitor/flow",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/sale/index",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
@@ -196,6 +276,16 @@
 			}
 		},
 		{
+			"path": "pages/order/sale/selectProduction",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/order/sale/saledevices",
 			"style": {
 				"app-plus": {
@@ -207,6 +297,16 @@
 		},
 		{
 			"path": "pages/order/sale/create",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/sale/created",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
@@ -299,9 +399,9 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#0081ff",
-		"navigationStyle": "custom"
-		// "backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#FC7930",
+		"navigationStyle": "custom",
+		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
 		"list": [{

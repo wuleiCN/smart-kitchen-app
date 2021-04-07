@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="工单监控"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="工单监控"
+		 :title-width="300" />
 		<u-card v-for="(item,index) in order" :key="index" padding="0" @click="toFlow(item)">
 			<view class="u-card-wrap" slot="body">
 				<view class="u-body-item u-flex u-col-between">
@@ -25,9 +25,6 @@
 	export default {
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				order: [],
 				OrderType: uni.getStorageSync('OrderType'),
 				OrderStatus: uni.getStorageSync('OrderStatus'),

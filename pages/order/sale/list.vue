@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="销售工单"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="销售工单" :title-width="300" />
 		<view class="order u-border-bottom" v-for="(item,index) in orderList" :key="index">
 			<view class="_info">
 				<u-image src="/static/devices/1.png" width="120rpx" height="120rpx" shape="circle" />
@@ -23,7 +22,8 @@
 			</view>
 		</view>
 		<u-button class="add" type="primary" @click="$u.route('pages/order/sale/create')">+新增订单</u-button>
-		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distribute"></u-modal>
+		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distribute">
+		</u-modal>
 	</view>
 </template>
 
@@ -31,9 +31,6 @@
 	export default {
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				distributeContent: '确定要派单出库吗?',
 				distributeShow: false,
 				orderList: [],
@@ -45,24 +42,24 @@
 			this.getOrderSaleList()
 		},
 		methods: {
-			toProduct(Id) { 
+			toProduct(Id) {
 				setTimeout(() => {
-					this.$u.route('pages/order/sale/selectproduct',{
+					this.$u.route('pages/order/sale/selectproduct', {
 						Id
 					})
-				},200)
+				}, 200)
 			},
 			toSaledevices(Id) {
 				setTimeout(() => {
-					this.$u.route('pages/order/sale/saledevices',{
+					this.$u.route('pages/order/sale/saledevices', {
 						Id
 					})
-				},200)
+				}, 200)
 			},
 			getOrderSaleList() {
 				this.$u.api.getOrderSaleList().then(res => {
 					this.orderList = res
-					console.log(res,this.orderList)
+					console.log(res, this.orderList)
 				}).catch(err => {
 					uni.showToast({
 						icon: 'none',
@@ -72,8 +69,10 @@
 			},
 			sendToDistribute(id) {
 				this.distributeId = id
-				this.$u.api.getOrderSaleDevices({id}).then(res => {
-					if(res.length) {
+				this.$u.api.getOrderSaleDevices({
+					id
+				}).then(res => {
+					if (res.length) {
 						this.distributeShow = true
 					} else {
 						uni.showToast({
@@ -89,7 +88,9 @@
 				})
 			},
 			distribute() {
-				this.$u.api.orderSale({order: this.distributeId}).then(res => {
+				this.$u.api.orderSale({
+					order: this.distributeId
+				}).then(res => {
 					uni.showToast({
 						title: '派单出库成功！'
 					})
@@ -144,6 +145,7 @@
 			}
 		}
 	}
+
 	.add {
 		position: fixed;
 		bottom: 0;

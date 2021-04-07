@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="出货工单"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="出货工单" :title-width="300" />
 		<view class="order u-border-bottom" v-for="(item,index) in order" :key="index">
 			<view class="_info">
 				<u-image src="/static/devices/device.png" width="120rpx" height="120rpx" shape="circle" />
@@ -15,7 +14,8 @@
 			<view class="operation">
 				<span>
 					<u-button v-if="item.Status === 10" type="success" plain ripple @click="accept(index)">接单</u-button>
-					<u-button v-if="item.Status === 12" type="success" plain ripple @click="toProduct(item)">出库</u-button>
+					<u-button v-if="item.Status === 12" type="success" plain ripple @click="toProduct(item)">出库
+					</u-button>
 				</span>
 				<span>
 					<u-button type="warning" plain ripple>退单</u-button>
@@ -38,9 +38,6 @@
 		},
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				order: [],
 				shipmentShow: false,
 				shipmentContent: '确定要接单吗？',
@@ -72,7 +69,7 @@
 				this.$u.api.distributeAccept({
 					id: this.order[this._index].Id
 				}).then(res => {
-					if(res.success) {
+					if (res.success) {
 						uni.showToast({
 							title: '接单成功！'
 						})

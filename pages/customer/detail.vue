@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="员工详情"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="员工详情"
+		 :title-width="300"/>
 		<u-form :model="list" :rules="rules" ref="uForm">
 			<u-form-item label-position="left" :border-bottom="false" label="姓名:" label-align="center" label-width="135" prop="Name">
 				<u-input :trim="true" :border="true" v-model="list.Name " placeholder="请输入名字" />

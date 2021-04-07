@@ -1,19 +1,19 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="入库信息"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="入库信息" :title-width="300" />
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">设备入库信息</span>
 		</view>
 		<view class="code u-flex">
 			<text>入库设备：</text>
-			<u-input v-model="deviceValue" type="select" :select-open="selectShow" :border-top="true" placeholder="请选择设备" @click="selectShow = true" />
+			<u-input v-model="deviceValue" type="select" :select-open="selectShow" :border-top="true"
+				placeholder="请选择设备" @click="selectShow = true" />
 		</view>
 		<view class="code u-flex" v-if="modelInput">
 			<text>设备型号：</text>
-			<u-input v-model="modelValue" type="select" :select-open="modelShow" :border-top="true"
-			 placeholder="请选择型号" @click="modelShow = true" />
+			<u-input v-model="modelValue" type="select" :select-open="modelShow" :border-top="true" placeholder="请选择型号"
+				@click="modelShow = true" />
 		</view>
 		<view class="code u-flex">
 			<text>通讯号码：</text>
@@ -32,7 +32,8 @@
 				<text>扫码设备条码/二维码</text>
 				<text>或输入设备编号</text>
 			</view>
-			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan"></u-image>
+			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan">
+			</u-image>
 		</view>
 		<view class="code u-flex">
 			<text>设备编码：</text>
@@ -41,8 +42,9 @@
 		</view>
 		<view>{{arrValue === null ? [] : arrValue[0].value}}</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" value-name="Type" label-name="TypeName"
-		 @confirm="selectConfirm"></u-select>
-		<u-select mode="single-column" :list="modelList" v-model="modelShow" value-name="Type" label-name="Name" @confirm="CMJSConfirm" />
+			@confirm="selectConfirm"></u-select>
+		<u-select mode="single-column" :list="modelList" v-model="modelShow" value-name="Type" label-name="Name"
+			@confirm="CMJSConfirm" />
 		<u-modal v-model="warehousShow" :content="warehousContent" show-cancel-button @confirm="warehoused" />
 		<u-modal v-model="scanShow" :content="warehousContent" title="扫描成功" show-cancel-button @confirm="warehoused" />
 		<Modal />
@@ -324,7 +326,7 @@
 				this.modelValue = '';
 				this.CMValue = e
 				this.modelNum = e[0].extra
-				console.log(e,this.modelNum)
+				console.log(e, this.modelNum)
 				e.map((val, index) => {
 					this.modelValue += this.modelValue == '' ? val.label : '-' + val.label;
 				})

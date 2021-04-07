@@ -1,13 +1,13 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备出库"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="设备出库" :title-width="300" />
 		<view class="scan u-flex u-row-around">
 			<view class="describe u-flex-col">
 				<text>扫码设备条码/二维码</text>
 				<text>或输入设备编号</text>
 			</view>
-			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan"></u-image>
+			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan">
+			</u-image>
 		</view>
 		<view class="code u-flex">
 			<text>设备编码：</text>
@@ -39,9 +39,6 @@
 		},
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				optionId: '',
 				scanCode: '',
 				device: {
@@ -72,7 +69,7 @@
 					order: this.optionId,
 					code: this.scanCode
 				}).then(res => {
-					if(res.success === true) {
+					if (res.success === true) {
 						this.show = true
 						this.content = '设备出库成功！'
 					} else {
@@ -125,8 +122,10 @@
 				});
 			},
 			distributed() {
-				this.$u.api.orderSaleDeviceDistribute({code: this.Code}).then(res => {
-					if(res.success !== 'false') {
+				this.$u.api.orderSaleDeviceDistribute({
+					code: this.Code
+				}).then(res => {
+					if (res.success !== 'false') {
 						uni.showToast({
 							title: '出库成功！'
 						})

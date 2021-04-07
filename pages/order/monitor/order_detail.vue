@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备出库"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="设备出库" :title-width="300" />
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">工单基本信息</span>
@@ -33,9 +32,7 @@
 	export default {
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
+
 				orderId: '',
 				order: {},
 				devices: []
@@ -81,6 +78,7 @@
 			padding-bottom: 10rpx;
 		}
 	}
+
 	.device_info {
 		padding: 20rpx;
 		background: #FFFFFF;

@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="施工安装"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="施工安装" :title-width="300" />
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">销售信息</span>
@@ -18,7 +17,8 @@
 			<span class="_title u-flex">出库设备</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<view class="device u-flex-col" v-for="(item,index) in devices" :key="index" @click="toDeviceDisribute(item.Id,item.InstalledCount,item.DistributedCount,item.Type,index)">
+			<view class="device u-flex-col" v-for="(item,index) in devices" :key="index"
+				@click="toDeviceDisribute(item.Id,item.InstalledCount,item.DistributedCount,item.Type,index)">
 				<span><strong>设备型号：</strong>{{item.modelName}}</span>
 				<span><strong>设备类别：</strong>{{item.Name}}</span>
 				<span><strong>出库数量：</strong>{{item.InstalledCount}} / {{item.DistributedCount}}</span>
@@ -41,9 +41,6 @@
 		},
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				order: {},
 				status: 'nomore',
 				optionId: '',

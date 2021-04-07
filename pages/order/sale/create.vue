@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="新增工单"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="新增工单" :title-width="300" />
 		<u-form :model="form" ref="uForm">
 			<u-form-item label="客户信息:" label-width="150" label-align="center">
 				<u-input v-model="form.Name" />
@@ -34,9 +33,6 @@
 	export default {
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				form: {},
 				rules: {
 					Contact: [{
@@ -79,7 +75,9 @@
 					if (valid) {
 						this.form.Phone = this.form.ContactPhone
 						delete this.form.ContactPhone
-						this.$u.api.createOrderSale({order: this.form}).then(res => {
+						this.$u.api.createOrderSale({
+							order: this.form
+						}).then(res => {
 							uni.showToast({
 								title: '新增工单成功！'
 							})

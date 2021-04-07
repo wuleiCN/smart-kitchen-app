@@ -1,24 +1,51 @@
 <template>
 	<view class="content">
-		<view class="Logon">
-			<u-image width="100%" height="150rpx" src="/static/logon.png" mode="aspectFit" />
+		<view class="Login">
+			<u-image width="100%" height="150rpx" src="/static/Logo.png" mode="aspectFit" />
 		</view>
-		<u-form :model="model" :rules="rules" ref="uForm">
-			<u-form-item label-position="left" :border-bottom="false" label="账号:" :label-style="{color: '#fff'}" label-align="center"
-			 label-width="135" prop="account">
-				<u-input :password-icon="true" :trim="true" :border="true" v-model="model.account " placeholder="请输入账号"></u-input>
-			</u-form-item>
-			<u-form-item label-position="left" :border-bottom="false" :label-style="{color: '#fff'}" label-align="center"
-			 label-width="135" label="密码:" prop="password">
-				<u-input :password-icon="true" :trim="true" :border="true" type="password" v-model="model.password" placeholder="请输入密码"></u-input>
-			</u-form-item>
-		</u-form>
-		<u-button type="success" shape="square" :custom-style="customStyle" @tap="login">确 定</u-button>
-		<view class="register">
-			<a>注册新用户</a>
-			<a>忘记密码</a>
+		<view class="circle"></view>
+		<view v-show="isPwd" class="Login_pwd">
+			<u-form :model="model" ref="uForm">
+				<u-form-item lable="+86" prop="account" :border-bottom="false">
+					<u-input v-model="model.account" type="text" border placeholder="请输入手机号/用户名"
+						placeholder-style="color: #CCCCCC;fontSize: 28rpx" trim />
+				</u-form-item>
+				<u-form-item prop="password" :border-bottom="false">
+					<u-input v-model="model.password" type="password" border placeholder="请输入密码"
+						placeholder-style="color: #CCCCCC;fontSize: 28rpx" trim />
+				</u-form-item>
+			</u-form>
+			<view class="sign">
+				<a @tap="ckSms">短信验证登录</a>
+				<a @tap="findPwd">忘记密码</a>
+			</view>
+			<button class="sign_ck" @tap="login">确 定</button>
+			<view class="register">
+				<span>还没有账号？</span>
+				<a>立即注册</a>
+			</view>
 		</view>
-		<u-toast ref="uToast" />
+		<view v-show="!isPwd" class="Login_pwd">
+			<u-form :model="model" ref="uFormB">
+				<u-form-item lable="+86" prop="iphone" :border-bottom="false">
+					<u-input v-model="model.iphone" type="text" border placeholder="请输入手机号/用户名"
+						placeholder-style="color: #CCCCCC;fontSize: 28rpx" trim />
+				</u-form-item>
+				<u-form-item lable="+86" :border-bottom="false">
+					<u-field label-width="0" placeholder-style="color: #CCCCCC;fontSize: 28rpx"
+						placeholder="请输入验证码" :border-bottom="false" trim>
+						<u-button size="mini" slot="right" @click="getCode">{{codeText}}
+						</u-button>
+					</u-field>
+					<u-verification-code ref="uCode" @change="codeChange"></u-verification-code>
+				</u-form-item>
+			</u-form>
+			<button class="sign_ck" @tap="sendCode" :disabled="isTure">
+				获取短信验证码</button>
+			<view class="register">
+				<a @click="ckPwd">返回密码登录</a>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -31,13 +58,14 @@
 			return {
 				model: {
 					account: '',
-					password: ''
+					password: '',
+					iphone: ''
 				},
+				smsMsg: '',
+				codeText: '',
+				isPwd: true,
+				isTure: true,
 				user: uni.getStorageSync('userInfo'),
-				customStyle: {
-					margin: '5px 15px',
-					'font-size': '19px'
-				},
 				rules: {
 					account: [{
 						required: true,
@@ -55,6 +83,19 @@
 							message: '长度在6-12之间',
 							trigger: ['change', 'blur']
 						}
+					],
+					iphone: [{
+							required: true,
+							message: '请输入手机号',
+							trigger: ['change', 'blur'],
+						},
+						{
+							validator: (rule, value, callback) => {
+								return this.$u.test.mobile(value);
+							},
+							message: '手机号码不正确',
+							trigger: ['change', 'blur'],
+						}
 					]
 				}
 			}
@@ -69,43 +110,93 @@
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
+			this.$refs.uFormB.setRules(this.rules);
+		},
+		watch: {
+			'model.iphone': {
+				handler(e) {
+					this.model.iphMsg = ""
+					this.isTure = true
+					if (this.$u.test.mobile(e)) this.isTure = false
+					console.log(e, this.isTure);
+				}
+			},
+			deep: true
 		},
 		computed: {
 			...mapState(["vuex_token"])
 		},
 		methods: {
-			login() {
-				this.$refs.uForm.validate(async vaild => {
-					if(vaild) {
-						const res = await this.$u.api.Login({
-							username: this.model.account,
-							password: this.model.password
-						}).catch(err => {
+			async login() {
+				if (this.model.account === '' && this.model.password === '') {
+					this.$u.toast('请输入用户名或密码')
+				} else {
+					const res = await this.$u.api.Login({
+						username: this.model.account,
+						password: this.model.password
+					}).catch(err => {
+						console.log(err)
+					})
+					if (!res.success) {
+						this.$u.toast(res.message + ', 请重新登录');
+					}
+					if (res !== undefined) {
+						uni.setStorageSync('token', res.Token)
+						const info = await this.$u.api.getInfo().catch(err => {
 							console.log(err)
 						})
-						if (!res.success) {
-							this.$u.toast(res.message + ', 请重新登录');
-						}
-						if (res !== undefined) {
-							uni.setStorageSync('token', res.Token)
-							const info = await this.$u.api.getInfo().catch(err => {
-								console.log(err)
-							})
-							console.log(info)
-							if (info !== undefined) {
-								uni.setStorageSync('userInfo', info)
-								this.getDictionary()
-								uni.switchTab({
-									url: '/pages/index/index'
-								});
-							}
+						console.log(info)
+						if (info !== undefined) {
+							uni.setStorageSync('userInfo', info)
+							this.getDictionary()
+							uni.switchTab({
+								url: '/pages/index/index'
+							});
 						} else {
 							this.$u.toast('发生错误，请重新登陆！')
 							return false
 						}
+					} else {
+						this.$u.toast('发生错误，请重新登陆！')
+						return false
 					}
-				})
+				}
 			},
+			ckSms() {
+				this.isPwd = false
+			},
+			ckPwd() {
+				this.isPwd = true
+			},
+			// 忘记密码
+			findPwd() {
+				this.$u.route('pages/FindPwd')
+			},
+			// 发送验证码
+			codeChange(text) {
+				this.codeText = text;
+			},
+			sendCode() {},
+			getCode() {
+				if (this.$refs.uCode.canGetCode) {
+					// 模拟向后端请求验证码
+					uni.showLoading({
+						title: '正在获取验证码'
+					})
+					setTimeout(() => {
+						uni.hideLoading();
+						// 通知验证码组件内部开始倒计时
+						this.$refs.uCode.start();
+					}, 1000);
+				} else {
+					this.$u.toast('倒计时结束后再发送');
+				}
+			},
+			// sendCode() {
+			// 	this.$u.route('pages/SendSms', {
+			// 		params: JSON.stringify(this.model.iphone)
+			// 	})
+			// },
 			// 数据字典
 			getDictionary() {
 				// 设备类别
@@ -164,33 +255,112 @@
 <style scoped lang="scss">
 	.content {
 		height: 100vh;
-		background-image: linear-gradient(-45deg, rgb(115, 108, 260), rgb(40, 200, 160)) !important;
+		background: #FFFFFF !important;
 
 		::v-deep .u-form-item--right {
 			margin-right: 30rpx;
 		}
 	}
 
-	.Logon {
+	::v-deep .Login {
 		width: 100%;
-		height: 340rpx;
+		height: 377rpx;
+		background-image: url(../static/NavBar.png);
 
-		::v-deep .u-image {
-			transform: translateY(80%);
+		.u-image {
+			transform: translateY(150%);
+			z-index: 999;
 		}
 	}
 
-	::v-deep .u-input__input {
-		color: #FFFFFF;
+	::v-deep .Login_pwd {
+		margin-top: 50%;
+		transform: translateY(-40%);
+		z-index: 999;
+
+		.u-form-item {
+			width: 600rpx;
+			height: 88rpx;
+			background: #F2F2F2;
+			border-radius: 20rpx;
+			margin-left: 50%;
+			transform: translateX(-50%);
+			margin-top: 40rpx;
+			padding: 0;
+
+			.u-input,
+			.u-input__input {
+				width: 600rpx;
+				height: 88rpx;
+				border-radius: 20rpx;
+			}
+
+			.u-field {
+				padding: 0 20rpx;
+				height: 88rpx;
+				line-height: 88rpx;
+
+				.u-btn {
+					height: 24rpx;
+					background: #F2F2F2;
+					color: #B3B3B3;
+				}
+
+				.u-hairline-border:after {
+					border: 0;
+					border-left: 2rpx solid #B3B3B3 !important;
+					border-radius: 0;
+				}
+			}
+		}
+	}
+
+	.sign {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 40rpx;
+
+		a {
+			font-size: 20rpx;
+			color: #d5d5d5
+		}
 	}
 
 	.register {
-		display: flex;
-		justify-content: space-around;
+		margin-left: 50%;
+		margin-top: 40rpx;
+		text-align: center;
+		transform: translateX(-50%);
+		font-size: 32rpx;
+		color: #CCCCCC;
 
 		a {
-			font-size: 16px;
-			color: #f4f4f4
+			color: #919191;
 		}
+	}
+
+	.sign_ck {
+		width: 600rpx;
+		height: 88rpx;
+		font-size: 32rpx;
+		background: #CCCCCC;
+		border-radius: 20rpx;
+		margin-top: 60rpx;
+		color: #FFFFFF;
+		background: #FB8D50;
+		&:after {
+			border: 0 !important;
+		}
+	}
+
+	.circle {
+		position: absolute;
+		background: #FFFFFF;
+		border-radius: 50%;
+		width: 1500rpx;
+		height: 1000rpx;
+		top: 300rpx;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 </style>

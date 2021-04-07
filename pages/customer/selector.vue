@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="选择客户"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		 :title-width="300" title-color="#ffffff" />
 		<view class="_top">
 			<u-search placeholder="请输入关键字" v-model="value" />
 		</view>

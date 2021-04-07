@@ -1,7 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="产品销售"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="产品销售" :title-width="300" />
 		<view class="product" v-for="(item,index) in list" :key="index">
 			<view class="u-flex">
 				<u-image src="/static/devices/device.png" width="200rpx" height="200rpx"></u-image>
@@ -22,7 +21,8 @@
 			<view class="navigation">
 				<view class="left">
 					<view class="item car" @click="toCart">
-						<u-badge v-if="deviceCount" class="car-num" :count="deviceCount" type="error" :offset="[-8, -8]"></u-badge>
+						<u-badge v-if="deviceCount" class="car-num" :count="deviceCount" type="error"
+							:offset="[-8, -8]"></u-badge>
 						<u-icon name="shopping-cart" :size="40" :color="$u.color['contentColor']"></u-icon>
 						<view class="text u-line-1">购物车</view>
 					</view>
@@ -49,9 +49,6 @@
 	export default {
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				status: 'loadmore',
 				editShow: false,
 				content: '功能未完善！',

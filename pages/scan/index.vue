@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="false" title="香道云厨智慧厨房" :title-width="300" title-color="#ffffff" :background="background" />
-		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#aaaaaa" inactive-color="#aaaaaa" :mid-button="true" />
+		<u-navbar :is-back="false" title="香道云厨智慧厨房" />
+		<u-tabbar :list="vuex_tabbar" bg-color="#ffffff" active-color="#FC7930" inactive-color="#aaaaaa" :mid-button="true" :border-top="false" />
 		<u-modal v-model="show" :content="content" @confirm="back"></u-modal>
 	</view>
 </template>
@@ -15,9 +15,6 @@
 		data() {
 			return {
 				title: 'scan',
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				show: false,
 				content: ''
 			}

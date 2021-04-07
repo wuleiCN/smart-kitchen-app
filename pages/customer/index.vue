@@ -1,40 +1,44 @@
 <template>
-	<view class="content">
-		<u-navbar :is-back="false" title="香道云厨智慧厨房" :title-width="300" title-color="#ffffff" :background="background" />
-		<view class="text-area">
-			<u-swiper :list="list"></u-swiper>
-			<u-grid :col="4" :border="false">
-				<u-grid-item v-for="(value,index) in gridList" :key="index" :index="index" style="padding: 20px 0 0;" @click="$u.route(value.url)">
-					<u-icon :name="value.icon" :size="56" :color="value.color"></u-icon>
-					<view class="grid-text" style="margin-top: 10px">{{value.text}}</view>
-				</u-grid-item>
-			</u-grid>
-			<scroll-view show-scrollbar :scroll-y="true" :lower-threshold="5" :style="{height: screenHeight}">
-				<u-card padding="0" :title="title" thumb="/static/comment/spot.png">
-					<view class="u-card-wrap" slot="body" v-for="(v, i) in warning" :key="i">
-						<view class="u-body-item u-flex u-border-bottom u-col-between">
-							<image src="/static/tabbar/user2.png" mode="aspectFill" shape="circle"></image>
-							<view class="u-body-item-title info"><span>{{v.Content}}</span><span class="news-wraning">
-									消息未送达</span></view>
-							<view class="u-body-item-title time"><span>{{$date.dateFormat('HH:MM', v.DisposedOn)}}</span><span>
-									<p>5</p>
-								</span></view>
-						</view>
+	<view class="content" @click="closeIcon()">
+		<u-navbar :is-back="back" :title="title" title-color="#000000" :title-size="36">
+			<view class="slot-wrap" :class="{slotSearch: solt}">
+				<slot name="right" v-if="icon">
+					<u-icon name="search" @click="searchCK" />
+					<view class="" @click.stop="operShow = !operShow">
+						<u-icon name="plus" />
 					</view>
-				</u-card>
-			</scroll-view>
+				</slot>
+				<view class="search-wrap" v-if="search">
+					<u-search v-model="keyword" height="56" :action-style="{color: '#fff'}" :show-action="true"
+						action-text="返回" @custom="searchBK()" />
+				</view>
+			</view>
+			<view class="operation" v-show="operShow">
+				<view class="opt_ck" @click.stop="$u.route('pages/customer/register')">
+					客户注册
+				</view>
+			</view>
+		</u-navbar>
+		<view class="text-area" v-for="item in form" :key="item">
+			<view class="cust_title">
+				<view>我是单位名称我是单位名称</view>
+				<button class="btn" @click.stop="$u.route('pages/customer/employees')">更新</button>
+			</view>
+			<view class="cust_centent">
+				<view>公司法人：张三</view>
+				<view>公司系统管理员姓名：李四</view>
+				<view>公司系统管理员联系电话：1234567890</view>
+			</view>
 		</view>
-		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#0081ff" inactive-color="#aaaaaa" :mid-button="true" />
-		<!-- <u-modal v-model="$store.state.vuex_popupShow" :content="!warning.length ? '' : warning[0].Content" title="警告"
-		 show-cancel-button @confirm="handle" /> -->
-		 <Modal />
+		<u-empty mode="search" v-if="dataListShow" />
+		<Modal />
 	</view>
 </template>
 
 <script>
-	import {
-		mapState
-	} from "vuex"
+	// import {
+	// 	mapState
+	// } from "vuex"
 	import Modal from "../components/modal.vue"
 	export default {
 		components: {
@@ -42,46 +46,24 @@
 		},
 		data() {
 			return {
-				title: '通知公告',
+				title: '客户管理',
 				warning: [],
-				screenHeight: null,
-				list: [
-					'/static/banners/banner1.jpg',
-					'/static/banners/banner2.jpg',
-					'/static/banners/banner3.jpg'
-				],
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
-				gridList: [{
-						icon: 'bell',
-						text: '报警信息',
-						color: '#fa3534',
-						url: '/pages/message/New'
-					},
-					{
-						icon: 'account-fill',
-						text: '员工信息',
-						color: '#2979ff',
-						url: '/pages/customer/employees'
-					},
-					{
-						icon: 'plus-people-fill',
-						text: '员工注册',
-						color: '#19be6b',
-						url: '/pages/customer/register'
-					}
-				]
+				operShow: false,
+				search: false,
+				icon: true,
+				back: true,
+				solt: false,
+				dataListShow: false,
+				keyword: '',
+				form: 3
+
 			}
 		},
+		onShow() {
+			this.operShow = false;
+		},
 		mounted() {
-			uni.getSystemInfo({
-				success:(res) => {
-					this.screenHeight = res.windowHeight  + 'rpx'
-					console.log(res)
-				}
-			})
-			console.log(this.warning, uni.getStorageSync('warnInfo'))
+			console.log(this.warning, this.vuex_tabbar)
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {
@@ -92,108 +74,132 @@
 			}
 		},
 		computed: {
-			...mapState(["vuex_tabbar"])
+
+		},
+		methods: {
+			searchCK() {
+				this.search = true,
+					this.icon = false,
+					this.back = false,
+					this.solt = true,
+					this.dataListShow = true,
+					this.form = 0,
+					this.title = ''
+			},
+			searchBK() {
+				setTimeout(() => {
+					this.search = false,
+						this.icon = true,
+						this.back = true,
+						this.solt = false,
+						this.dataListShow = false,
+						this.form = 3,
+						this.title = '客户管理'
+				}, 200)
+			},
+			closeIcon() {
+				this.operShow = false;
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.content {
+		position: relative;
+
 		.text-area {
+			width: 702rpx;
+			height: 240rpx;
+			background: #FFFFFF;
+			border: 1rpx solid #FFFFFF;
+			border-radius: 20rpx;
+			padding: 24rpx;
+			margin-top: 24rpx;
+			margin-left: 50%;
+			transform: translateX(-50%);
 
-			::v-deep .u-grid {
-				background-color: #FFFFFF !important;
-				padding: 10rpx 0 0;
-			}
+			.cust_title {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-weight: 600;
+				height: 39rpx;
+				padding: 24rpx 0;
 
-			.grid-text {
-				font-size: 28rpx;
-				margin-top: 20rpx;
-				color: $u-type-info;
-			}
-
-			::v-deep .u-card {
-				margin: 10rpx 0 !important;
-
-				.u-card__head {
-					padding: 5rpx !important;
+				.btn {
+					background: #FC7930;
+					height: 32rpx;
+					border-radius: 6rpx;
+					font-size: 24rpx;
+					line-height: 32rpx;
+					color: #ffffff;
+					margin: 0;
 				}
 
-				.u-card-wrap {
-					background-color: $u-bg-color;
-					// padding: 1rpx;
-				}
-
-				.u-body-item {
-					font-size: 32rpx;
-					color: #333;
-					padding: 20rpx 10rpx;
-					background: #FFFFFF;
-
-					.info {
-						display: flex;
-						flex-direction: column;
-						margin-left: 10rpx;
-
-						span:nth-child(1) {
-							color: $u-content-color;
-							font-size: 32rpx;
-						}
-
-						span:nth-child(2) {
-							font-size: 24rpx;
-							color: $u-tips-color;
-							margin-top: 10rpx;
-						}
-					}
-
-					.time {
-						flex-direction: column;
-						display: flex;
-						text-align: center;
-						margin-left: 5%;
-
-						span:nth-child(1) {
-							color: $u-tips-color;
-							font-size: 14px;
-						}
-
-						span:nth-child(2) {
-							margin-top: 10rpx;
-
-							p {
-								display: block;
-								width: 32rpx;
-								height: 32rpx;
-								color: #FFFFFF;
-								font-size: 24rpx;
-								border-radius: 50%;
-								background: $u-type-info;
-								transform: translateX(50%);
-							}
-						}
-					}
-				}
-
-				.u-body-item image {
-					width: 96rpx;
-					flex: 0 0 96rpx;
-					height: 96rpx;
-					border-radius: 8rpx;
-					margin-left: 12rpx;
-				}
 			}
 
-			.news-wraning {
-				color: $u-type-warning !important;
-			}
-
-			.news-success {
-				color: $u-type-success !important;
+			.cust_centent {
+				padding: 23rpx 0;
+				border-top: 1rpx solid #F5F5F5;
 			}
 		}
-		::v-deep .u-fixed-placeholder {
-			height: calc(74rpx) !important;
+
+		.slot-wrap {
+			display: flex;
+			align-items: center;
+
+			.search-wrap {
+				margin: 0 20rpx;
+				flex: 1;
+
+				::v-deep .u-action {
+					background: #f3f3f3;
+					color: #000000 !important;
+					height: 28px;
+					line-height: 28px;
+					border-radius: 5px;
+				}
+			}
 		}
+
+		::v-deep .u-slot-content {
+			justify-content: flex-end;
+			margin-right: 24rpx;
+			font-size: 36rpx;
+
+			.u-icon {
+				padding: 10rpx;
+			}
+		}
+
+		.operation {
+			position: absolute;
+			width: 200rpx;
+			// height: 156rpx;
+			font-size: 28rpx;
+			background: #FFFFFF;
+			box-shadow: 1rpx 1rpx 6rpx 0rpx rgba(151, 151, 151, 0.27);
+			border-radius: 10rpx;
+			top: 88rpx;
+			right: 30rpx;
+			z-index: 999;
+
+			.opt_ck {
+				height: 78rpx;
+				color: #000000;
+				text-align: center;
+				line-height: 78rpx;
+
+				// &:nth-child(1) {
+				// 	border-bottom: 1px solid #F5F5F5;
+				// }
+			}
+		}
+	}
+
+	.slotSearch {
+		width: 100% !important;
+		margin-left: 12px;
 	}
 </style>

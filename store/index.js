@@ -18,20 +18,20 @@ const store = new Vuex.Store({
 		vuex_tabbar: [{
 				pagePath: "/pages/index/index",
 				iconPath: "/static/tabbar/home.png",
-				selectedIconPath: "/static/tabbar/homeSelected.png",
+				selectedIconPath: "/static/tabbar/home_S.png",
 				text: "首页"
 			},
 			{
 				pagePath: "/pages/scan/index",
-				iconPath: "/static/tabbar/ScanCode.png",
-				selectedIconPath: "/static/tabbar/ScanCode.png",
+				iconPath: "/static/tabbar/scan.png",
+				selectedIconPath: "/static/tabbar/scan.png",
 				midButton: true,
 				text: "扫码"
 			},
 			{
 				pagePath: "/pages/my/index",
-				iconPath: "/static/tabbar/user.png",
-				selectedIconPath: "/static/tabbar/userSelected.png",
+				iconPath: "/static/tabbar/my.png",
+				selectedIconPath: "/static/tabbar/my_s.png",
 				text: "我的"
 			},
 		]

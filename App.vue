@@ -22,6 +22,9 @@
 	@import "uview-ui/index.scss";
 	// *{touch-action: none;}
 	body {
-		background-color: #f2f2f2f2;
+		background-color: #F5F5F5;
+		button::after {
+			border: none !important;
+		}
 	}
 </style>

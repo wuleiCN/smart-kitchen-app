@@ -1,147 +1,271 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="员工注册"
-		 :title-width="300" title-color="#ffffff" :background="background" />
-		<u-form :model="model" :rules="rules" ref="uForm">
-			<u-form-item label-position="left" :border-bottom="false" label="姓名:" label-align="center" label-width="135" prop="Name">
-				<u-input :trim="true" :border="true" v-model="model.Name " placeholder="请输入名字" />
-			</u-form-item>
-			<u-form-item label-position="left" :border-bottom="false" label-align="center" label-width="135" label="联系电话:" prop="Phone">
-				<u-input :trim="true" :border="true" v-model="model.Phone" placeholder="请输入手机号" />
-			</u-form-item>
-			<u-form-item label-position="left" :border-bottom="false" label-align="center" label-width="135" label="性别:" prop="Gender">
-				<u-input type="select" :border="true" :select-open="genderShow" v-model="Gender" placeholder="请输入性别" @click="genderShow = true" />
-			</u-form-item>
-			<u-form-item label-position="left" :border-bottom="false" label-align="center" label-width="135" label="出生日期:" prop="Gender">
-				<u-input type="select" :border="true" v-model="model.Birthday" placeholder="请输入出生日期" @click="birthShow = true" />
-			</u-form-item>
-			<u-form-item label-position="left" :border-bottom="false" label-align="center" label-width="135" label="员工类别:">
-				<u-input type="select" :border="true" :select-open="typeShow" v-model="Type" placeholder="请输入员工类别" @click="typeShow = true" />
-			</u-form-item>
-			<u-form-item label-position="left" :border-bottom="false" label-align="center" label-width="135" label="员工类别:">
-				<u-upload :action="action" :file-list="fileList" max-count="1" />
-			</u-form-item>
+		<u-navbar :is-back="true" title="客户注册" :title-width="300" title-color="#000000" :title-size="36" />
+		<u-form :model="form" ref="uForm">
+			<view class="info">
+				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="name">
+					<u-input v-model="form.name" input-align="right" placeholder="请输入名称" />
+				</u-form-item>
+				<u-form-item label="统一社会信用码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="credit">
+					<u-input v-model="form.credit" input-align="right" placeholder="请输入统一社会信用码" />
+				</u-form-item>
+				<u-form-item label="开户银行" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="bank">
+					<u-input v-model="form.bank" input-align="right" placeholder="请输入开户银行" />
+				</u-form-item>
+				<u-form-item label="银行账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="account">
+					<u-input v-model="form.account" input-align="right" placeholder="请输入银行账号" />
+				</u-form-item>
+			</view>
+			<view class="info">
+				<u-form-item label="地区" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="region">
+					<u-input v-model="form.region" input-align="right" type="select" :select-open="pickerShow"
+						placeholder="所在地区" @click="pickerShow = true" />
+				</u-form-item>
+				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="address">
+					<u-input v-model="form.address" input-align="right" placeholder="如道路、门牌号、小区等" />
+				</u-form-item>
+			</view>
+			<view class="info">
+				<u-form-item label="公司法人/负责人" label-width="310" :label-style="{paddingLeft: '24rpx'}"
+					prop="directorName">
+					<u-input v-model="form.directorName" input-align="right" placeholder="请输入姓名" />
+				</u-form-item>
+				<u-form-item label="公司法人/负责人联系电话" label-width="355" :label-style="{paddingLeft: '24rpx'}"
+					prop="directorPhone">
+					<u-input v-model="form.directorPhone" input-align="right" placeholder="请输入联系电话" />
+				</u-form-item>
+				<u-form-item label="公司法人/负责人Email" label-width="350" :label-style="{paddingLeft: '24rpx'}"
+					prop="directorEmail">
+					<u-input v-model="form.directorEmail" input-align="right" placeholder="请输入Email" />
+				</u-form-item>
+			</view>
+			<view class="info">
+				<u-form-item label="公司系统管理员姓名" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="adminName">
+					<u-input v-model="form.adminName" input-align="right" placeholder="请输入姓名" />
+				</u-form-item>
+				<u-form-item label="公司系统管理员联系电话" label-width="350" :label-style="{paddingLeft: '24rpx'}"
+					prop="adminPhone">
+					<u-input v-model="form.adminPhone" input-align="right" placeholder="请输入联系电话" />
+				</u-form-item>
+				<u-form-item label="公司系统管理员Email" label-width="310" :label-style="{paddingLeft: '24rpx'}"
+					prop="adminEmail">
+					<u-input v-model="form.adminEmail" input-align="right" placeholder="请输入Email" />
+				</u-form-item>
+			</view>
 		</u-form>
-		<u-button class="add" type="primary" @click="register">注册</u-button>
-		<u-select mode="single-column" :list="genderList" v-model="genderShow" value-name="Type" label-name="Name" @confirm="genderConfirm" />
-		<u-select mode="single-column" :list="typeList" v-model="typeShow" value-name="value" label-name="name" @confirm="typeConfirm" />
-		<u-picker v-model="birthShow" mode="time" :params="params" @confirm="BirthFn" @on-change="update" />
-		<Modal />
+		<view class="submit_vw">
+			<button class="submit_ck" @click="submit">提交</button>
+		</view>
+		<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm" />
 	</view>
 </template>
 
 <script>
-	import Modal from "@/pages/components/modal.vue"
+	// import { mapState } from "vuex";
 	export default {
-		components: {
-			Modal
-		},
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
+				form: {
+					name: '',
+					credit: '',
+					bank: '',
+					account: '',
+					region: '',
+					address: '',
+					directorName: '',
+					directorPhone: '',
+					directorEmail: '',
+					adminName: '',
+					adminPhone: '',
+					adminEmail: ''
+
 				},
-				model: {
-					Name: '',
-					Gender: '',
-					Birthday: '',
-					Phone: '',
-					Photo: '',
-					Type: ''
-				},
-				Gender: '',
-				Type: '',
-				genderShow: false,
-				typeShow: false,
-				birthShow: false,
-				params: {
-					year: true,
-					month: true,
-					day: true
-				},
-				genderList: [{
-						Type: 1,
-						Name: '男'
-					},
-					{
-						Type: 2,
-						Name: '女'
-					}
-				],
-				action: 'http://www.example.com/upload',
-				fileList: [],
-				typeList: uni.getStorageSync('EmployeeType'),
+				pickerShow: false,
 				rules: {
-					Name: [{
+					name: [{
 						required: true,
 						message: '请输入姓名',
-						trigger: ['blur', 'change']
+						trigger: ['change', 'blur'],
 					}],
-					Gender: [{
+					credit: [{
 						required: true,
-						message: '请输入性别',
-						trigger: ['blur', 'change']
+						len: 18,
+						message: '请输入统一社会信用码',
+						trigger: ['change', 'blur']
 					}],
-					Phone: [{
+					bank: [{
+						required: true,
+						message: '请输入开户银行',
+						trigger: ['change', 'blur']
+					}],
+					account: [{
+						min: 16,
+						max: 19,
+						required: true,
+						message: '请输入银行账号',
+						trigger: ['change', 'blur']
+					}],
+					region: [{
+						required: true,
+						message: '请输入所在地区',
+						trigger: ['change', 'blur']
+					}],
+					address: [{
+						required: true,
+						message: '请输入详细住址',
+						trigger: ['change', 'blur']
+					}],
+					directorName: [{
+						required: true,
+						message: '请输入公司法人/负责人',
+						trigger: ['change', 'blur']
+					}],
+					directorPhone: [{
 							required: true,
-							message: '请输入手机号',
-							trigger: ['blur', 'change']
+							message: '请输入公司法人/负责人电话',
+							trigger: ['change', 'blur']
 						},
 						{
-							min: 6,
-							max: 12,
-							message: '长度在6-12之间',
+							validator: (rule, value, callback) => {
+								// 上面有说，返回true表示校验通过，返回false表示不通过
+								return this.$u.test.mobile(value);
+							},
+							message: '手机号码不正确',
+							// 触发器可以同时用blur和change
+							trigger: ['change', 'blur'],
+						}
+					],
+					directorEmail: [{
+							required: true,
+							message: '请输入公司法人/负责人Email',
 							trigger: ['change', 'blur']
+						},
+						{
+							validator: (rule, value, callback) => {
+								// 上面有说，返回true表示校验通过，返回false表示不通过
+								return this.$u.test.email(value);
+							},
+							message: '手机号码不正确',
+							// 触发器可以同时用blur和change
+							trigger: ['change', 'blur'],
+						}
+					],
+					adminName: [{
+						required: true,
+						message: '请输入姓名',
+						trigger: ['change', 'blur']
+					}],
+					adminPhone: [{
+							required: true,
+							message: '请输入联系电话',
+							trigger: ['change', 'blur']
+						},
+						{
+							validator: (rule, value, callback) => {
+								// 上面有说，返回true表示校验通过，返回false表示不通过
+								return this.$u.test.mobile(value);
+							},
+							message: '手机号码不正确',
+							// 触发器可以同时用blur和change
+							trigger: ['change', 'blur'],
+						}
+					],
+					adminEmail: [{
+							required: true,
+							message: '请输入Email',
+							trigger: ['change', 'blur']
+						},
+						{
+							validator: (rule, value, callback) => {
+								// 上面有说，返回true表示校验通过，返回false表示不通过
+								return this.$u.test.email(value);
+							},
+							message: '电子邮箱不正确',
+							// 触发器可以同时用blur和change
+							trigger: ['change', 'blur'],
 						}
 					],
 				}
 			}
 		},
+		onLoad(e) {
+
+		},
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
+			console.log(this.$refs.uForm.rules);
+		},
 		onShow() {
 
 		},
+		computed: {
+
+		},
+		watch: {
+
+		},
 		methods: {
-			register() {
-				this.$u.api.employeesRegister(this.model).then(res => {
-					uni.showToast({
-						title: '注册成功！'
-					})
-					Object.assign(this.$data.model, this.$options.data().model)
-					this.Gender = '',
-						this.Type = ''
-				}).catch(err => {
-					console.log(err)
-				})
+			submit() {
+				this.$refs.uForm.validate(valid => {
+					if (valid) {
+						console.log('验证通过');
+					} else {
+						console.log('验证失败');
+					}
+				});
 			},
-			genderConfirm(e) {
-				this.Gender = ''
-				this.model.Gender = e[0].value;
-				console.log(e)
-				e.map((val, index) => {
-					this.Gender += this.Gender == '' ? val.label : '-' + val.label;
-				})
+			// 选择地区回调
+			regionConfirm(e) {
+				this.form.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
 			},
-			typeConfirm(e) {
-				this.Type = ''
-				this.model.Type = e[0].value;
-				console.log(e)
-				e.map((val, index) => {
-					this.Type += this.Type == '' ? val.label : '-' + val.label;
-				})
-			},
-			BirthFn(e) {
-				this.model.Birthday= e.year + '-' + e.month + '-' + e.day
-				console.log(e)
-			},
-			update(res, index, lists, name) {
-				console.log(res, index, lists, name)
-			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	.add {
-		margin: 0 10%;
+	::v-deep .u-form {
+		.info {
+			margin-top: 24rpx;
+		}
+
+		.u-form-item,
+		.u-form-item__body {
+			background: #FFFFFF;
+			padding: 0;
+			// height: 76rpx;
+
+			.u-input {
+				padding-right: 24rpx !important;
+
+				.input-placeholder {
+					text-align: right;
+				}
+			}
+
+			.u-form-item__message {
+				text-align: end;
+				margin: 0 12px 6px 0;
+			}
+		}
+	}
+
+	.submit_vw {
+		position: fixed;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		bottom: 0;
+		width: 750rpx;
+		height: 98rpx;
+		background: #FFFFFF;
+
+		.submit_ck {
+			width: 702rpx;
+			height: 68rpx;
+			line-height: 68rpx;
+			color: #FFFFFF;
+			background: #FC7930;
+			border-radius: 10rpx;
+		}
 	}
 </style>

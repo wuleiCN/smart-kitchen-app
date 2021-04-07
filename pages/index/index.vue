@@ -65,6 +65,7 @@
 					console.log(self.$store.state.vuex_popupShow, msg)
 					console.log('收到来自', topic, '的消息 ===>', message.toString())
 				}).on('reconnect', (err) => {
+					client.end()
 					console.log('重新连接', err)
 				}).on('err', () => {
 					console.log('连接失败', err)

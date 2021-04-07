@@ -1,35 +1,61 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="false" title="我的" :title-width="300" title-color="#ffffff" :background="background" />
 		<view class="text-area">
-			<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
-				<view class="u-m-r-10">
-					<u-avatar :src="user.Avatar" size="140"></u-avatar>
+			<view class="user-box">
+				<view class="u-p-l-24">
+					<u-avatar src="/static/icon/Avatar.png" size="140"></u-avatar>
 				</view>
-				<view class="u-flex-1">
-					<view class="u-font-18 u-p-b-20">{{user.Name}}</view>
-					<view class="u-font-14 u-tips-color">微信号:{{user.WeChat}}</view>
-				</view>
-				<view class="u-m-l-10">
-					<view class="u-font-18" @tap="setting">设置</view>
-				</view>
-				<view class="u-p-10">
-					<u-icon name="arrow-right" color="#969799" size="28"></u-icon>
+				<view class="u-p-l-12">
+					<view class="u-font-16">{{user.Name}}</view>
+					<view class="u-font-14">微信号:{{user.WeChat}}</view>
 				</view>
 			</view>
-			<view class="u-m-t-20">
-				<u-cell-group>
-					<u-cell-item title="昵称"></u-cell-item>
-					<u-cell-item title="电话"></u-cell-item>
-					<u-cell-item title="修改密码"></u-cell-item>
-					<u-cell-item title="发布通知"></u-cell-item>
-					<u-cell-item title="关于"></u-cell-item>
-				</u-cell-group>
+			<view class="user_updata">
+				<view class="info_ud">
+					更新公司信息
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+				<view class="info_ud">
+					更新公司地址
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+				<view class="info_ud">
+					更新公司GPS定位
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+			</view>
+			<view class="user_updata info_top">
+				<view class="info_ud">
+					修改名称
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+				<view class="info_ud">
+					修改密码
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+				<view class="info_ud">
+					修改电话
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+			</view>
+			<view class="user_updata info_top_b">
+				<view class="info_ud">
+					关于
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
+				<view class="info_ud">
+					通知
+					<u-icon class="u-font-24" name="arrow-right" />
+				</view>
 			</view>
 		</view>
-		<u-button type="error" shape="circle" size="default" style="margin: 10px;" @click="signOut">退出登录</u-button>
-		<u-tabbar :list="vuex_tabbar" bg-color="#303133" active-color="#0081ff" inactive-color="#aaaaaa" :mid-button="true" />
-		<u-modal v-model="sign" content="确定要退出吗？" title="提示" show-cancel-button @confirm="handle" />
+		<!-- <u-button type="error" shape="circle" size="default" style="margin: 10px;" @click="signOut">退出登录</u-button> -->
+		<button class="outLogin" @click="signOut">退出登录</button>
+		<button class="outLogin log" @click="logOut">注销</button>
+		<u-tabbar :list="vuex_tabbar" bg-color="#ffffff" active-color="#FC7930" inactive-color="#aaaaaa"
+			:mid-button="true" :border-top="false" />
+		<u-modal v-model="sign" content="确定要退出吗？" title="提示" show-cancel-button @confirm="signHandle" />
+		<u-modal v-model="log" content="确定要注销吗？" title="提示" show-cancel-button @confirm="logHandle" />
 	</view>
 </template>
 
@@ -41,11 +67,8 @@
 		data() {
 			return {
 				user: '',
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
-				pic: 'https://uviewui.com/common/logo.png',
-				sign: false
+				sign: false,
+				log: false
 			}
 		},
 		onShow() {
@@ -61,17 +84,81 @@
 			signOut() {
 				this.sign = true
 			},
-			handle() {
+			logOut() {
+				this.log = true
+			},
+			signHandle() {
 				console.log('===> out')
 				uni.clearStorageSync()
 				this.$u.route('pages/Login')
+			},
+			logHandle(e) {
+				console.log(e);
 			}
 		}
 	}
 </script>
 
-<style>
+<style scoped lang="scss">
 	.user-box {
-		background-color: #fff;
+		display: flex;
+		align-items: center;
+		background-image: url(../../static/NavBar.png);
+		height: 378rpx;
+		color: #FFFFFF;
+	}
+
+	.user_updata {
+		width: 702rpx;
+		height: 240rpx;
+		background: #FFFFFF;
+		border-radius: 20rpx;
+		position: absolute;
+		top: 297rpx;
+		left: 50%;
+		transform: translateX(-50%);
+		.info_ud {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-weight: 600;
+			padding: 0 20rpx;
+			width: 100%;
+			height: 80rpx;
+			&:nth-child(1) {
+				border-bottom: 1rpx solid #F5F5F5;
+			}
+			&:nth-child(2) {
+				border-bottom: 1rpx solid #F5F5F5;
+			}
+		}
+	}
+	.info_top {
+		top: 561rpx !important;
+	}
+	.info_top_b {
+		height: 150rpx;
+		top: 825rpx !important;
+	}
+	.outLogin {
+		position: absolute;
+		width: 702rpx;
+		height: 88rpx;
+		line-height: 88rpx;
+		font-size: 28rpx;
+		font-weight: 600;
+		color: #919191;
+		border: 0;
+		background: #FFFFFF;
+		border-radius: 30rpx;
+		top: 990rpx;
+		left: 50%;
+		transform: translateX(-50%);
+		&::after {
+			border: 0;
+		}
+	}
+	.log {
+		top: 1098rpx;
 	}
 </style>

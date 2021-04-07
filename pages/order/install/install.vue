@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备安装"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="设备安装"
+		 :title-width="300" />
 		<view class="scan u-flex u-row-around">
 			<view class="describe u-flex-col">
 				<text>扫码设备条码/二维码</text>
@@ -118,9 +118,6 @@
 		},
 		data() {
 			return {
-				background: {
-					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
-				},
 				nvr: {
 					nvrValue: '',
 					nvrShow: false,

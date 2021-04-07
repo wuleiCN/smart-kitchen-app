@@ -1,13 +1,13 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备信息"
-		 :title-width="300" title-color="#ffffff" :background="background" />
+		<u-navbar :is-back="true" title="设备信息" :title-width="300" />
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
 			<u-card padding="0" v-for="(item,index) in dveices" :key="index" @click="toDetail(item)">
 				<view class="u-card-wrap" slot="body">
 					<view class="u-body-item u-flex u-border-bottom u-col-between">
 						<image src="/static/devices/1.png" mode="aspectFill" shape="circle"></image>
-						<view class="u-body-item-title info"><span>设备名称：{{item.DeviceName}}</span><span class="news-wraning">
+						<view class="u-body-item-title info"><span>设备名称：{{item.DeviceName}}</span><span
+								class="news-wraning">
 								设备型号：{{item.Name}}</span></view>
 						<view class="u-body-item-title _icon">
 							<u-icon name="arrow-right" color="#c8c9cc"></u-icon>
@@ -60,7 +60,7 @@
 					this.dveices = res
 					res.map(v => {
 						this.deviceType.forEach(i => {
-							if(v.Type === i.value) v.DeviceName = i.name
+							if (v.Type === i.value) v.DeviceName = i.name
 						})
 					})
 					this.status = 'nomore';

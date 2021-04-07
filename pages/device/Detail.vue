@@ -1,8 +1,7 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" back-text="返回" :back-text-style="{color: '#fff'}" back-icon-color="#ffffff" title="设备详情"
-		 :title-width="300" title-color="#ffffff" :background="background" />
-<!-- 		<view class="head">
+		<u-navbar :is-back="true" btitle="设备详情" :title-width="300" />
+		<!-- 		<view class="head">
 			<u-image width="120rpx" height="120rpx" src="/static/devices/1.png"></u-image>
 		</view> -->
 		<u-swiper :list="list" :autoplay="false"></u-swiper>
@@ -19,7 +18,7 @@
 			<u-form-item label="设备状态 :" label-width="150" label-align="center">
 				<view>{{status}}</view>
 			</u-form-item>
-<!-- 			<u-form-item label="安装地点 :" label-width="150" label-align="center">
+			<!-- 			<u-form-item label="安装地点 :" label-width="150" label-align="center">
 				<view>{{form.name}}</view>
 			</u-form-item> -->
 			<u-form-item :label="status + '时间 :'" label-width="150" label-align="center">
@@ -56,8 +55,8 @@
 		},
 		onLoad(e) {
 			this.form = JSON.parse(e.params)
-			uni.getStorageSync('DeviceStatus').map(v=> {
-				if(this.form.Status === v.value) this.status = v.name
+			uni.getStorageSync('DeviceStatus').map(v => {
+				if (this.form.Status === v.value) this.status = v.name
 			})
 			console.log(this.form)
 		},
