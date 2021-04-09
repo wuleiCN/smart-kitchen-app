@@ -45,8 +45,8 @@
 		methods: {
 			mqqtMsg() {
 				var self = this
-				const _id = uni.getStorageSync('userInfo').CompOrCustId
-				console.log(_id)
+				const _id = uni.getStorageSync('userInfo').OrgId
+				console.log(_id)	
 				client.on('connect', () => {
 					console.log('====>  成功连接服务器!')
 					client.subscribe(_id, (err) => {

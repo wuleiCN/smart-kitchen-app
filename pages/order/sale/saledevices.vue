@@ -6,21 +6,21 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col" v-if="order != null">
-			<span><strong>客户单位：</strong>{{order.CustomerId}}</span>
-			<span><strong>联系人：</strong>{{order.Contact}}</span>
-			<span><strong>联系电话：</strong>{{order.Phone}}</span>
-			<span><strong>收货地址：</strong>{{order.Address}}</span>
-			<span><strong>销售说明：</strong>{{order.Comment}}</span>
+			<span>客户单位：{{order.CustomerId}}</span>
+			<span>联系人：{{order.Contact}}</span>
+			<span>联系电话：{{order.Phone}}</span>
+			<span>收货地址：{{order.Address}}</span>
+			<span>销售说明：{{order.Comment}}</span>
 		</view>
 		<view class="section u-flex">
 			<span class="line" />
 			<span class="_title u-flex">销售清单</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index"
+			<u-swipe-action v-for="(item, index) in 3" :key="index" :show="item.show" :index="index"
 				:options="options" @open="open" @click="alarm">
 				<view class="item u-border-bottom">
-					<image mode="aspectFill" src="" />
+					<image mode="aspectFill" src="../../../static/devices/production.png" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 					<view class="title-wrap">
 						<text>设备型号：{{ item.modelName }}</text>
@@ -33,7 +33,8 @@
 			<u-loadmore :status="status" />
 		</scroll-view>
 		<view class="dispatch">
-			<u-button type="success" @click="dispatchOrder">确定派单</u-button>
+			<u-button hover-class="none" @click="dispatchOrder">确定派单</u-button>
+			<u-button hover-class="none">提交</u-button>
 		</view>
 		<u-modal v-model="dispatchShow" :content="content" show-cancel-button @confirm="dispatch" />
 	</view>
@@ -67,7 +68,6 @@
 			this.$u.api.getOrderInfo({
 				id: this.optionId
 			}).then(res => {
-				uni.hideLoading()
 				this.order = res
 			}).catch(err => {
 				uni.showToast({
@@ -77,6 +77,7 @@
 				console.log(err)
 			})
 			this.getOrderList()
+			uni.hideLoading()
 			console.log(option)
 		},
 		watch: {
@@ -188,35 +189,38 @@
 	.content {
 		.section {
 			width: 100%;
-			height: 100rpx;
+			padding: 30rpx 0;
+			margin-top: 30rpx;
 			background: #FFFFFF;
-			border-bottom: 1px solid #f3f3f3;
 
 			._title {
-				height: 80rpx;
 				margin-left: 20rpx;
+				font-size: 32rpx;
+				font-weight: 600;
 			}
 
 			.line {
 				height: 30rpx;
 				border-radius: 30%;
 				border: 5rpx solid #f37b1d;
-				margin-left: 5%;
+				margin-left: 23rpx;
 			}
 		}
 
 		.info {
-			height: 300rpx;
+			// height: 420rpx;
 			background: #FFFFFF;
-			padding: 15px;
+			padding:0 0 20rpx 23rpx;
 
 			span {
+				font-size: 28rpx;
+				color: #666666;
 				padding-bottom: 10rpx;
 			}
 		}
 
 		.product {
-			height: 900rpx;
+			// height: 900rpx;
 
 			.item {
 				display: flex;
@@ -244,7 +248,8 @@
 				}
 
 				::v-deep .u-numberbox {
-					margin-left: 160rpx;
+					margin-left: 300rpx;
+					width: 147rpx;
 				}
 			}
 
@@ -267,10 +272,20 @@
 		.dispatch {
 			z-index: 999;
 			position: fixed;
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
 			width: 100%;
-			height: 80rpx;
+			height: 98rpx;
 			bottom: 0;
 			background: #FFFFFF;
+			.u-btn {
+				width: 300rpx;
+				height: 68rpx;
+				color: #FFFFFF;
+				background: #FC7930;
+				border-radius: 10rpx;
+			}
 		}
 	}
 </style>

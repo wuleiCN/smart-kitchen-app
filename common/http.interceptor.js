@@ -1,6 +1,6 @@
 const install = (Vue, vm) => {
 	Vue.prototype.$u.http.setConfig({
-		baseUrl: 'http://118.190.153.247:9001',
+		baseUrl: 'http://175.6.77.126:9001',
 		// 如果将此值设置为true，拦截回调中将会返回服务端返回的所有数据response，而不是response.data
 		// 设置为true后，就需要在this.$u.http.interceptor.response进行多一次的判断，请打印查看具体值
 		originalData: true,
@@ -27,12 +27,16 @@ const install = (Vue, vm) => {
 			// 如果把originalData设置为了true，这里return回什么，this.$u.post的then回调中就会得到什么
 			return res.data;
 		} else if (res.statusCode == 401) {
+			vm.$u.toast(res.data.Message)
 			vm.$u.debounce(() => {
 				vm.$u.route({
 					url: 'pages/Login',
 					type: 'redirectTo'
 				})
 			},500)
+			return false;
+		} else if (res.statusCode == 500) {
+			vm.$u.toast(res.data.Message);
 			return false;
 		} else return false;
 	}

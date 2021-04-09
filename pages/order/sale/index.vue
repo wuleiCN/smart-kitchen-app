@@ -19,24 +19,27 @@
 				</view>
 			</view>
 		</u-navbar>
-		<view class="text-area"  v-for="(item,index) in orderList" :key="index">
-			<view class="cust_title">
-				{{item.CompanyId}}
-			</view>
-			<view class="cust_centent">
-				<view>联系人：{{item.Contact}}</view>
-				<view>联系电话：{{item.Phone}}</view>
-				<view>联系地址：{{item.Address}}</view>
-				<view>创建时间：{{item.OrderOn}}</view>
-			</view>
-			<view class="cust_oper">
-				<view class="order_oper">
-					<button class="btn_send btn" @click.stop="toProduct(item.Id)">产品订购</button>
-					<button class="btn_list btn" @click.stop="$u.route('pages/customer/employees')">销售清单</button>
-					<button class="btn_deli btn" @click.stop="sendToDistribute(item.Id)">派单出库</button>
+		<view v-show="orderShow">
+			<view class="text-area"  v-for="(item,index) in 3" :key="index">
+				<view class="cust_title">
+					{{item.CompanyId}}
 				</view>
-				<button class="btn_del btn" @click.stop="$u.route('pages/customer/employees')">删除</button>
+				<view class="cust_centent">
+					<view>联系人：{{item.Contact}}</view>
+					<view>联系电话：{{item.Phone}}</view>
+					<view>联系地址：{{item.Address}}</view>
+					<view>创建时间：{{item.OrderOn}}</view>
+				</view>
+				<view class="cust_oper">
+					<view class="order_oper">
+						<button class="btn_send btn" @click.stop="toProduct(item.Id)">产品订购</button>
+						<button class="btn_list btn" @click.stop="toSaledevices(item.Id)">销售清单</button>
+						<button class="btn_deli btn" @click.stop="sendToDistribute(item.Id)">派单出库</button>
+					</view>
+					<button class="btn_del btn" @click.stop="$u.route('pages/customer/employees')">删除</button>
+				</view>
 			</view>
+			<u-empty mode="list" v-if="!orderList.length" />
 		</view>
 		<u-empty mode="search" v-if="dataListShow" />
 		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distribute" />
@@ -63,6 +66,7 @@
 				back: true,
 				solt: false,
 				dataListShow: false,
+				orderShow: false,
 				keyword: '',
 				form: 3,
 				distributeContent: '确定要派单出库吗?',
@@ -90,9 +94,18 @@
 
 		},
 		methods: {
+			// 跳转产品列表
 			toProduct(Id) {
 				setTimeout(() => {
 					this.$u.route('pages/order/sale/selectProduction', {
+						Id
+					})
+				}, 200)
+			},
+			// 跳转销售清单
+			toSaledevices(Id) {
+				setTimeout(() => {
+					this.$u.route('pages/order/sale/saledevices', {
 						Id
 					})
 				}, 200)
@@ -103,7 +116,7 @@
 					this.back = false,
 					this.solt = true,
 					this.dataListShow = true,
-					this.form = 0,
+					this.orderShow = false,
 					this.title = ''
 			},
 			searchBK() {
@@ -113,14 +126,15 @@
 						this.back = true,
 						this.solt = false,
 						this.dataListShow = false,
-						this.form = 3,
+						this.orderShow = true,
 						this.title = '客户管理'
 				}, 200)
 			},
 			// 获取销售工单列表
 			getOrderSaleList() {
 				this.$u.api.getOrderSaleList().then(res => {
-					this.orderList = res
+					this.orderList = res.data
+					if (!res.data.length) this.orderShow = true
 					console.log(res, this.orderList)
 				}).catch(err => {
 					uni.showToast({
@@ -135,7 +149,7 @@
 				this.$u.api.getOrderSaleDevices({
 					id
 				}).then(res => {
-					if (res.length) {
+					if (res.data.length) {
 						this.distributeShow = true
 					} else {
 						uni.showToast({
@@ -150,6 +164,7 @@
 					})
 				})
 			},
+			// 确定派单出库
 			distribute() {
 				this.$u.api.orderSale({
 					order: this.distributeId

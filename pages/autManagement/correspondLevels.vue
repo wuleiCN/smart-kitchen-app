@@ -19,22 +19,22 @@
 		</u-navbar>
 		<u-subsection :list="list" :current="0" @change="sectionChange" font-size="36" active-color="#ffffff"
 			inactive-color="#666666" />
-		<view class="content_box" v-show="role" v-for="item in form">
+		<view class="content_box" v-show="role" v-for="(item, index) in currentRoleList">
 			<view class="avatar">
 				<u-avatar />
 			</view>
 			<view class="text-area">
 				<view class="cust_title">
-					<view>我是单位名称我是单位名称</view>
+					<view>{{item.Type}}</view>
 					<!-- <button class="btn" @click.stop="$u.route('pages/customer/employees')">更新</button> -->
 				</view>
 				<view class="cust_centent">
-					<view>所属组织ID：1001011</view>
-					<view>用户名称：张三</view>
+					<view>角色代码：{{item.Code}}</view>
+					<view>用户名称：{{item.Name}}</view>
 				</view>
 				<view class="cust_operation">
 					<view class="creat_date">
-						创建时间：2021-03-21
+						创建时间：{{item.RegistOn}}
 					</view>
 					<view class="btn">
 						<button class="btn_cance" @click.stop="$u.route('pages/customer/employees')">注销</button>
@@ -43,7 +43,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="content_box" v-show="user" v-for="item in form" :key="item">
+		<view class="content_box" v-show="user" v-for="(item, index) in currentRoleList" :key="index">
 			<view class="avatar">
 				<u-avatar />
 			</view>
@@ -85,7 +85,7 @@
 				title: '本级权限管理',
 				warning: [],
 				operShow: false,
-				form: 3,
+				currentRoleList: [],
 				role: true,
 				user: false,
 				list: [{
@@ -98,11 +98,11 @@
 				curNow: 0
 			}
 		},
-		onShow() {
-			this.operShow = false
+		onLoad() {
 		},
-		mounted() {
-			console.log(this.warning, this.vuex_tabbar)
+		onShow() {
+			this.getCurrentRoleList()
+			this.operShow = false
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {
@@ -116,6 +116,27 @@
 
 		},
 		methods: {
+			// 获取角色列表
+			getCurrentRoleList() {
+				this.$u.api.getCurrentRoleList().then(res => {
+					this.currentRoleList = res.data
+					this.currentRoleList.map((v, i) => {
+						v.RegistOn = this.$u.timeFormat(res.data.RegistOn,'yyyy-mm-dd')
+						this.getCompanyById(v, i)
+					})
+					if (!res.success) this.$u.toast(res.message)
+					console.log(this.currentRoleList);
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			// 获取指定单位
+			getCompanyById(v, i) {
+				this.$u.api.getCompanyFind({id: v.OrgId}).then(res => {
+					v.Type = res.data.Name
+					console.log(v,res);
+				})
+			},
 			sectionChange(index) {
 				this.curNow = index;
 				this.role = !this.role;

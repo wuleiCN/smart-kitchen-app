@@ -155,7 +155,7 @@
 			}
 		},
 		mounted() {
-			console.log(this.warning, this.vuex_tabbar)
+			// console.log(this.warning, this.vuex_tabbar)
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {

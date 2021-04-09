@@ -1,12 +1,34 @@
 const install = (Vue, vm) => {
+	
+	// ====新接口====
+	
 	// 登录
-	let Login = (params = {}) => vm.$u.get('api/Account/Login', params);
+	let Login = (params = {}) => vm.$u.get('api/account/loginbyaccount', params);
 	// 当前用户信息
-	let getInfo = (params = {}) => vm.$u.get('api/Users/GetLoginUserInfo');
-	// 获取员工信息
-	let getEmployees = (params = {}) => vm.$u.get('api/Employees/GetAll');
-	// 创建员工信息
-	let employeesRegister = (params = {}) => vm.$u.post('api/Employees/Create', params);
+	let getInfo = (params = {}) => vm.$u.get('api/users/current/getinfo');
+	// 创建客户信息
+	let customerRegister = (params = {}) => vm.$u.post('api/customer/create', params);
+	// 获得当前登录用户所属公司下所有客户单位信息
+	let getCustomersList = (params = {}) => vm.$u.get('api/customer/getall');
+	// 获得指定客户信息
+	let getCustomerById = (params = {}) => vm.$u.get('api/customer/find',params)
+	// 根据客户单位名称查找 (当前登录用户所属单位)
+	let getCustomerByName = (params = {}) => vm.$u.get('api/customer/searchbyname',params)
+	// 更新客户单位信息
+	let updataCustomer = (params = {}) => vm.$u.post('api/customer/update',params)
+	// 获得所有公司信息
+	let getCompanyList = (params = {}) => vm.$u.get('api/company/getall')
+	// 创建客户单位角色
+	let createCustomerRole = (params = {}) => vm.$u.post('api/role/current/create',params)
+	// 获得当前登录用户所属组织下所有角色信息
+	let getCurrentRoleList = (params = {}) => vm.$u.get('api/role/current/getall')
+	// 获得指定单位信息
+	let getCompanyFind = (params = {}) => vm.$u.get('api/company/find',params)
+	
+	
+	// ====弃用接口====
+	
+	
 	// 报警信息
 	let getMessageList = (params = {}) => vm.$u.get('api/Messages/List', params)
 	// 获取所有设备信息
@@ -20,7 +42,7 @@ const install = (Vue, vm) => {
 	// 获取指定工单信息
 	let getMonitorById = (params = {}) => vm.$u.get('api/Orders/GetMonitorFlow',params)
 	// 获取销售工单列表（未派出)
-	let getOrderSaleList = (params = {}) => vm.$u.get('api/OrderSale/GetOrderSaleList',params)
+	let getOrderSaleList = (params = {}) => vm.$u.get('api/order/sale/getsaling',params)
 	// 销售派单
 	let orderSale = (params = {}) => vm.$u.post('api/OrderSale/Saled',params)
 	// 产品销售列表
@@ -31,16 +53,12 @@ const install = (Vue, vm) => {
 	let OrderSaleDevice = (params = {}) => vm.$u.post('api/OrderSale/SaleDevice',params)
 	// 立刻派单
 	let OrderSaled = (params = {}) => vm.$u.post('api/OrderSale/Saled',params)
-	// 获得指定客户信息
-	let getCustomer = (params = {}) => vm.$u.get('api/Customers/GetCustomer',params)
 	// 获取销售信息
 	let getOrderInfo = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderById',params)
 	// 获得指定销售工单销售产品清单
 	let getOrderSaleDevices = (params = {}) => vm.$u.get('api/OrderSale/GetOrderSaleDevices',params)
 	// 更新销售工单产品信息
 	let updateOrderSaleDevices = (params = {}) => vm.$u.post('api/OrderSale/UpdateOrderSaleDevices',params)
-	// 获取客户单位列表
-	let getCustomersList = (params = {}) => vm.$u.get('api/Customers/List',params)
 	// 新增销售工单
 	let createOrderSale = (params = {}) => vm.$u.post('api/OrderSale/Create',params)
 	// 销售出库回单
@@ -135,8 +153,7 @@ const install = (Vue, vm) => {
 	vm.$u.api = {
 		Login,
 		getInfo,
-		getEmployees,
-		employeesRegister,
+		customerRegister,
 		getMessageList,
 		getDevicesInfoAll,
 		getDevicesInfoById,
@@ -153,7 +170,13 @@ const install = (Vue, vm) => {
 		getOrderSaleDevices,
 		updateOrderSaleDevices,
 		getCustomersList,
-		getCustomer,
+		getCustomerById,
+		getCustomerByName,
+		updataCustomer,
+		getCompanyList,
+		createCustomerRole,
+		getCurrentRoleList,
+		getCompanyFind,
 		createOrderSale,
 		distributeFinish,
 		getDistributeOrders,

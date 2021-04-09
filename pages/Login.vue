@@ -137,18 +137,19 @@
 					}).catch(err => {
 						console.log(err)
 					})
+					console.log(res);
 					if (!res.success) {
 						this.$u.toast(res.message + ', 请重新登录');
 					}
 					if (res !== undefined) {
-						uni.setStorageSync('token', res.Token)
+						uni.setStorageSync('token', res.data.Token)
 						const info = await this.$u.api.getInfo().catch(err => {
 							console.log(err)
 						})
 						console.log(info)
 						if (info !== undefined) {
-							uni.setStorageSync('userInfo', info)
-							this.getDictionary()
+							uni.setStorageSync('userInfo', info.data)
+							// this.getDictionary()
 							uni.switchTab({
 								url: '/pages/index/index'
 							});

@@ -10,7 +10,7 @@
 				</slot>
 				<view class="search-wrap" v-if="search">
 					<u-search v-model="keyword" height="56" :action-style="{color: '#fff'}" :show-action="true"
-						action-text="返回" @custom="searchBK()" />
+						action-text="返回" @blur="searchFn()" @custom="searchBK()" />
 				</view>
 			</view>
 			<view class="operation" v-show="operShow">
@@ -19,18 +19,34 @@
 				</view>
 			</view>
 		</u-navbar>
-		<view class="text-area" v-for="item in form" :key="item">
-			<view class="cust_title">
-				<view>我是单位名称我是单位名称</view>
-				<button class="btn" @click.stop="$u.route('pages/customer/employees')">更新</button>
+		<view v-show="customerShow">
+			<view class="text-area u-line-1" v-for="(item, index) in customersList" :key="index">
+				<view class="cust_title">
+					<view>{{item.Name}}</view>
+					<button class="btn" @click.stop="toCustomerInfo(item.Id)">更新</button>
+				</view>
+				<view class="cust_centent">
+					<view>公司法人：{{item.Master}}</view>
+					<view>公司系统管理员姓名：{{item.Admin}}</view>
+					<view>公司系统管理员联系电话：{{item.AdminPhone}}</view>
+				</view>
 			</view>
-			<view class="cust_centent">
-				<view>公司法人：张三</view>
-				<view>公司系统管理员姓名：李四</view>
-				<view>公司系统管理员联系电话：1234567890</view>
-			</view>
+			<u-empty mode="list" v-if="!customersList.length" />
 		</view>
-		<u-empty mode="search" v-if="dataListShow" />
+		<view v-show="dataListShow">
+			<view class="text-area u-line-1" v-for="(item, index) in searchList" :key="index">
+				<view class="cust_title">
+					<view>{{item.Name}}</view>
+					<button class="btn" @click.stop="toCustomerInfo(item.Id)">更新</button>
+				</view>
+				<view class="cust_centent">
+					<view>公司法人：{{item.MasterId}}</view>
+					<view>公司系统管理员姓名：{{item.AdminId}}</view>
+					<view>公司系统管理员联系电话：{{item.AdminPhone}}</view>
+				</view>
+			</view>
+			<u-empty mode="search" v-if="!searchList.length" />
+		</view>
 		<Modal />
 	</view>
 </template>
@@ -48,6 +64,8 @@
 			return {
 				title: '客户管理',
 				warning: [],
+				customersList: [],
+				searchList: [],
 				operShow: false,
 				search: false,
 				icon: true,
@@ -55,9 +73,17 @@
 				solt: false,
 				dataListShow: false,
 				keyword: '',
-				form: 3
-
+				customerShow: false
 			}
+		},
+		onLoad() {
+			this.$u.api.getCustomersList().then(res => {
+				this.customersList = res.data
+				this.customerShow = true
+				console.log(res);
+			}).catch(err => {
+				this.$u.toast(res.data.Message)
+			})
 		},
 		onShow() {
 			this.operShow = false;
@@ -77,25 +103,44 @@
 
 		},
 		methods: {
+			// 客户详情
+			toCustomerInfo(id) {
+				this.$u.route('pages/customer/employees', {
+					id
+				})
+			},
+			// 搜索回调
+			searchFn() {
+				this.$u.api.getCustomerByName({
+					name: this.keyword
+				}).then(res => {
+					this.searchList = res.data
+					console.log(res);
+				}).catch(err => {
+					console.log(err);
+				})
+				console.log(this.keyword);
+			},
 			searchCK() {
 				this.search = true,
 					this.icon = false,
 					this.back = false,
 					this.solt = true,
 					this.dataListShow = true,
-					this.form = 0,
+					this.customerShow = false,
 					this.title = ''
 			},
+			// 搜索返回
 			searchBK() {
-				setTimeout(() => {
-					this.search = false,
-						this.icon = true,
-						this.back = true,
-						this.solt = false,
-						this.dataListShow = false,
-						this.form = 3,
-						this.title = '客户管理'
-				}, 200)
+				this.search = false,
+					this.icon = true,
+					this.back = true,
+					this.solt = false,
+					this.dataListShow = false,
+					this.customerShow = true,
+					this.title = '客户管理',
+					this.keyword = '',
+					this.searchList = []
 			},
 			closeIcon() {
 				this.operShow = false;

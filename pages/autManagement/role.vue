@@ -5,16 +5,13 @@
 			<view class="info">
 				<u-form-item label="角色信息" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="goodsType">
 					<u-input type="select" input-align="right" :select-open="selectShow" v-model="form.goodsType"
-						placeholder="请选择所属组织/公司" @click="selectShow = true" />
+						placeholder="请选择所属组织/公司" @click="companyListCK" />
 				</u-form-item>
-				<u-form-item label="所属组织ID" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="ID">
-					<u-input v-model="form.ID" input-align="right" placeholder="请输入组织ID" />
+				<u-form-item label="角色代码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Code">
+					<u-input v-model="form.Code" input-align="right" placeholder="请输入角色代码" />
 				</u-form-item>
-				<u-form-item label="角色代码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="roleCode">
-					<u-input v-model="form.roleCode" input-align="right" placeholder="请输入角色代码" />
-				</u-form-item>
-				<u-form-item label="角色名称" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="roleName">
-					<u-input v-model="form.roleName" input-align="right" placeholder="请输入角色名称" />
+				<u-form-item label="角色名称" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Name">
+					<u-input v-model="form.Name" input-align="right" placeholder="请输入角色名称" />
 				</u-form-item>
 			</view>
 		</u-form>
@@ -31,42 +28,24 @@
 		data() {
 			return {
 				form: {
-					ID: '',
-					roleCode: '',
-					roleName: '',
-					goodsType: ''
+					goodsType: '',
+					OrgId: '',
+					Code: '',
+					Name: '',
 				},
-				selectList: [
-					{
-						value: '电子产品',
-						label: '电子产品'
-					},
-					{
-						value: '服装',
-						label: '服装'
-					},
-					{
-						value: '工艺品',
-						label: '工艺品'
-					}
-				],
+				selectList: [],
 				rules: {
 					goodsType:[{
 						required: true,
 						message: '请输入角色信息',
 						trigger: ['change', 'blur']
 					}],
-					ID:[{
-						required: true,
-						message: '请输入组织ID',
-						trigger: ['change', 'blur']
-					}],
-					roleCode:[{
+					Code:[{
 						required: true,
 						message: '请输入角色代码',
 						trigger: ['change', 'blur']
 					}],
-					roleName:[{
+					Name:[{
 						required: true,
 						message: '请输入角色名字',
 						trigger: ['change', 'blur']
@@ -89,23 +68,49 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
+						delete this.form.goodsType
+						this.$u.api.createCustomerRole(this.form).then(res => {
+							if (res.success) this.$u.toast('创建成功！')
+							else this.$u.toast(res.message)
+							Object.assign(this.$data.form, this.$options.data().form)
+							console.log(res);
+						}).catch(err => {
+							Object.assign(this.$data.form, this.$options.data().form)
+							this.$u.toast('创建失败！')
+							console.log(err);
+						})
 						console.log('验证通过');
 					} else {
 						console.log('验证失败');
 					}
 				});
+				console.log(123);
 			},
 			// 选择公司回调
+			companyListCK() {
+				this.$u.api.getCompanyList().then(res => {
+					this.selectList = []
+					res.data.map(v => {
+						this.selectList.push({value:v.Id, label:v.Name})
+					})
+					this.selectShow = true
+					console.log(res,this.selectList);
+				}).catch(err => {
+					this.$u.toast('获取公司列表失败！')
+					console.log(err);
+				})
+			},
 			selectConfirm(e) {
 				this.form.goodsType = '';
 				e.map((val, index) => {
 					this.form.goodsType += this.form.goodsType == '' ? val.label : '-' + val.label;
 				})
+				console.log(e);
 			},
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
-			console.log(this.$refs.uForm);
+			// console.log(this.$refs.uForm);
 		}
 	}
 </script>

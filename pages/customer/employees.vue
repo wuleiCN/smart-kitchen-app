@@ -1,19 +1,19 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="客户注册" :title-width="300" title-color="#000000" :title-size="36" />
+		<u-navbar :is-back="true" title="客户详情" :title-width="300" title-color="#000000" :title-size="36" />
 		<u-form :model="form" ref="uForm">
 			<view class="info">
-				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="name">
-					<u-input v-model="form.name" input-align="right" placeholder="请输入名称" />
+				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Name">
+					<u-input v-model="form.Name" input-align="right" placeholder="请输入名称" />
 				</u-form-item>
-				<u-form-item label="统一社会信用码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="credit">
-					<u-input v-model="form.credit" input-align="right" placeholder="请输入统一社会信用码" />
+				<u-form-item label="统一社会信用码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="CreditNo">
+					<u-input v-model="form.CreditNo" input-align="right" placeholder="请输入统一社会信用码" />
 				</u-form-item>
-				<u-form-item label="开户银行" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="bank">
-					<u-input v-model="form.bank" input-align="right" placeholder="请输入开户银行" />
+				<u-form-item label="开户银行" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Bank">
+					<u-input v-model="form.Bank" input-align="right" placeholder="请输入开户银行" />
 				</u-form-item>
-				<u-form-item label="银行账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="account">
-					<u-input v-model="form.account" input-align="right" placeholder="请输入银行账号" />
+				<u-form-item label="银行账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Account">
+					<u-input v-model="form.Account" input-align="right" placeholder="请输入银行账号" />
 				</u-form-item>
 			</view>
 			<view class="info">
@@ -21,35 +21,34 @@
 					<u-input v-model="form.region" input-align="right" type="select" :select-open="pickerShow"
 						placeholder="所在地区" @click="pickerShow = true" />
 				</u-form-item>
-				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="address">
-					<u-input v-model="form.address" input-align="right" placeholder="如道路、门牌号、小区等" />
+				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Address">
+					<u-input v-model="form.Address" input-align="right" placeholder="如道路、门牌号、小区等" />
 				</u-form-item>
 			</view>
 			<view class="info">
-				<u-form-item label="公司法人/负责人" label-width="310" :label-style="{paddingLeft: '24rpx'}"
-					prop="directorName">
-					<u-input v-model="form.directorName" input-align="right" placeholder="请输入姓名" />
+				<u-form-item label="公司法人/负责人" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="Master">
+					<u-input v-model="form.Master" input-align="right" placeholder="请输入姓名" />
 				</u-form-item>
 				<u-form-item label="公司法人/负责人联系电话" label-width="355" :label-style="{paddingLeft: '24rpx'}"
-					prop="directorPhone">
-					<u-input v-model="form.directorPhone" input-align="right" placeholder="请输入联系电话" />
+					prop="MasterPhone">
+					<u-input v-model="form.MasterPhone" input-align="right" placeholder="请输入联系电话" />
 				</u-form-item>
 				<u-form-item label="公司法人/负责人Email" label-width="350" :label-style="{paddingLeft: '24rpx'}"
-					prop="directorEmail">
-					<u-input v-model="form.directorEmail" input-align="right" placeholder="请输入Email" />
+					prop="MasterEmail">
+					<u-input v-model="form.MasterEmail" input-align="right" placeholder="请输入Email" />
 				</u-form-item>
 			</view>
 			<view class="info">
-				<u-form-item label="公司系统管理员姓名" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="adminName">
-					<u-input v-model="form.adminName" input-align="right" placeholder="请输入姓名" />
+				<u-form-item label="公司系统管理员姓名" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="Admin">
+					<u-input v-model="form.Admin" input-align="right" placeholder="请输入姓名" />
 				</u-form-item>
 				<u-form-item label="公司系统管理员联系电话" label-width="350" :label-style="{paddingLeft: '24rpx'}"
-					prop="adminPhone">
-					<u-input v-model="form.adminPhone" input-align="right" placeholder="请输入联系电话" />
+					prop="AdminPhone">
+					<u-input v-model="form.AdminPhone" input-align="right" placeholder="请输入联系电话" />
 				</u-form-item>
 				<u-form-item label="公司系统管理员Email" label-width="310" :label-style="{paddingLeft: '24rpx'}"
-					prop="adminEmail">
-					<u-input v-model="form.adminEmail" input-align="right" placeholder="请输入Email" />
+					prop="AdminEmail">
+					<u-input v-model="form.AdminEmail" input-align="right" placeholder="请输入Email" />
 				</u-form-item>
 			</view>
 		</u-form>
@@ -66,19 +65,22 @@
 		data() {
 			return {
 				form: {
-					name: '',
-					credit: '',
-					bank: '',
-					account: '',
+					Name: '',
+					CreditNo: '',
+					Bank: '',
+					Account: '',
 					region: '',
-					address: '',
-					directorName: '',
-					directorPhone: '',
-					directorEmail: '',
-					adminName: '',
-					adminPhone: '',
-					adminEmail: ''
-
+					Province: '',
+					City: '',
+					Country: '',
+					Address: '',
+					Master: '',
+					MasterPhone: '',
+					MasterEmail: '',
+					Admin: '',
+					AdminPhone: '',
+					AdminEmail: '',
+					optionId: null
 				},
 				pickerShow: false,
 				rules: {
@@ -145,7 +147,7 @@
 								// 上面有说，返回true表示校验通过，返回false表示不通过
 								return this.$u.test.email(value);
 							},
-							message: '手机号码不正确',
+							message: '电子邮箱不正确',
 							// 触发器可以同时用blur和change
 							trigger: ['change', 'blur'],
 						}
@@ -189,11 +191,18 @@
 			}
 		},
 		onLoad(e) {
-
+			this.optionId = e.id
+			this.$u.api.getCustomerById({id: e.id}).then(res => {
+				this.form = res.data
+				this.form.region = res.data.Province + '-' + res.data.City + '-' + res.data.Country
+				console.log(res);
+			}).catch(err => {
+				console.log(err);
+			})
+			console.log(e);
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
-			console.log(this.$refs.uForm.rules);
 		},
 		onShow() {
 
@@ -208,6 +217,11 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
+						this.$u.api.updataCustomer(this.form).then(res => {
+							this.$u.toast('更新成功！')
+						}).catch(err => {
+							this.$u.toast('更新失败！')
+						})
 						console.log('验证通过');
 					} else {
 						console.log('验证失败');
