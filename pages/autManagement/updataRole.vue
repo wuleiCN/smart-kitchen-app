@@ -16,7 +16,7 @@
 			</view>
 		</u-form>
 		<view class="submit_vw">
-			<button class="submit_ck" @click="submit">提交</button>
+			<button class="submit_ck" @click="submit">更新</button>
 		</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm" />
 	</view>
@@ -29,10 +29,11 @@
 			return {
 				form: {
 					goodsType: '',
-					OrgId: '',
+					Id: '',
 					Code: '',
 					Name: '',
 				},
+				optionId: null,
 				companyList: uni.getStorageSync('GetCompanyList'),
 				selectList: [],
 				rules: {
@@ -57,6 +58,18 @@
 			}
 		},
 		onLoad(e) {
+			this.optionId = e.Id
+			this.$u.api.getRoleFind({Id: e.id}).then(res => {
+				if (res.success) {
+					this.form.Code = res.data.Code
+					this.form.Name = res.data.Name
+					this.form.Id = res.data.Id
+					this.form.goodsType = this.companyList.find(v => v.CompanyId == res.data.OrgId).Name
+				}
+				console.log(res, this.form);
+			}).catch(err => {
+				console.log(err);
+			})
 			console.log(this.companyList);
 		},
 		computed: {
@@ -70,8 +83,8 @@
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						delete this.form.goodsType
-						this.$u.api.createCustomerRole(this.form).then(res => {
-							if (res.success) this.$u.toast('创建成功！')
+						this.$u.api.updataRole(this.form).then(res => {
+							if (res.success) this.$u.toast('更新成功！')
 							else this.$u.toast(res.message)
 							Object.assign(this.$data.form, this.$options.data().form)
 							console.log(res);
@@ -80,12 +93,10 @@
 							this.$u.toast('创建失败！')
 							console.log(err);
 						})
-						console.log('验证通过');
 					} else {
 						console.log('验证失败');
 					}
 				});
-				console.log(123);
 			},
 			// 选择公司回调
 			companyListCK() {

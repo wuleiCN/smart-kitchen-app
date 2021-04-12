@@ -149,7 +149,7 @@
 						console.log(info)
 						if (info !== undefined) {
 							uni.setStorageSync('userInfo', info.data)
-							// this.getDictionary()
+							this.getDictionary()
 							uni.switchTab({
 								url: '/pages/index/index'
 							});
@@ -202,51 +202,53 @@
 			getDictionary() {
 				// 设备类别
 				this.$u.api.getDeviceType().then(res => {
-					uni.setStorageSync('DeviceType', res)
+					if (res.success) uni.setStorageSync('DeviceType', res.data)
+					console.log(res);
 				}).catch(err => {})
 				// 设备状态
-				this.$u.api.getDeviceStatus().then(res => {
-					uni.setStorageSync('DeviceStatus', res)
+				this.$u.api.getDevicestatus().then(res => {
+					if (res.success) uni.setStorageSync('DeviceStatus', res.data)
+					console.log(res);
 				}).catch(err => {})
 				// 摄像机/NVR品牌
-				this.$u.api.getCameraBrand().then(res => {
-					uni.setStorageSync('CameraBrand', res)
+				this.$u.api.getIpcsdk().then(res => {
+					if (res.success) uni.setStorageSync('CameraBrand', res.data)
+					console.log(res);
 				}).catch(err => {})
-				// 公司类别
-				this.$u.api.getCompanyType().then(res => {
-					uni.setStorageSync('CompanyType', res)
+				// 角色类别
+				this.$u.api.getRoletype().then(res => {
+					if (res.success) uni.setStorageSync('CompanyType', res.data)
+					console.log(res);
 				}).catch(err => {})
-				// 公司状态
-				this.$u.api.getCompanyStatus().then(res => {
-					uni.setStorageSync('CompanyStatus', res)
+				// 角色状态
+				this.$u.api.getRolestatus().then(res => {
+					if (res.success) uni.setStorageSync('CompanyStatus', res.data)
+					console.log(res);
 				}).catch(err => {})
-				// 客户状态
-				this.$u.api.getCustomerStatus().then(res => {
-					uni.setStorageSync('CustomerStatus', res)
+				// 用户类别
+				this.$u.api.getUsertype().then(res => {
+					if (res.success) uni.setStorageSync('EmployeeType', res.data)
+					console.log(res);
 				}).catch(err => {})
-				// 员工类别
-				this.$u.api.getEmployeeType().then(res => {
-					uni.setStorageSync('EmployeeType', res)
-				}).catch(err => {})
-				// 员工状态
-				this.$u.api.getEmployeeStatus().then(res => {
-					uni.setStorageSync('EmployeeStatus', res)
+				// 用户状态
+				this.$u.api.getUserstatus().then(res => {
+					if (res.success) uni.setStorageSync('CustomerStatus', res.data)
+					console.log(res);
 				}).catch(err => {})
 				// 工单类别
-				this.$u.api.getOrderType().then(res => {
-					uni.setStorageSync('OrderType', res)
+				this.$u.api.getOrderopertype().then(res => {
+					if (res.success) uni.setStorageSync('OrderType', res.data)
+					console.log(res);
 				}).catch(err => {})
 				// 工单状态
-				this.$u.api.getOrderStatus().then(res => {
-					uni.setStorageSync('OrderStatus', res)
+				this.$u.api.getOrderstatus().then(res => {
+					if (res.success) uni.setStorageSync('OrderStatus', res.data)
+					console.log(res);
 				}).catch(err => {})
-				// 设备类别
-				this.$u.api.GetAllModle().then(res => {
-					uni.setStorageSync('GetAllModle', res)
-				})
 				// 客户单位列表
 				this.$u.api.getCustomersList().then(res => {
-					uni.setStorageSync('GetCustomersList', res)
+					if (res.success) uni.setStorageSync('GetCompanyList', res.data)
+					console.log(res);
 				}).catch(() => {})
 			}
 		}

@@ -21,7 +21,7 @@
 			inactive-color="#666666" />
 		<view class="content_box" v-show="role" v-for="(item, index) in currentRoleList">
 			<view class="avatar">
-				<u-avatar />
+				<u-avatar :src="item.Avatar" />
 			</view>
 			<view class="text-area">
 				<view class="cust_title">
@@ -37,28 +37,28 @@
 						创建时间：{{item.RegistOn}}
 					</view>
 					<view class="btn">
-						<button class="btn_cance" @click.stop="$u.route('pages/customer/employees')">注销</button>
-						<button class="btn_updata" @click.stop="$u.route('pages/customer/employees')">更新</button>
+						<button class="btn_cance" @click.stop="toCancel(item.Id)">注销</button>
+						<button class="btn_updata" @click.stop="toUpdataRole(item.Id)">更新</button>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="content_box" v-show="user" v-for="(item, index) in currentRoleList" :key="index">
+		<view class="content_box" v-show="user" v-for="(item, index) in currentUserList" :key="index">
 			<view class="avatar">
-				<u-avatar />
+				<u-avatar :src="item.Avatar" />
 			</view>
 			<view class="text-area">
 				<view class="cust_title">
-					<view>我是单位名称</view>
+					<view>{{item.Type}}</view>
 					<!-- <button class="btn" @click.stop="$u.route('pages/customer/employees')">更新</button> -->
 				</view>
 				<view class="cust_centent">
-					<view>所属组织ID：1001011</view>
-					<view>用户名称：张三</view>
+					<view>用户名称：{{item.Name}}</view>
+					<view>电话：{{item.Phone}}</view>
 				</view>
 				<view class="cust_operation">
 					<view class="creat_date">
-						创建时间：2021-03-21
+						创建时间：{{item.RegistOn}}
 					</view>
 					<view class="btn">
 						<button class="btn_cance" @click.stop="$u.route('pages/customer/employees')">注销</button>
@@ -67,6 +67,7 @@
 				</view>
 			</view>
 		</view>
+		<u-modal v-model="cancel" content="确定要注销吗？" title="提示" show-cancel-button @confirm="signHandle" />
 		<Modal />
 	</view>
 </template>
@@ -84,8 +85,11 @@
 			return {
 				title: '本级权限管理',
 				warning: [],
+				cancel: false,
 				operShow: false,
+				delId: null,
 				currentRoleList: [],
+				currentUserList:[],
 				role: true,
 				user: false,
 				list: [{
@@ -98,10 +102,10 @@
 				curNow: 0
 			}
 		},
-		onLoad() {
-		},
+		onLoad() {},
 		onShow() {
 			this.getCurrentRoleList()
+			this.getCurrentUserList()
 			this.operShow = false
 		},
 		watch: {
@@ -121,7 +125,7 @@
 				this.$u.api.getCurrentRoleList().then(res => {
 					this.currentRoleList = res.data
 					this.currentRoleList.map((v, i) => {
-						v.RegistOn = this.$u.timeFormat(res.data.RegistOn,'yyyy-mm-dd')
+						v.RegistOn = this.$u.timeFormat(res.data.RegistOn, 'yyyy-mm-dd')
 						this.getCompanyById(v, i)
 					})
 					if (!res.success) this.$u.toast(res.message)
@@ -130,17 +134,52 @@
 					console.log(err);
 				})
 			},
+			// 获取用户列表
+			getCurrentUserList() {
+				this.$u.api.getCurrentUserList().then(res => {
+					this.currentUserList = res.data
+					this.currentUserList.map((v, i) => {
+						v.RegistOn = this.$u.timeFormat(res.data.RegistOn, 'yyyy-mm-dd')
+						this.getCompanyById(v, i)
+					})
+				})
+			},
 			// 获取指定单位
 			getCompanyById(v, i) {
-				this.$u.api.getCompanyFind({id: v.OrgId}).then(res => {
+				this.$u.api.getCompanyFind({
+					id: v.OrgId
+				}).then(res => {
 					v.Type = res.data.Name
-					console.log(v,res);
+					console.log(v, res);
+				})
+			},
+			toUpdataRole(id) {
+				this.$u.route('pages/autManagement/updataRole', {
+					id
 				})
 			},
 			sectionChange(index) {
 				this.curNow = index;
 				this.role = !this.role;
 				this.user = !this.user
+			},
+			// 注销角色
+			toCancel(id) {
+				this.cancel = true
+				this.delId = id
+				console.log(id);
+			},
+			signHandle() {
+				this.$u.post('api/role/destroy?id='+this.delId).then(res => {
+					if (res.success) {
+						this.$u.toast('删除成功！');
+						this.getCurrentRoleList();
+					}
+					else this.$u.toast('删除失败！')
+				}).catch(err => {
+					this.$u.toast('删除失败！')
+					console.log(err);
+				})
 			},
 			closeIcon() {
 				this.operShow = false;

@@ -5,38 +5,36 @@
 			<view class="info_A">
 				<u-form-item label="角色信息" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="role">
 					<u-input type="select" input-align="right" :select-open="selectShow" v-model="form.role"
-						placeholder="请选择所属组织/公司" @click="selectShow = true" />
+						placeholder="请选择所属组织/公司" @click="companyListCK" />
 				</u-form-item>
-				<u-form-item label="所属组织ID" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="ID">
-					<u-input v-model="form.ID" input-align="right" placeholder="请输入组织ID" />
+				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Name">
+					<u-input v-model="form.Name" input-align="right" placeholder="请输入姓名" />
 				</u-form-item>
-				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="name">
-					<u-input v-model="form.name" input-align="right" placeholder="请输入姓名" />
+				<u-form-item label="登录账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="LogonName">
+					<u-input v-model="form.LogonName" input-align="right" placeholder="请输入登录账号" />
 				</u-form-item>
-				<u-form-item label="登录账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="account">
-					<u-input v-model="form.account" input-align="right" placeholder="请输入登录账号" />
+				<u-form-item label="登录密码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Password">
+					<u-input v-model="form.Password" input-align="right" placeholder="请输入登录密码" />
 				</u-form-item>
-				<u-form-item label="登录密码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="password">
-					<u-input v-model="form.password" input-align="right" placeholder="请输入登录密码" />
-				</u-form-item>
-				<u-form-item label="确认密码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="upassword">
-					<u-input v-model="form.upassword" input-align="right" placeholder="请输入确认密码" />
+				<u-form-item label="确认密码" label-width="242" :label-style="{paddingLeft: '24rpx'}"
+					prop="ConfirmPassword">
+					<u-input v-model="form.ConfirmPassword" input-align="right" placeholder="请输入确认密码" />
 				</u-form-item>
 			</view>
 			<view class="info_B">
-				<u-form-item label="手机号码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="phone">
-					<u-input v-model="form.phone" input-align="right" placeholder="请输入手机号码" />
+				<u-form-item label="手机号码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Phone">
+					<u-input v-model="form.Phone" input-align="right" placeholder="请输入手机号码" />
 				</u-form-item>
-				<u-form-item label="电子邮箱" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="email">
-					<u-input v-model="form.email" input-align="right" placeholder="请输入电子邮箱" />
+				<u-form-item label="电子邮箱" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Email">
+					<u-input v-model="form.Email" input-align="right" placeholder="请输入电子邮箱" />
 				</u-form-item>
 				<u-form-item label="用户头像" label-width="242" :border-bottom="false"
 					:label-style="{paddingLeft: '24rpx'}" />
-				<u-upload max-count="1" width="136" height="136" />
+				<u-upload ref="uUpload" :action="action" max-count="1" width="136" height="136" />
 			</view>
 		</u-form>
 		<view class="submit_vw">
-			<button class="submit_ck">提交</button>
+			<button class="submit_ck" @click="submit()">提交</button>
 		</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm" />
 	</view>
@@ -49,27 +47,18 @@
 			return {
 				form: {
 					role: '',
-					name: '',
-					ID: '',
-					account: '',
-					password: '',
-					upassword: '',
-					phone: '',
-					email: ''
+					Name: '',
+					OrgId: '',
+					LogonName: '',
+					Password: '',
+					ConfirmPassword: '',
+					Phone: '',
+					Avatar: '',
+					Email: ''
 				},
-				selectList: [{
-						value: '电子产品',
-						label: '电子产品'
-					},
-					{
-						value: '服装',
-						label: '服装'
-					},
-					{
-						value: '工艺品',
-						label: '工艺品'
-					}
-				],
+				action: 'http://175.6.77.126:9001/api/file/avatar',
+				companyList: uni.getStorageSync('GetCompanyList'),
+				selectList: [],
 				pickerShow: false,
 				selectShow: false,
 				rules: {
@@ -78,17 +67,12 @@
 						message: '请输入角色信息',
 						trigger: ['change', 'blur']
 					}],
-					name: [{
+					Name: [{
 						required: true,
 						message: '请输入姓名',
 						trigger: ['change', 'blur']
 					}],
-					ID: [{
-						required: true,
-						message: '请输入组织ID',
-						trigger: ['change', 'blur']
-					}],
-					account: [{
+					LogonName: [{
 						required: true,
 						message: '请输入登录账号',
 						trigger: ['change', 'blur']
@@ -98,12 +82,12 @@
 						message: '请输入密码',
 						trigger: ['change', 'blur']
 					}],
-					upassword: [{
+					ConfirmPassword: [{
 						required: true,
 						message: '请输入确认密码',
 						trigger: ['change', 'blur']
 					}],
-					phone: [{
+					Phone: [{
 							required: true,
 							message: '请输入手机号码',
 							trigger: ['change', 'blur']
@@ -118,7 +102,7 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					email: [{
+					Email: [{
 							required: true,
 							message: '请输入电子邮箱',
 							trigger: ['change', 'blur']
@@ -154,20 +138,39 @@
 				this.form.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
 			},
 			// 选择公司回调
+			companyListCK() {
+				this.selectList = []
+				this.companyList.map(v => {
+					this.selectList.push({
+						value: v.OrgId,
+						label: v.Name
+					})
+				})
+				this.selectShow = true
+				console.log(this.selectList);
+			},
 			selectConfirm(e) {
 				this.form.role = '';
 				e.map((val, index) => {
 					this.form.role += this.form.role == '' ? val.label : '-' + val.label;
 				})
+				console.log(e);
 			},
 			submit() {
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						console.log('验证通过');
-					} else {
-						console.log('验证失败');
-					}
-				});
+				let files = [];
+				// 通过filter，筛选出上传进度为100的文件
+				files = this.$refs.uUpload.lists.filter(val => {
+					return val.progress == 100;
+				})
+				// files = this.$refs.uUpload.lists;
+				console.log(files)
+				// this.$refs.uForm.validate(valid => {
+				// 	if (valid) {
+				// 		console.log('验证通过');
+				// 	} else {
+				// 		console.log('验证失败');
+				// 	}
+				// });
 			}
 		}
 	}

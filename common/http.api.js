@@ -22,8 +22,34 @@ const install = (Vue, vm) => {
 	let createCustomerRole = (params = {}) => vm.$u.post('api/role/current/create',params)
 	// 获得当前登录用户所属组织下所有角色信息
 	let getCurrentRoleList = (params = {}) => vm.$u.get('api/role/current/getall')
+	// 获得当前登录用户所属组织下所有用户信息
+	let getCurrentUserList = (params = {}) => vm.$u.get('api/users/current/getall')
 	// 获得指定单位信息
 	let getCompanyFind = (params = {}) => vm.$u.get('api/company/find',params)
+	// 获得指定ID的角色信息
+	let getRoleFind = (params = {}) => vm.$u.get('api/role/find',params)
+	// 更新角色信息
+	let updataRole = (params = {}) => vm.$u.post('api/role/update',params)
+	// ====数据字典====
+	
+	// 设备类别
+	let getDeviceType = (params = {}) => vm.$u.get('api/dictionary/devicetype')
+	// 设备状态
+	let getDevicestatus = (params = {}) => vm.$u.get('api/dictionary/devicestatus')
+	// 摄像机/NVR品牌
+	let getIpcsdk = (params = {}) => vm.$u.get('api/dictionary/ipcsdk')
+	// 角色类别
+	let getRoletype = (params = {}) => vm.$u.get('api/dictionary/roletype')
+	// 角色状态
+	let getRolestatus = (params = {}) => vm.$u.get('api/dictionary/rolestatus')
+	// 用户类别
+	let getUsertype = (params = {}) => vm.$u.get('api/dictionary/usertype')
+	// 用户状态
+	let getUserstatus = (params = {}) => vm.$u.get('api/dictionary/userstatus')
+	// 工单状态
+	let getOrderstatus = (params = {}) => vm.$u.get('api/dictionary/orderstatus')
+	// 工单类别
+	let getOrderopertype = (params = {}) => vm.$u.get('api/dictionary/orderopertype')
 	
 	
 	// ====弃用接口====
@@ -97,59 +123,7 @@ const install = (Vue, vm) => {
 	let StockInCamera = (params = {}) => vm.$u.post('api/Storages/StockInCamera',params)
 	// 设备出库
 	let StockOutDevice = (params = {}) => vm.$u.post('api/Storages/StockOutDevice',params)
-	// 数据字典
-	// 设备类别
-	let getDeviceType = (params = {}) => vm.$u.get('api/Dictionary/DeviceType',params)
-	// 设备状态
-	let getDeviceStatus = (params = {}) => vm.$u.get('api/Dictionary/DeviceStatus',params)
-	// 摄像机/NVR品牌
-	let getCameraBrand= (params = {}) => vm.$u.get('api/Dictionary/CameraBrand',params)
-	// 公司类别
-	let getCompanyType = (params = {}) => vm.$u.get('api/Dictionary/CompanyType',params)
-	// 公司状态
-	let getCompanyStatus = (params = {}) => vm.$u.get('api/Dictionary/CompanyStatus',params)
-	// 客户状态
-	let getCustomerStatus = (params = {}) => vm.$u.get('api/Dictionary/CustomerStatus',params)
-	// 员工类别
-	let getEmployeeType = (params = {}) => vm.$u.get('api/Dictionary/EmployeeType',params)
-	// 员工状态
-	let getEmployeeStatus = (params = {}) => vm.$u.get('api/Dictionary/EmployeeStatus',params)
-	// 工单类别
-	let getOrderType = (params = {}) => vm.$u.get('api/Dictionary/OrderType',params)
-	// 工单状态
-	let getOrderStatus = (params = {}) => vm.$u.get('api/Dictionary/OrderStatus',params)
-	// 获得所有设备型号信息
-	let GetAllModle = (params = {}) => vm.$u.get('api/Models/GetAll',params)
-	// 查询销售订单设备详情
-	let getSaleOrderDeviceDetails = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDeviceDetails',params)
-	// 查询安装区域
-	let getSaleOrderDevicesByType = (params = {}) => vm.$u.get('api/Sales/GetSaleOrderDevicesByType',params)
-	// 获得指定设备信息
-	let getById = (params = {}) => vm.$u.get('api/Devices/GetById',params)
-	// 获得指定灭火设备信息
-	let getFireDeviceById = (params = {}) => vm.$u.get('api/Devices/GetFireDeviceById',params)
-	// 获得指定报警设备信息
-	let getAlertDeviceById = (params = {}) => vm.$u.get('api/Devices/GetAlertDeviceById',params)
-	// 获得指定摄像机设备信息
-	let getAlarms = (params = {}) => vm.$u.get('api/Alarms/GetAlarms',params)
-	// 获得当前登录用户所属公司/客户单位所有报警设备信息
-	let getCamerasById = (params = {}) => vm.$u.get('api/Devices/GetCameraByCustomerArea',params)
-	// 获得当前登录用户所属单位NVR信息
-	let getByNvrsCompany = (params = {}) => vm.$u.get('api/Nvrs/GetByCurrentCompany',params)
-	// 获得当前登录用户所属单位智能网关信息
-	let getByGatewaysCompany = (params = {}) => vm.$u.get('api/Gateways/GetByCurrentCompany',params)
-	// 安装灭火设备（集成报警设备）
-	let InstallFireDeviceCombineAlert = (params = {}) => vm.$u.post('api/Installs/InstallFireDeviceCombineAlert',params)
-	// 安装灭火设备（未集成）
-	let InstallFireDevice = (params = {}) => vm.$u.post('api/Installs/InstallFireDevice',params)
-	// 安装智能网关设备
-	let InstallGateway = (params = {}) => vm.$u.post('api/Installs/InstallGateway',params)
-	// 安装NVR
-	let InstallNvr = (params = {}) => vm.$u.post('api/Installs/InstallNvr',params)
-	// 安装摄像机
-	let InstallCamera = (params = {}) => vm.$u.post('api/Installs/InstallCamera',params)
-	// 安装报警设备
-	let InstallAlertDevice = (params = {}) => vm.$u.post('api/Installs/InstallAlertDevice',params)
+	
 	vm.$u.api = {
 		Login,
 		getInfo,
@@ -176,7 +150,19 @@ const install = (Vue, vm) => {
 		getCompanyList,
 		createCustomerRole,
 		getCurrentRoleList,
+		getCurrentUserList,
 		getCompanyFind,
+		getRoleFind,
+		updataRole,
+		getDeviceType,
+		getDevicestatus,
+		getIpcsdk,
+		getRoletype,
+		getRolestatus,
+		getUsertype,
+		getUserstatus,
+		getOrderstatus,
+		getOrderopertype,
 		createOrderSale,
 		distributeFinish,
 		getDistributeOrders,
@@ -195,33 +181,7 @@ const install = (Vue, vm) => {
 		StockInGateway,
 		StockInNvr,
 		StockInCamera,
-		StockOutDevice,
-		getDeviceType,
-		getDeviceStatus,
-		getCameraBrand,
-		getCompanyType,
-		getCompanyStatus,
-		getCustomerStatus,
-		getEmployeeType,
-		getEmployeeStatus,
-		getOrderType,
-		getOrderStatus,
-		GetAllModle,
-		getSaleOrderDeviceDetails,
-		getSaleOrderDevicesByType,
-		getFireDeviceById,
-		getAlertDeviceById,
-		getAlarms,
-		getByNvrsCompany,
-		getByGatewaysCompany,
-		getCamerasById,
-		getById,
-		InstallFireDeviceCombineAlert,
-		InstallFireDevice,
-		InstallGateway,
-		InstallNvr,
-		InstallCamera,
-		InstallAlertDevice
+		StockOutDevice
 	};
 }
 
