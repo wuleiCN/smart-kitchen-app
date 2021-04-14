@@ -126,6 +126,16 @@
 			}
 		},
 		{
+			"path": "pages/autManagement/updataUser",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/autManagement/user",
 			"style": {
 				"app-plus": {
@@ -297,16 +307,6 @@
 		},
 		{
 			"path": "pages/order/sale/saledevices",
-			"style": {
-				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
-					"animationType": "slide-in-right"
-				}
-			}
-		},
-		{
-			"path": "pages/order/sale/create",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",

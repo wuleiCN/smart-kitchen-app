@@ -5,15 +5,15 @@
 			<view class="u-flex">
 				<u-image src="/static/devices/production.png" width="220rpx" height="165rpx" />
 				<view class="_info u-flex-col u-col-line">
-					<span><strong>设备型号：</strong>{{item.modelName}}</span>
-					<span><strong>设备类别：</strong>{{item.Name}}</span>
+					<span><strong>设备型号：</strong>{{item.Name}}</span>
+					<span><strong>设备类别：</strong>{{item.deviceName}}</span>
 					<span><strong>设备描述：</strong>...</span>
 					<span>已售：{{item.Count}}</span>
 				</view>
 			</view>
 			<view class="sale">
-				<u-button v-if="!item.step" ripple @click="sale(index)">+加入购物车</u-button>
-				<u-number-box v-else v-model="item.step" @change="getDeviceStep(item.step)" />
+				<u-button v-if="!item.count" ripple @click="sale(index)">+加入购物车</u-button>
+				<u-number-box v-else v-model="item.count" @change="updataDeviceCount(item.count)" />
 			</view>
 		</view>
 		<u-loadmore :status="status" />
@@ -49,40 +49,48 @@
 				dispatchShow: false,
 				dispatch_content: '确定立刻派单出库吗？',
 				optionId: '',
-				deviceCount: 0,
+				deviceCount: 2,
 				step: 0,
 				list: [],
+				orderList: [],
 				deviceStep: [],
-				DeviceType: uni.getStorageSync('DeviceType'),
-				modelList: uni.getStorageSync('GetAllModle')
+				DeviceType: uni.getStorageSync('DeviceType')
 			}
 		},
 		onLoad(option) {
 			this.optionId = option.Id
 		},
 		onShow() {
-			this.getDeviceCount()
-			this.getOrderList()
+			// this.getDeviceCount()
+			this.getOrderList(this.optionId)
 			this.getSalingDevicesList()
 		},
 		methods: {
 			// 获取销售设备列表
 			getSalingDevicesList() {
-				this.$u.api.getSalingDevices({
-					order: this.optionId
+				this.$u.api.getModelSaleList().then(res => {
+					if (res.success) {
+						res.data.map(v => {
+							this.DeviceType.forEach(i => {
+								if (v.Type === i.value) v.deviceName = i.name
+							})
+							this.orderList.forEach(i => {
+								if (v.Id === i.Model) v.count = i.Count
+							})
+						})
+						this.list = res.data
+					}
+					console.log(this.list)
+				}).catch(err => {
+					console.log(err)
+				})
+			},
+			// 获取已购设备清单
+			getOrderList(id) {
+				this.$u.api.getOrderSaleDevices({
+					order: id
 				}).then(res => {
-					res.map(v => {
-						this.DeviceType.forEach(i => {
-							if (v.Type === i.value) v.Name = i.name
-						})
-						this.modelList.forEach(i => {
-							if (v.ModelId === i.Id) v.modelName = i.Name
-						})
-						this.deviceStep.forEach(i => {
-							if (v.ModelId === i.ModelId) v.step = i.Count
-						})
-					})
-					this.list = res
+					if (res.success) this.orderList = res.data
 					console.log(res)
 				}).catch(err => {
 					console.log(err)
@@ -90,79 +98,48 @@
 			},
 			// 加入购物车
 			sale(index) {
-				this.$u.api.OrderSaleDevice({
-					order: this.optionId,
-					model: this.list[index].ModelId
+				this.$u.api.addDeviceSale({
+					Order: this.optionId,
+					Model: this.list[index].Id
 				}).then(res => {
-					console.log(res)
-					if (res.success === false) return
-					this.deviceCount = res.total
-					this.list[index].Count = res.count
-					uni.showToast({
-						icon: 'none',
-						title: '加入购物车成功！'
-					})
-					this.getDeviceCount()
+					if (res.success) this.$u.toast('加入购物车成功!')
+					else this.$u.toast(res.message)
 					console.log(res)
 				}).catch(err => {
-					uni.showToast({
-						title: '添加商品失败！',
-						icon: 'none'
-					})
+					this.$u.toast(err.message)
 					console.log(err)
 				})
-				this.getSalingDevicesList()
 			},
 			editOrder() {
 				this.editShow = true
 			},
 			dispatchOrder() {
-				this.dispatchShow = true
+				this.$u.api.getOrderSaleDevices({
+					order: this.optionId
+				}).then(res => {
+					if (res.data.length) this.dispatchShow = true
+					else this.$u.toast('请至少选择一个产品!')
+				}).catch(err => {
+					this.$u.toast('发生错误，派单失败!')
+				})
 			},
 			// 派单出库
 			dispatch() {
-				if (this.deviceCount === 0) {
-					uni.showToast({
-						icon: 'none',
-						title: '没有选择任何商品！'
-					});
-					return
-				}
-				this.$u.api.OrderSaled({
-					order: this.optionId
-				}).then(res => {
-					uni.showToast({
-						title: '派单出库成功！'
-					})
-					this.$u.route({
-						type: 'navigateBack',
-						url: 'pages/order/sale/list',
-						delta: 1
-					})
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '派单出库失败！'
-					})
-				})
-			},
-			// 获取出库数量
-			getDeviceCount() {
-				this.$u.api.getOrderSaleDeviceCounts({
-					order: this.optionId
-				}).then(res => {
-					this.deviceCount = res
-					console.log(res)
-				}).catch(err => {})
-			},
-			// 获取指定设备数量
-			getOrderList() {
-				this.$u.api.getOrderSaleDevices({
+				this.$u.api.acceptSaleOrder({
 					id: this.optionId
 				}).then(res => {
-					this.deviceStep = res
-				}).catch(err => {
-					console.log(err)
+					if (res.success) this.$u.toast('派单成功！')
+					else this.$u.toast(res.message)
+					console.log(res)
+				})
+			},
+			// 修改设备数量
+			updataDeviceCount(count) {
+				this.$u.api.updataDeviceSale({
+					Id: this.optionId,
+					Count: count
+				}).then(res => {
+					console.log(res)
 				})
 			},
 			getDeviceStep(step) {

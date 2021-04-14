@@ -19,6 +19,7 @@
 			<button class="submit_ck" @click="submit">更新</button>
 		</view>
 		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm" />
+		<u-modal v-model="show" content="更新成功!" @confirm="confirm" />
 	</view>
 </template>
 
@@ -34,6 +35,7 @@
 					Name: '',
 				},
 				optionId: null,
+				show: false,
 				companyList: uni.getStorageSync('GetCompanyList'),
 				selectList: [],
 				rules: {
@@ -64,7 +66,7 @@
 					this.form.Code = res.data.Code
 					this.form.Name = res.data.Name
 					this.form.Id = res.data.Id
-					this.form.goodsType = this.companyList.find(v => v.CompanyId == res.data.OrgId).Name
+					this.form.goodsType = this.companyList.find(v => v.Id == res.data.OrgId).Name	
 				}
 				console.log(res, this.form);
 			}).catch(err => {
@@ -84,13 +86,11 @@
 					if (valid) {
 						delete this.form.goodsType
 						this.$u.api.updataRole(this.form).then(res => {
-							if (res.success) this.$u.toast('更新成功！')
+							if (res.success) this.show = true
 							else this.$u.toast(res.message)
-							Object.assign(this.$data.form, this.$options.data().form)
 							console.log(res);
 						}).catch(err => {
-							Object.assign(this.$data.form, this.$options.data().form)
-							this.$u.toast('创建失败！')
+							this.$u.toast('更新失败！')
 							console.log(err);
 						})
 					} else {
@@ -114,6 +114,11 @@
 				})
 				console.log(e);
 			},
+			confirm() {
+				this.$u.route({
+					type: 'navigateBack'
+				})
+			}
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);

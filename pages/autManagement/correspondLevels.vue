@@ -37,7 +37,7 @@
 						创建时间：{{item.RegistOn}}
 					</view>
 					<view class="btn">
-						<button class="btn_cance" @click.stop="toCancel(item.Id)">注销</button>
+						<button class="btn_cance" @click.stop="toCancelRole(item.Id)">注销</button>
 						<button class="btn_updata" @click.stop="toUpdataRole(item.Id)">更新</button>
 					</view>
 				</view>
@@ -61,13 +61,14 @@
 						创建时间：{{item.RegistOn}}
 					</view>
 					<view class="btn">
-						<button class="btn_cance" @click.stop="$u.route('pages/customer/employees')">注销</button>
-						<button class="btn_updata" @click.stop="$u.route('pages/customer/employees')">更新</button>
+						<button class="btn_cance" @click.stop="toCancelUser(item.Id)">注销</button>
+						<button class="btn_updata" @click.stop="toUpdataUser(item.Id)">更新</button>
 					</view>
 				</view>
 			</view>
 		</view>
 		<u-modal v-model="cancel" content="确定要注销吗？" title="提示" show-cancel-button @confirm="signHandle" />
+		<u-modal v-model="uCancel" content="确定要注销吗？" title="提示" show-cancel-button @confirm="signHandleUser" />
 		<Modal />
 	</view>
 </template>
@@ -86,6 +87,7 @@
 				title: '本级权限管理',
 				warning: [],
 				cancel: false,
+				uCancel: false,
 				operShow: false,
 				delId: null,
 				currentRoleList: [],
@@ -142,6 +144,7 @@
 						v.RegistOn = this.$u.timeFormat(res.data.RegistOn, 'yyyy-mm-dd')
 						this.getCompanyById(v, i)
 					})
+					console.log(res);
 				})
 			},
 			// 获取指定单位
@@ -158,13 +161,18 @@
 					id
 				})
 			},
+			toUpdataUser(id) {
+				this.$u.route('pages/autManagement/updataUser', {
+					id
+				})
+			},
 			sectionChange(index) {
 				this.curNow = index;
 				this.role = !this.role;
 				this.user = !this.user
 			},
 			// 注销角色
-			toCancel(id) {
+			toCancelRole(id) {
 				this.cancel = true
 				this.delId = id
 				console.log(id);
@@ -174,6 +182,23 @@
 					if (res.success) {
 						this.$u.toast('删除成功！');
 						this.getCurrentRoleList();
+					}
+					else this.$u.toast('删除失败！')
+				}).catch(err => {
+					this.$u.toast('删除失败！')
+					console.log(err);
+				})
+			},
+			// 注销用户
+			toCancelUser(id) {
+				this.uCancel = true
+				this.delId = id
+			},
+			signHandleUser() {
+				this.$u.destroyCustomer({Id: this.delId}).then(res => {
+					if (res.success) {
+						this.$u.toast('删除成功！');
+						this.getCurrentUserList();
 					}
 					else this.$u.toast('删除失败！')
 				}).catch(err => {

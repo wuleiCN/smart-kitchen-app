@@ -1,10 +1,10 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="客户注册" :title-width="300" title-color="#000000" :title-size="36" />
+		<u-navbar :is-back="true" title="添加订单" :title-width="300" title-color="#000000" :title-size="36" />
 		<u-form :model="form" ref="uForm">
 			<view class="info">
-				<u-form-item label="客户单位" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Customer">
-					<u-input v-model="form.Customer" input-align="right" type="select" :select-open="pickerShow"
+				<u-form-item label="客户单位" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Name">
+					<u-input v-model="form.Name" input-align="right" type="select" :select-open="pickerShow"
 						placeholder="请选择客户单位" @click="pickerShow = true" />
 				</u-form-item>
 				<u-form-item label="联系人" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Contact">
@@ -30,7 +30,9 @@
 		<view class="submit_vw">
 			<button class="submit_ck" @click="submit">提交</button>
 		</view>
-		<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm" />
+		<u-modal v-model="dispatchShow" :content="content" @confirm="dispatch" />
+		<u-select mode="single-column" :list="customerList" value-name="Id" label-name="Name" v-model="pickerShow"
+			@confirm="selectConfirm" />
 	</view>
 </template>
 
@@ -40,17 +42,20 @@
 		data() {
 			return {
 				form: {
+					Name: '',
 					Contact: '',
 					Customer: '',
 					Phone: '',
 					Address: '',
 					Description: ''
 				},
+				customerList: [],
+				content: '',
+				dispatchShow: false,
 				pickerShow: false,
 				rules: {
 					Contact: [{
 						required: true,
-						len: 18,
 						message: '请输入联系人',
 						trigger: ['change', 'blur']
 					}],
@@ -74,7 +79,7 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					Customer: [{
+					Name: [{
 						required: true,
 						message: '请选择客户单位',
 						trigger: ['change', 'blur']
@@ -83,7 +88,10 @@
 			}
 		},
 		onLoad(e) {
-
+			this.$u.api.getCustomersList().then(res => {
+				if (res.success) this.customerList = res.data
+				console.log(res);
+			})
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
@@ -102,15 +110,31 @@
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
+						delete this.form.Name
+						this.$u.api.createOrderSale(this.form).then(res => {
+							this.dispatchShow = true
+							if (res.success) this.content = "创建成功！"
+							else this.content = "创建失败！"
+						})
 						console.log('验证通过');
 					} else {
 						console.log('验证失败');
 					}
 				});
 			},
-			// 选择地区回调
-			regionConfirm(e) {
-				this.form.Customer = e.province.label + '-' + e.city.label + '-' + e.area.label;
+			dispatch() {
+				this.$u.route({
+					type: 'navigateBack'
+				})
+			},
+			// 选择客户回调
+			selectConfirm(e) {
+				this.form.Name = '';
+				e.map((val, index) => {
+					this.form.Name = val.label
+					this.form.Customer = val.value
+				})
+				console.log(e);
 			},
 		}
 	}
@@ -121,10 +145,12 @@
 		.info {
 			margin-top: 24rpx;
 		}
+
 		.area {
 			width: 750rpx;
 			height: 232rpx;
 			background: #FFFFFF;
+
 			.desc {
 				padding: 30rpx 0 0 24rpx;
 			}
@@ -143,7 +169,9 @@
 					text-align: right;
 				}
 			}
-			.textarea-placeholder, .uni-textarea-textarea {
+
+			.textarea-placeholder,
+			.uni-textarea-textarea {
 				padding-left: 24rpx !important;
 			}
 

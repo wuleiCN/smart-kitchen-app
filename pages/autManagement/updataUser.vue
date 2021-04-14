@@ -3,41 +3,24 @@
 		<u-navbar :is-back="true" title="用户注册" :title-width="300" title-color="#000000" :title-size="36" />
 		<u-form :model="form" ref="uForm">
 			<view class="info_A">
-				<u-form-item label="角色信息" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="role">
-					<u-input type="select" input-align="right" :select-open="selectShow" v-model="form.role"
-						placeholder="请选择所属组织/公司" @click="companyListCK" />
-				</u-form-item>
 				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Name">
 					<u-input v-model="form.Name" input-align="right" placeholder="请输入姓名" />
 				</u-form-item>
 				<u-form-item label="登录账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="LogonName">
 					<u-input v-model="form.LogonName" input-align="right" placeholder="请输入登录账号" />
 				</u-form-item>
-				<u-form-item label="登录密码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Password">
-					<u-input v-model="form.Password"  type="password"input-align="right" placeholder="请输入登录密码" />
-				</u-form-item>
-				<u-form-item label="确认密码" label-width="242" :label-style="{paddingLeft: '24rpx'}"
-					prop="ConfirmPassword">
-					<u-input v-model="form.ConfirmPassword" type="password" input-align="right" placeholder="请输入确认密码" />
-				</u-form-item>
-			</view>
-			<view class="info_B">
 				<u-form-item label="手机号码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Phone">
 					<u-input v-model="form.Phone" input-align="right" placeholder="请输入手机号码" />
 				</u-form-item>
 				<u-form-item label="电子邮箱" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Email">
 					<u-input v-model="form.Email" input-align="right" placeholder="请输入电子邮箱" />
 				</u-form-item>
-				<u-form-item label="用户头像" label-width="242" :border-bottom="false"
-					:label-style="{paddingLeft: '24rpx'}" />
-				<u-upload ref="uUpload" :action="action" :header="header" :auto-upload="false" @on-success="upload"
-					max-count="1" width="136" height="136" />
 			</view>
 		</u-form>
 		<view class="submit_vw">
 			<button class="submit_ck" @click="submit()">提交</button>
 		</view>
-		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm" />
+		<u-modal v-model="show" content="更新成功!" @confirm="confirm" />
 	</view>
 </template>
 
@@ -47,31 +30,19 @@
 		data() {
 			return {
 				form: {
-					role: '',
+					Id: null,
 					Name: '',
-					OrgId: '',
 					LogonName: '',
-					Password: '',
-					ConfirmPassword: '',
 					Phone: '',
-					Avatar: '',
 					Email: ''
 				},
-				isLoad: false,
+				show: false,
 				header: {
 					Token: uni.getStorageSync('token')
 				},
 				action: 'http://175.6.77.126:9001/api/file/avatar',
 				companyList: uni.getStorageSync('GetCompanyList'),
-				selectList: [],
-				pickerShow: false,
-				selectShow: false,
 				rules: {
-					role: [{
-						required: true,
-						message: '请输入角色信息',
-						trigger: ['change', 'blur']
-					}],
 					Name: [{
 						required: true,
 						message: '请输入姓名',
@@ -80,16 +51,6 @@
 					LogonName: [{
 						required: true,
 						message: '请输入登录账号',
-						trigger: ['change', 'blur']
-					}],
-					password: [{
-						required: true,
-						message: '请输入密码',
-						trigger: ['change', 'blur']
-					}],
-					ConfirmPassword: [{
-						required: true,
-						message: '请输入确认密码',
 						trigger: ['change', 'blur']
 					}],
 					Phone: [{
@@ -126,7 +87,18 @@
 			}
 		},
 		onLoad(e) {
-			console.log(this.companyLists);
+			this.form.Id = e.id
+			this.$u.api.getUserFindById({
+				id: e.id
+			}).then(res => {
+				if (res.success) {
+					this.form.Name = res.data.Name
+					this.form.LogonName = res.data.LogonName
+					this.form.Phone = res.data.Phone
+					this.form.Email = res.data.Email
+				} else this.$u.toast('获取用户信息失败！')
+				console.log(res);
+			})
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
@@ -138,54 +110,23 @@
 
 		},
 		methods: {
-			// 选择地区回调
-			regionConfirm(e) {
-				this.form.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
-			},
-			// 选择公司回调
-			companyListCK() {
-				this.selectList = []
-				this.companyList.map(v => {
-					this.selectList.push({
-						value: v.Id,
-						label: v.Name
-					})
-				})
-				this.selectShow = true
-				console.log(this.selectList);
-			},
-			selectConfirm(e) {
-				this.form.role = '';
-				e.map((val, index) => {
-					this.form.role += this.form.role == '' ? val.label : '-' + val.label;
-					this.form.OrgId = val.value
-				})
-				console.log(e);
-			},
-			upload(res, list) {
-				this.form.Avatar = res.data.filename
-				this.isLoad = true
-				if (this.isLoad) {
-					delete this.form.role
-					this.$u.api.createcCustomer(this.form).then(res => {
-						if (res.success) this.$u.toast('创建成功！')
-						else this.$u.toast(res.message)
-						this.$refs.uUpload.clear();
-						Object.assign(this.$data.form, this.$options.data().form)
-						this.isLoad = false
-					}).catch(err => {})
-				}
-				console.log(res);
-			},
 			submit() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						this.$refs.uUpload.upload();
+						this.$u.api.updataUser(this.form).then(res => {
+							if (res.success) this.show = true
+							else this.$u.toast('更新失败！')
+						})
 						console.log('验证通过', this.isLoad);
 					} else {
 						console.log('验证失败');
 					}
 				});
+			},
+			confirm() {
+				this.$u.route({
+					type: 'navigateBack'
+				})
 			}
 		}
 	}
@@ -197,20 +138,6 @@
 			margin-top: 24rpx;
 			// height: 460rpx;
 			background: #FFFFFF;
-		}
-
-		.info_B {
-			margin-top: 24rpx;
-			height: 571.8rpx;
-			background: #FFFFFF;
-
-			.u-upload {
-				margin-left: 24rpx;
-
-				.u-list-item {
-					margin: 0;
-				}
-			}
 		}
 
 		.u-form-item,

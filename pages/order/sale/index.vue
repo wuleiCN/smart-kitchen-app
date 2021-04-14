@@ -10,7 +10,7 @@
 				</slot>
 				<view class="search-wrap" v-if="search">
 					<u-search v-model="keyword" height="56" :action-style="{color: '#fff'}" :show-action="true"
-						action-text="返回" @custom="searchBK()" />
+						action-text="返回" @blur="searchFn()" @custom="searchBK()" />
 				</view>
 			</view>
 			<view class="operation" v-show="operShow">
@@ -20,15 +20,15 @@
 			</view>
 		</u-navbar>
 		<view v-show="orderShow">
-			<view class="text-area"  v-for="(item,index) in 3" :key="index">
+			<view class="text-area" v-for="(item,index) in orderList" :key="index">
 				<view class="cust_title">
-					{{item.CompanyId}}
+					{{item.Company}}
 				</view>
 				<view class="cust_centent">
 					<view>联系人：{{item.Contact}}</view>
 					<view>联系电话：{{item.Phone}}</view>
 					<view>联系地址：{{item.Address}}</view>
-					<view>创建时间：{{item.OrderOn}}</view>
+					<view>创建时间：{{item.CreatedOn}}</view>
 				</view>
 				<view class="cust_oper">
 					<view class="order_oper">
@@ -36,13 +36,14 @@
 						<button class="btn_list btn" @click.stop="toSaledevices(item.Id)">销售清单</button>
 						<button class="btn_deli btn" @click.stop="sendToDistribute(item.Id)">派单出库</button>
 					</view>
-					<button class="btn_del btn" @click.stop="$u.route('pages/customer/employees')">删除</button>
+					<button class="btn_del btn" @click.stop="deleteOrder(item.Id)">删除</button>
 				</view>
 			</view>
 			<u-empty mode="list" v-if="!orderList.length" />
 		</view>
 		<u-empty mode="search" v-if="dataListShow" />
 		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distribute" />
+		<u-modal v-model="deleteShow" content="确定要删除订单吗？" show-cancel-button @confirm="deleteOrderBute" />
 		<Modal />
 	</view>
 </template>
@@ -66,11 +67,12 @@
 				back: true,
 				solt: false,
 				dataListShow: false,
-				orderShow: false,
+				orderShow: true,
 				keyword: '',
-				form: 3,
 				distributeContent: '确定要派单出库吗?',
 				distributeShow: false,
+				deleteShow: false,
+				orderId: '',
 				orderList: [],
 				distributeId: ''
 			}
@@ -133,53 +135,56 @@
 			// 获取销售工单列表
 			getOrderSaleList() {
 				this.$u.api.getOrderSaleList().then(res => {
-					this.orderList = res.data
-					if (!res.data.length) this.orderShow = true
+					if (res.success) {
+						this.orderList = res.data
+						this.orderList.map((v, i) => {
+							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+						})
+						if (!res.data.length) this.orderShow = true
+					} else this.$u.toast(res.message)
 					console.log(res, this.orderList)
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '获取数据失败！'
-					})
 				})
+			},
+			// 获得指定销售订单
+			searchFn() {
+				console.log('===> 搜索');
 			},
 			// 派单出库
 			sendToDistribute(id) {
 				this.distributeId = id
 				this.$u.api.getOrderSaleDevices({
-					id
+					order: id
 				}).then(res => {
-					if (res.data.length) {
-						this.distributeShow = true
-					} else {
-						uni.showToast({
-							icon: 'none',
-							title: '请至少选择一个产品!'
-						})
-					}
+					if (res.data.length) this.distributeShow = true
+					else this.$u.toast('请至少选择一个产品!')
 				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '发生错误，派单失败!'
-					})
+					this.$u.toast('发生错误，派单失败!')
 				})
 			},
 			// 确定派单出库
 			distribute() {
-				this.$u.api.orderSale({
-					order: this.distributeId
+				this.$u.api.acceptSaleOrder({
+					id: this.distributeId
 				}).then(res => {
-					uni.showToast({
-						title: '派单出库成功！'
-					})
+					if (res.success) this.$u.toast('派单成功！')
+					else this.$u.toast(res.message)
+					this
 					console.log(res)
+				})
+			},
+			// 删除订单
+			deleteOrder(id) {
+				this.deleteShow = true
+				this.orderId = id
+			},
+			// 确定删除订单
+			deleteOrderBute() {
+				this.$u.api.destroySaleOrder({
+					id: this.orderId
+				}).then(res => {
+					if (res.success) this.$u.toast('删除成功！')
+					else this.$u.toast(res.message)
 					this.getOrderSaleList()
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '派单出库失败！'
-					})
-					console.log(err)
 				})
 			},
 			closeIcon() {

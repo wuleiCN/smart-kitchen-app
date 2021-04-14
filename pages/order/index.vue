@@ -71,7 +71,7 @@
 				background-size: 340rpx 301rpx;
 			}
 			.MaintenanceOrder {
-				background-image: url(../../static/order/MaintenanceOrder.png);
+				background-image: url(../../static/order/DeliveryOrder.png);
 			}
 			.RepairOrder {
 				background-image: url(../../static/order/RepairOrder.png);
@@ -86,7 +86,7 @@
 				background-image: url(../../static/order/ConstructionOrder.png);
 			}
 			.DeliveryOrder {
-				background-image: url(../../static/order/DeliveryOrder.png);
+				background-image: url(../../static/order/MaintenanceOrder.png);
 			}
 		}
 	}

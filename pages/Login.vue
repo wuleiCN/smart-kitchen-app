@@ -210,6 +210,11 @@
 					if (res.success) uni.setStorageSync('DeviceStatus', res.data)
 					console.log(res);
 				}).catch(err => {})
+				// 设备类型
+				this.$u.api.getDevicesMdole().then(res => {
+					if (res.success) uni.setStorageSync('DevicesMdole', res.data)
+					console.log(res);
+				}).catch(() => {})
 				// 摄像机/NVR品牌
 				this.$u.api.getIpcsdk().then(res => {
 					if (res.success) uni.setStorageSync('CameraBrand', res.data)
@@ -245,8 +250,8 @@
 					if (res.success) uni.setStorageSync('OrderStatus', res.data)
 					console.log(res);
 				}).catch(err => {})
-				// 客户单位列表
-				this.$u.api.getCustomersList().then(res => {
+				// 公司列表
+				this.$u.api.getcompanyAll().then(res => {
 					if (res.success) uni.setStorageSync('GetCompanyList', res.data)
 					console.log(res);
 				}).catch(() => {})

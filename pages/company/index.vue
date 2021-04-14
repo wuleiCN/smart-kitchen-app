@@ -139,8 +139,8 @@
 						url: 'pages/autManagement/index'
 					},
 					{
-						text: '设备管理',
-						src: '../../static/icon/Device.png',
+						text: '订单管理',
+						src: '../../static/icon/Order.png',
 						url: 'pages/order/index'
 					},
 					{
@@ -148,9 +148,9 @@
 						src: '../../static/icon/Log.png'
 					},
 					{
-						text: '订单管理',
-						src: '../../static/icon/Order.png'
-					}
+						text: '设备管理',
+						src: '../../static/icon/Device.png'
+					},
 				]
 			}
 		},

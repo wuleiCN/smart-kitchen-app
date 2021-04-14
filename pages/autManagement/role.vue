@@ -100,6 +100,7 @@
 				this.form.goodsType = '';
 				e.map((val, index) => {
 					this.form.goodsType += this.form.goodsType == '' ? val.label : '-' + val.label;
+					this.form.OrgId = val.value
 				})
 				console.log(e);
 			},

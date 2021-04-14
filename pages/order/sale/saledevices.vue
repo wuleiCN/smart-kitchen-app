@@ -17,16 +17,17 @@
 			<span class="_title u-flex">销售清单</span>
 		</view>
 		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<u-swipe-action v-for="(item, index) in 3" :key="index" :show="item.show" :index="index"
-				:options="options" @open="open" @click="alarm">
+			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index"
+				:options="options" @open="open" @click="alarm(index, item.Id)">
 				<view class="item u-border-bottom">
 					<image mode="aspectFill" src="../../../static/devices/production.png" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 					<view class="title-wrap">
 						<text>设备型号：{{ item.modelName }}</text>
-						<text class="u-line-2">设备类别：{{ item.Name }}</text>
+						<text class="u-line-2">设备类别：{{ item.DeviceType }}</text>
 						<text>设备描述：...</text>
-						<u-number-box v-model="item.Count" disabled-input :long-press='false' />
+						<u-number-box v-model="item.Count" disabled-input :long-press='false'
+							@change="updataDeviceCount(item.Id, item.Count)" />
 					</view>
 				</view>
 			</u-swipe-action>
@@ -56,8 +57,8 @@
 				order: {},
 				content: '确定立刻派单出库吗？',
 				list: [],
-				DeviceType: uni.getStorageSync('DeviceType'),
-				modelList: uni.getStorageSync('GetAllModle')
+				deviceTypeList: uni.getStorageSync('DeviceType'),
+				modelList: uni.getStorageSync('DevicesMdole')
 			}
 		},
 		onLoad(option) {
@@ -66,9 +67,11 @@
 				title: '加载中...'
 			})
 			this.$u.api.getOrderInfo({
-				id: this.optionId
+				order: option.Id
 			}).then(res => {
-				this.order = res
+				if (res.success) this.order = res.data
+				else this.$u.toast('数据加载失败!')
+				console.log(res);
 			}).catch(err => {
 				uni.showToast({
 					icon: 'none',
@@ -80,17 +83,7 @@
 			uni.hideLoading()
 			console.log(option)
 		},
-		watch: {
-			list: {
-				handler(val, old) {
-					if (old.length !== 0) {
-						this.updataOrder()
-						console.log(val, old)
-					}
-				},
-				deep: true
-			}
-		},
+		watch: {},
 		methods: {
 			open(index) {
 				this.list[index].show = true;
@@ -99,49 +92,49 @@
 				})
 			},
 			// 更新设备
-			updataOrder() {
-				this.$u.api.updateOrderSaleDevices({
-					devices: this.list
+			updataDeviceCount(id, count) {
+				this.$u.api.updataDeviceSale({
+					Id: id,
+					Count: count
 				}).then(res => {
-					// this.getOrderList()
 					console.log(res)
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '更新失败！，' + err
-					})
-					console.log(err)
 				})
 			},
 			// 获取设备清单
 			getOrderList() {
 				this.$u.api.getOrderSaleDevices({
-					id: this.optionId
+					order: this.optionId
 				}).then(res => {
-					res.map(v => {
-						v.show = false
-					})
-					res.map(v => {
-						this.DeviceType.forEach(i => {
-							if (v.Type === i.value) v.Name = i.name
+					if (!res.success) this.$u.toast('获取清单列表失败！')
+					else {
+						res.data.map(v => {
+							this.modelList.forEach(i => {
+								if (v.Model === i.Id) {
+									v.modelName = i.Name
+									v.type = i.Type
+								}
+							})
+							v.show = false
 						})
-
-					})
-					res.map(v => {
-						this.modelList.forEach(i => {
-							if (v.ModelId === i.Id) v.modelName = i.Name
+						this.list = res.data
+						this.list.map(v => {
+							this.deviceTypeList.forEach(i => {
+								if (v.type === i.value) v.DeviceType = i.name
+							})
 						})
-					})
-					this.list = res
-					console.log(res)
+					}
+					console.log(this.list, this.deviceTypeList)
 				}).catch(err => {
 					console.log(err)
 				})
 			},
 			// 删除设备
-			alarm(index) {
+			alarm(index,id) {
+				this.$u.api.deleteDeviceSale({id}).then(res => {
+					if (res.success) this.$u.toast('删除成功！')
+					else this.$u.toast(res.message)
+				})
 				this.list.splice(index, 1);
-				// this.list[index].show = false
 				console.log(this.list)
 			},
 			dispatchOrder() {
@@ -149,25 +142,17 @@
 			},
 			// 派单
 			dispatch() {
-				this.$u.api.orderSale({
-					order: this.optionId
+				this.$u.api.acceptSaleOrder({
+					id: this.optionId
 				}).then(res => {
-					uni.showToast({
-						title: '派单出库成功！'
-					})
+					if (res.success) {
+						this.$u.toast('派单成功！')
+						this.$u.route({
+							type: 'navigateBack'
+						})
+					}
+					else this.$u.toast(res.message)
 					console.log(res)
-					this.getOrderList()
-					this.$u.route({
-						type: 'navigateBack',
-						url: 'pages/order/sale/list',
-						delta: 1
-					})
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '派单出库失败！'
-					})
-					console.log(err)
 				})
 			},
 			// 上拉加载
@@ -210,7 +195,7 @@
 		.info {
 			// height: 420rpx;
 			background: #FFFFFF;
-			padding:0 0 20rpx 23rpx;
+			padding: 0 0 20rpx 23rpx;
 
 			span {
 				font-size: 28rpx;
@@ -279,6 +264,7 @@
 			height: 98rpx;
 			bottom: 0;
 			background: #FFFFFF;
+
 			.u-btn {
 				width: 300rpx;
 				height: 68rpx;
