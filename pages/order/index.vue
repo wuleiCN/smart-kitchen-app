@@ -5,7 +5,7 @@
 				<view class="sales" @click="$u.route('pages/order/sale/index')" />
 			</view>
 			<view class="order">
-				<view class="left MaintenanceOrder" />
+				<view class="left MaintenanceOrder" @click="$u.route('pages/order/distribute/list')" />
 				<view class="right ConstructionOrder" />
 			</view>
 			<view class="order">

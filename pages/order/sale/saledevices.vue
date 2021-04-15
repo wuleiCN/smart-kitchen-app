@@ -6,7 +6,7 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col" v-if="order != null">
-			<span>客户单位：{{order.CustomerId}}</span>
+			<span>客户单位：{{order.customerName}}</span>
 			<span>联系人：{{order.Contact}}</span>
 			<span>联系电话：{{order.Phone}}</span>
 			<span>收货地址：{{order.Address}}</span>
@@ -16,7 +16,7 @@
 			<span class="line" />
 			<span class="_title u-flex">销售清单</span>
 		</view>
-		<scroll-view class="product" show-scrollbar :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
+		<scroll-view class="product" show-scrollbar scroll-top="0" :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
 			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index"
 				:options="options" @open="open" @click="alarm(index, item.Id)">
 				<view class="item u-border-bottom">
@@ -27,11 +27,12 @@
 						<text class="u-line-2">设备类别：{{ item.DeviceType }}</text>
 						<text>设备描述：...</text>
 						<u-number-box v-model="item.Count" disabled-input :long-press='false'
-							@change="updataDeviceCount(item.Id, item.Count)" />
+							@change="updataDeviceCount(item.Model, item.Count)" />
 					</view>
 				</view>
 			</u-swipe-action>
 			<u-loadmore :status="status" />
+			<view class="block" />
 		</scroll-view>
 		<view class="dispatch">
 			<u-button hover-class="none" @click="dispatchOrder">确定派单</u-button>
@@ -63,24 +64,22 @@
 		},
 		onLoad(option) {
 			this.optionId = option.Id
-			uni.showLoading({
-				title: '加载中...'
-			})
 			this.$u.api.getOrderInfo({
 				order: option.Id
 			}).then(res => {
-				if (res.success) this.order = res.data
+				if (res.success) {
+					this.order = res.data
+					this.$u.api.getCustomerById({
+						id: res.data.Customer
+					}).then(v => {
+						console.log(v);
+						this.order.customerName = v.data.Name
+					})
+				}
 				else this.$u.toast('数据加载失败!')
 				console.log(res);
-			}).catch(err => {
-				uni.showToast({
-					icon: 'none',
-					title: '数据加载失败！'
-				})
-				console.log(err)
 			})
 			this.getOrderList()
-			uni.hideLoading()
 			console.log(option)
 		},
 		watch: {},
@@ -94,10 +93,11 @@
 			// 更新设备
 			updataDeviceCount(id, count) {
 				this.$u.api.updataDeviceSale({
-					Id: id,
+					OrderId: this.optionId,
+					ModelId: id,
 					Count: count
 				}).then(res => {
-					console.log(res)
+					console.log(res, count)
 				})
 			},
 			// 获取设备清单
@@ -205,15 +205,12 @@
 		}
 
 		.product {
-			// height: 900rpx;
+			height: 720rpx;
 
 			.item {
 				display: flex;
 				padding: 20rpx;
 
-				::v-deep .u-numberbox {
-					touch-action: none;
-				}
 			}
 
 			image {
@@ -233,8 +230,9 @@
 				}
 
 				::v-deep .u-numberbox {
-					margin-left: 300rpx;
+					margin-left: 280rpx;
 					width: 147rpx;
+					touch-action: none;
 				}
 			}
 
@@ -249,9 +247,9 @@
 			}
 		}
 
-		._blank {
+		.block {
 			width: 100%;
-			height: 80rpx;
+			height: 98rpx;
 		}
 
 		.dispatch {

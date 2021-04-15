@@ -53,7 +53,7 @@ const install = (Vue, vm) => {
 	// 创建销售订单
 	let createOrderSale = (params = {}) => vm.$u.post('api/order/sale/create',params)
 	// 获得所有设备型号信息
-	let getModelSaleList = (params = {}) => vm.$u.get('api/model/getall')
+	let getModelSaleList = (params = {}) => vm.$u.get('api/order/sale/device/getmodels', params)
 	// 增加销售设备
 	let addDeviceSale = (params = {}) => vm.$u.post('api/order/sale/device/add',params)
 	// 获得获得指定销售订单
@@ -63,13 +63,19 @@ const install = (Vue, vm) => {
 	// 获得指定设备型号
 	let getModelFindById = (params = {}) => vm.$u.get('api/model/find', params)
 	// 更新销售设备信息数量
-	let updataDeviceSale = (params = {}) => vm.$u.post('api/order/sale/device/update',params)
+	let updataDeviceSale = (params = {}) => vm.$u.post('/api/order/sale/device/updatebymodel',params)
 	// 删除销售设备信息
 	let deleteDeviceSale = (params = {}) => vm.$u.post('api/order/sale/device/delete',params)
+	// 提交销售订单
+	let saleOrderFinish = (params = {}) => vm.$u.post('api/order/sale/finish',params)
 	// 销售订单出库接单
 	let acceptSaleOrder = (params = {}) => vm.$u.post('api/order/sale/delivery/accept',params)
 	// 注销销售订单
 	let destroySaleOrder = (params = {}) => vm.$u.post('api/order/sale/destroy',params)
+	// 获得所在已销售提交的销售定单
+	let getOrderSaled = (params = {}) => vm.$u.get('api/order/sale/getsaled')
+	// 获得所在未出库提交的销售定单
+	let getOrderDelivering= (params = {}) => vm.$u.get('api/order/sale/getdelivering')
 	
 	// ====数据字典====
 	
@@ -123,9 +129,12 @@ const install = (Vue, vm) => {
 		getOrderSaleDevices,
 		getModelFindById,
 		updataDeviceSale,
+		saleOrderFinish,
 		deleteDeviceSale,
 		acceptSaleOrder,
 		destroySaleOrder,
+		getOrderSaled,
+		getOrderDelivering,
 		getDeviceType,
 		getDevicestatus,
 		getDevicesMdole,

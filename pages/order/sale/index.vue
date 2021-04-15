@@ -22,7 +22,7 @@
 		<view v-show="orderShow">
 			<view class="text-area" v-for="(item,index) in orderList" :key="index">
 				<view class="cust_title">
-					{{item.Company}}
+					{{item.companyName}}
 				</view>
 				<view class="cust_centent">
 					<view>联系人：{{item.Contact}}</view>
@@ -74,7 +74,8 @@
 				deleteShow: false,
 				orderId: '',
 				orderList: [],
-				distributeId: ''
+				distributeId: '',
+				companyList: uni.getStorageSync('GetCompanyList')
 			}
 		},
 		onShow() {
@@ -139,6 +140,7 @@
 						this.orderList = res.data
 						this.orderList.map((v, i) => {
 							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+							v.companyName = this.companyList.find(i => v.Company === i.Id).Name
 						})
 						if (!res.data.length) this.orderShow = true
 					} else this.$u.toast(res.message)
@@ -163,10 +165,13 @@
 			},
 			// 确定派单出库
 			distribute() {
-				this.$u.api.acceptSaleOrder({
+				this.$u.api.saleOrderFinish({
 					id: this.distributeId
 				}).then(res => {
-					if (res.success) this.$u.toast('派单成功！')
+					if (res.success) {
+						this.getOrderSaleList()
+						this.$u.toast('派单成功！')
+					}
 					else this.$u.toast(res.message)
 					this
 					console.log(res)

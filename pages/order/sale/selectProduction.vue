@@ -8,12 +8,11 @@
 					<span><strong>设备型号：</strong>{{item.Name}}</span>
 					<span><strong>设备类别：</strong>{{item.deviceName}}</span>
 					<span><strong>设备描述：</strong>...</span>
-					<span>已售：{{item.Count}}</span>
 				</view>
 			</view>
 			<view class="sale">
-				<u-button v-if="!item.count" ripple @click="sale(index)">+加入购物车</u-button>
-				<u-number-box v-else v-model="item.count" @change="updataDeviceCount(item.count)" />
+				<u-button v-if="!item.Count" ripple @click="sale(item.Id)">+加入购物车</u-button>
+				<u-number-box v-else v-model="item.Count" @change="updataDeviceCount(item.Id,item.Count)" />
 			</view>
 		</view>
 		<u-loadmore :status="status" />
@@ -49,11 +48,9 @@
 				dispatchShow: false,
 				dispatch_content: '确定立刻派单出库吗？',
 				optionId: '',
-				deviceCount: 2,
-				step: 0,
+				deviceCount: null,
 				list: [],
 				orderList: [],
-				deviceStep: [],
 				DeviceType: uni.getStorageSync('DeviceType')
 			}
 		},
@@ -62,23 +59,25 @@
 		},
 		onShow() {
 			// this.getDeviceCount()
-			this.getOrderList(this.optionId)
+			// this.getOrderList(this.optionId)
 			this.getSalingDevicesList()
 		},
 		methods: {
 			// 获取销售设备列表
 			getSalingDevicesList() {
-				this.$u.api.getModelSaleList().then(res => {
+				this.$u.api.getModelSaleList({
+					order: this.optionId
+				}).then(res => {
 					if (res.success) {
 						res.data.map(v => {
 							this.DeviceType.forEach(i => {
 								if (v.Type === i.value) v.deviceName = i.name
 							})
-							this.orderList.forEach(i => {
-								if (v.Id === i.Model) v.count = i.Count
-							})
 						})
 						this.list = res.data
+						this.deviceCount = this.list.reduce((t,v) => {
+							return t + v.Count
+						}, 0)
 					}
 					console.log(this.list)
 				}).catch(err => {
@@ -86,23 +85,26 @@
 				})
 			},
 			// 获取已购设备清单
-			getOrderList(id) {
-				this.$u.api.getOrderSaleDevices({
-					order: id
-				}).then(res => {
-					if (res.success) this.orderList = res.data
-					console.log(res)
-				}).catch(err => {
-					console.log(err)
-				})
-			},
+			// getOrderList(id) {
+			// 	this.$u.api.getOrderSaleDevices({
+			// 		order: id
+			// 	}).then(res => {
+			// 		if (res.success) this.orderList = res.data
+			// 		console.log(res)
+			// 	}).catch(err => {
+			// 		console.log(err)
+			// 	})
+			// },
 			// 加入购物车
-			sale(index) {
+			sale(id) {
 				this.$u.api.addDeviceSale({
 					Order: this.optionId,
-					Model: this.list[index].Id
+					Model: id
 				}).then(res => {
-					if (res.success) this.$u.toast('加入购物车成功!')
+					if (res.success) {
+						this.getSalingDevicesList()
+						this.$u.toast('加入购物车成功!')
+					}
 					else this.$u.toast(res.message)
 					console.log(res)
 				}).catch(err => {
@@ -125,25 +127,31 @@
 			},
 			// 派单出库
 			dispatch() {
-				this.$u.api.acceptSaleOrder({
+				this.$u.api.saleOrderFinish({
 					id: this.optionId
 				}).then(res => {
-					if (res.success) this.$u.toast('派单成功！')
+					if (res.success) {
+						this.$u.toast('派单成功！')
+						setTimeout(() => {
+							this.$u.route({
+								type: 'navigateBack'
+							})
+						}, 300)
+					}
 					else this.$u.toast(res.message)
 					console.log(res)
 				})
 			},
 			// 修改设备数量
-			updataDeviceCount(count) {
+			updataDeviceCount(id,count) {
 				this.$u.api.updataDeviceSale({
-					Id: this.optionId,
+					OrderId: this.optionId,
+					ModelId: id,
 					Count: count
 				}).then(res => {
-					console.log(res)
+					if (res.success) this.getSalingDevicesList()
+					console.log(res, count)
 				})
-			},
-			getDeviceStep(step) {
-				console.log(step);
 			},
 			// 跳转购物车清单
 			toCart() {
@@ -172,7 +180,7 @@
 	.product {
 		background: #FFFFFF;
 		margin-bottom: 10rpx;
-		height: 270rpx;
+		height: 240rpx;
 
 		&:last-child {
 			margin: 0 !important;
