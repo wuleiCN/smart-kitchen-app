@@ -70,6 +70,8 @@ const install = (Vue, vm) => {
 	let saleOrderFinish = (params = {}) => vm.$u.post('api/order/sale/finish',params)
 	// 销售订单出库接单
 	let acceptSaleOrder = (params = {}) => vm.$u.post('api/order/sale/delivery/accept',params)
+	// 销售订单出库退单
+	let refuseSaleOrder = (params = {}) => vm.$u.post('api/order/sale/delivery/refuse',params)
 	// 注销销售订单
 	let destroySaleOrder = (params = {}) => vm.$u.post('api/order/sale/destroy',params)
 	// 获得所在已销售提交的销售定单
@@ -132,6 +134,7 @@ const install = (Vue, vm) => {
 		saleOrderFinish,
 		deleteDeviceSale,
 		acceptSaleOrder,
+		refuseSaleOrder,
 		destroySaleOrder,
 		getOrderSaled,
 		getOrderDelivering,

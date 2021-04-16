@@ -6,7 +6,7 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col" v-if="order != null">
-			<span>客户单位：{{order.customerName}}</span>
+			<span>客户单位：{{customerName}}</span>
 			<span>联系人：{{order.Contact}}</span>
 			<span>联系电话：{{order.Phone}}</span>
 			<span>收货地址：{{order.Address}}</span>
@@ -18,7 +18,7 @@
 		</view>
 		<scroll-view class="product" show-scrollbar scroll-top="0" :scroll-y="true" :lower-threshold="5"
 			@scrolltolower="toLowFun">
-			<view class="item u-border-bottom" v-for="(item, index) in list">
+			<view class="item u-border-bottom" v-for="(item, index) in list" @click="toDevicedistribute(item.Id)">
 				<image mode="aspectFill" src="../../../static/devices/production.png" />
 				<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 				<view class="title-wrap">
@@ -46,6 +46,7 @@
 				dispatchShow: false,
 				optionId: '',
 				order: {},
+				customerName: '',
 				content: '确定立刻派单出库吗？',
 				list: [],
 				deviceTypeList: uni.getStorageSync('DeviceType'),
@@ -54,35 +55,31 @@
 		},
 		onLoad(option) {
 			this.optionId = option.Id
-			uni.showLoading({
-				title: '加载中...'
-			})
-			this.$u.api.getOrderInfo({
-				order: option.Id
-			}).then(res => {
-				if (res.success) {
-					this.order = res.data
-					this.$u.api.getCustomerById({
-						id: res.data.Customer
-					}).then(v => {
-						this.order.customerName = v.data.Name
-					})
-				}
-				else this.$u.toast('数据加载失败!')
-				console.log(res);
-			}).catch(err => {
-				uni.showToast({
-					icon: 'none',
-					title: '数据加载失败！'
-				})
-				console.log(err)
-			})
-			this.getOrderList()
-			uni.hideLoading()
 			console.log(option)
+		},
+		mounted() {
+			this.getOrderInfo()
+			this.getOrderList()
 		},
 		watch: {},
 		methods: {
+			// 获取订单信息
+			getOrderInfo() {
+				this.$u.api.getOrderInfo({
+					order: this.optionId
+				}).then(res => {
+					if (res.success) {
+						this.order = res.data
+						this.$u.api.getCustomerById({
+							id: res.data.Customer
+						}).then(v => {
+							this.customerName = v.data.Name
+						})
+					}
+					else this.$u.toast('数据加载失败!')
+					console.log(res);
+				})
+			},
 			// 获取设备清单
 			getOrderList() {
 				this.$u.api.getOrderSaleDevices({
@@ -124,6 +121,13 @@
 						})
 					} else this.$u.toast(res.message)
 					console.log(res)
+				})
+			},
+			// 设备出库
+			toDevicedistribute(id) {
+				this.$u.route('pages/order/distribute/devicedistribute', {
+					order: this.optionId,
+					device: id
 				})
 			},
 			// 上拉加载

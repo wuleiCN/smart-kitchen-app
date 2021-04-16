@@ -1,31 +1,30 @@
 <template>
 	<view class="content">
 		<u-navbar :is-back="true" title="设备出库" :title-width="300" />
-		<view class="scan u-flex u-row-around">
-			<view class="describe u-flex-col">
-				<text>扫码设备条码/二维码</text>
-				<text>或输入设备编号</text>
+		<view class="card scan">
+			<view class="circle">
+				<u-image src="@/static/order/scan_B.png" width="78" height="78" />
 			</view>
-			<u-image width="180rpx" height="180rpx" src="/static/tabbar/Scanning-code.png" shape="circle" @click="scan">
-			</u-image>
+			<view class="text">
+				扫码设备条码/二维码
+			</view>
 		</view>
-		<view class="code u-flex">
-			<text>设备编码：</text>
-			<u-input v-model="scanCode" type="text" />
-			<u-button type="success" size="medium" @click="distributeByCode">确定</u-button>
+		<view class="codeCard">
+			<view class="card code" v-if="show">
+				<view class="circle" @click="show = false">
+					<u-image src="@/static/order/Nub.png" width="78" height="78" />
+				</view>
+				<view class="text">
+					输入设备编号
+				</view>
+			</view>
+			<view class="card code" v-else>
+				<view class="codeInput">
+					<u-input v-model="codeValue" placeholder="请输入设备编码" border border-color="#FC7930" />
+					<u-button class="submit_ck" @click="toDeviceDelivery">更新</u-button>
+				</view>
+			</view>
 		</view>
-		<view class="section u-flex">
-			<span class="line" />
-			<span class="_title u-flex">出库设备</span>
-		</view>
-		<view class="info u-flex-col">
-			<span><strong>设备型号：</strong>{{device.model}}</span>
-			<span><strong>设备类别：</strong></span>
-			<span><strong>设备编码：</strong></span>
-			<span><strong>设备状态：</strong></span>
-		</view>
-		<u-modal v-model="show" :content="content" @confirm="define" />
-		<u-modal v-model="distributeShow" :content="distributeContent" show-cancel-button @confirm="distributed" />
 		<Modal />
 	</view>
 </template>
@@ -40,51 +39,29 @@
 		data() {
 			return {
 				optionId: '',
+				deviceId: '',
 				scanCode: '',
-				device: {
-					model: ''
-				},
-				show: false,
+				show: true,
+				codeValue: '',
 				content: '',
-				distributeShow: false,
-				distributeContent: '确定要出库吗？',
 				Code: ''
 			}
 		},
 		onLoad(option) {
-			this.optionId = option.id
+			this.optionId = option.order
+			this.deviceId = option.device
 		},
 		methods: {
-			// 编码出库
-			distributeByCode() {
-				if (this.scanCode.length === 0) {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入设备编码!'
-					})
-					return;
+			toDeviceDelivery() {
+				if (this.codeValue === '') {
+					this.$u.toast('请输入设备编码')
+					return false
 				}
-
-				this.$u.api.orderSaleDeviceDistributeByCode({
-					order: this.optionId,
-					code: this.scanCode
-				}).then(res => {
-					if (res.success === true) {
-						this.show = true
-						this.content = '设备出库成功！'
-					} else {
-						this.show = true
-						this.content = '设备出库失败！' + res.message
-					}
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '出现错误！'
-					})
+				this.$u.route('pages/order/distribute/deviceDelivery', {
+					id: this.optionId,
+					device: this.deviceId
 				})
-			},
-			define() {
-				this.content = ''
+				console.log(this.codeValue);
 			},
 			// 扫码出库
 			async scan() {
@@ -121,28 +98,6 @@
 					}
 				});
 			},
-			distributed() {
-				this.$u.api.orderSaleDeviceDistribute({
-					code: this.Code
-				}).then(res => {
-					if (res.success !== 'false') {
-						uni.showToast({
-							title: '出库成功！'
-						})
-					} else {
-						uni.showToast({
-							icon: 'none',
-							title: '出库失败！'
-						})
-					}
-					console.log(res)
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '出库失败！'
-					})
-				})
-			},
 			// 相机权限
 			async checkPermission(code) {
 				let status = permision.isIOS ? await permision.requestIOS('camera') :
@@ -168,74 +123,68 @@
 </script>
 
 <style scoped lang="scss">
-	.scan {
-		width: 100%;
-		height: 240rpx;
+	.card {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 702rpx;
+		height: 395rpx;
+		margin-left: 50%;
+		transform: translateX(-50%);
 		background: #FFFFFF;
+		border-radius: 20rpx;
 
-		.describe {
-			text:nth-child(1) {
-				font-size: 36rpx;
-				font-weight: 600;
-				display: block;
-				margin-bottom: 5rpx;
-				color: #666666;
+		.circle {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 204rpx;
+			height: 204rpx;
+			background: #FFFFFF;
+			box-shadow: 0px 4rpx 35rpx 0rpx rgba(252, 121, 48, 0.23);
+			border-radius: 50%;
+		}
+
+		.text {
+			width: 313rpx;
+			height: 66rpx;
+			line-height: 66rpx;
+			margin-top: 43rpx;
+			text-align: center;
+			font-size: 32rpx;
+			font-family: Source Han Sans CN;
+			font-weight: 600;
+			color: #000000;
+		}
+
+		.codeInput {
+			display: flex;
+
+			.u-input {
+				width: 400rpx;
+				height: 68rpx;
+				background: #F5F5F5;
+				border-radius: 10rpx;
 			}
 
-			text:nth-child(2) {
-				color: $u-tips-color;
-				font-size: 30rpx;
+			.u-btn {
+				color: #FFFFFF;
+				width: 148rpx;
+				height: 68rpx;
+				padding: 0;
+				margin-left: 20rpx;
+				background: #FC7930;
+				border-radius: 10rpx;
 			}
 		}
+	}
+
+	.scan {
+		margin-top: 116rpx;
 	}
 
 	.code {
-		width: 100%;
-		height: 80rpx;
-		background: #ffffff;
-		padding: 0 30rpx;
-		border-top: 1rpx solid #eeeeee;
-		border-buttom: 1rpx solid #eeeeee;
-
-		text {
-			font-size: 30rpx;
-			color: #666666;
-		}
-
-		::v-deep .u-btn {
-			width: 116rpx;
-		}
-	}
-
-	.section {
-		z-index: 9;
-		position: sticky;
-		width: 100%;
-		height: 80rpx;
-		background: #FFFFFF;
-		border-bottom: 1px solid #f3f3f3;
-		box-shadow: 6rpx 1rpx 6rpx rgba(0, 0, 0, 0.1);
-
-		._title {
-			height: 80rpx;
-			margin-left: 20rpx;
-		}
-
-		.line {
-			height: 30rpx;
-			border-radius: 30%;
-			border: 5rpx solid #0081ff;
-			margin-left: 5%;
-		}
-	}
-
-	.info {
-		height: 260rpx;
-		background: #FFFFFF;
-		padding: 30rpx;
-
-		span {
-			padding-bottom: 10rpx;
-		}
+		margin-top: 24rpx;
 	}
 </style>

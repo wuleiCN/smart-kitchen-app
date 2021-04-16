@@ -6,7 +6,7 @@
 			<span class="_title u-flex">销售信息</span>
 		</view>
 		<view class="info u-flex-col" v-if="order != null">
-			<span>客户单位：{{order.customerName}}</span>
+			<span>客户单位：{{customerName}}</span>
 			<span>联系人：{{order.Contact}}</span>
 			<span>联系电话：{{order.Phone}}</span>
 			<span>收货地址：{{order.Address}}</span>
@@ -56,6 +56,7 @@
 					}
 				}],
 				order: {},
+				customerName: '',
 				content: '确定立刻派单出库吗？',
 				list: [],
 				deviceTypeList: uni.getStorageSync('DeviceType'),
@@ -73,7 +74,7 @@
 						id: res.data.Customer
 					}).then(v => {
 						console.log(v);
-						this.order.customerName = v.data.Name
+						this.customerName = v.data.Name
 					})
 				}
 				else this.$u.toast('数据加载失败!')
@@ -142,7 +143,7 @@
 			},
 			// 派单
 			dispatch() {
-				this.$u.api.acceptSaleOrder({
+				this.$u.api.saleOrderFinish({
 					id: this.optionId
 				}).then(res => {
 					if (res.success) {

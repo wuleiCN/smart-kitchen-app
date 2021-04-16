@@ -346,6 +346,16 @@
 			}
 		},
 		{
+			"path": "pages/order/distribute/deviceDelivery",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/order/install/list",
 			"style": {
 				"app-plus": {

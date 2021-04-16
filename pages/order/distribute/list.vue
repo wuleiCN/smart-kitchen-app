@@ -24,7 +24,7 @@
 				</view>
 				<view class="cust_oper">
 					<button class="btn_send btn" @click.stop="toProduct(item.Id)">接单</button>
-					<button class="btn_deli btn" @click.stop="sendToDistribute(item.Id)">退单</button>
+					<button class="btn_deli btn" @click.stop="refuseSale(item.Id)">退单</button>
 				</view>
 			</view>
 			<view class="text-area" v-for="(item,index) in orderDeliver" :key="index+'-only'">
@@ -38,14 +38,19 @@
 					<view>创建时间：{{item.CreatedOn}}</view>
 				</view>
 				<view class="cust_oper">
-					<button v-if="item.Status === 4" class="btn_list btn" @click.stop="toSaledevices(item.Id)">派单出库</button>
+					<button v-if="item.Status === 4" class="btn_list btn"
+						@click.stop="toSaledevices(item.Id)">派单出库</button>
 				</view>
 			</view>
 			<u-empty mode="list" v-if="!orderList.length || !orderDeliver.length" />
 		</view>
 		<u-empty mode="search" v-if="dataListShow" />
 		<u-modal v-model="distributeShow" content="确定要接单出库吗？" show-cancel-button @confirm="distribute" />
-		<u-modal v-model="deleteShow" content="确定要删除订单吗？" show-cancel-button @confirm="deleteOrderBute" />
+		<u-modal v-model="refuseShow" title="退单原因" show-cancel-button @confirm="refuseOrderBute">
+			<view class="slot-content">
+				<u-input v-model="commentValue" type="textarea" border />
+			</view>
+		</u-modal>
 		<Modal />
 	</view>
 </template>
@@ -71,9 +76,10 @@
 				orderShow: true,
 				keyword: '',
 				distributeShow: false,
-				deleteShow: false,
+				refuseShow: false,
 				orderId: '',
 				itemId: '',
+				commentValue: '',
 				orderList: [],
 				orderDeliver: [],
 				distributeId: '',
@@ -174,27 +180,33 @@
 			},
 			// 确定出库接单
 			distribute() {
-				this.$u.api.saleOrderFinish({
+				this.$u.api.acceptSaleOrder({
 					id: this.itemId
 				}).then(res => {
-					if (res.success) this.$u.toast('接单成功！')
-					else this.$u.toast(res.message)
+					if (res.success) {
+						this.getOrderSaleList();
+						this.getOrderDeliveringList();
+						this.$u.toast('接单成功！')
+					} else this.$u.toast(res.message)
 					console.log(res)
 				})
 			},
-			// 删除订单
-			deleteOrder(id) {
-				this.deleteShow = true
+			// 退单
+			refuseSale(id) {
+				this.refuseShow = true
 				this.orderId = id
 			},
-			// 确定删除订单
-			deleteOrderBute() {
-				this.$u.api.destroySaleOrder({
-					id: this.orderId
+			// 确定退单
+			refuseOrderBute() {
+				this.$u.api.refuseSaleOrder({
+					Order: this.orderId,
+					Comment: (this.commentValue || '无')
 				}).then(res => {
-					if (res.success) this.$u.toast('删除成功！')
-					else this.$u.toast(res.message)
-					this.getOrderSaleList()
+					if (res.success) {
+						this.getOrderSaleList();
+						this.getOrderDeliveringList();
+						this.$u.toast('退单成功！')
+					} else this.$u.toast(res.message)
 				})
 			}
 		}
@@ -238,13 +250,13 @@
 					color: #FC7930;
 					width: 116rpx;
 				}
-				
+
 				.btn_list {
 					background: rgba(54, 182, 177, .2);
 					color: #36B6B1;
 					width: 116rpx;
 				}
-				
+
 				.btn_deli {
 					background: rgba(252, 48, 48, .2);
 					color: #FC3030;
@@ -313,6 +325,11 @@
 				// &:nth-child(1) {
 				// 	border-bottom: 1px solid #F5F5F5;
 				// }
+			}
+		}
+		.u-model {
+			.u-input {
+				margin: 30rpx;
 			}
 		}
 	}
