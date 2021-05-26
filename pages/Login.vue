@@ -149,7 +149,7 @@
 						console.log(info)
 						if (info !== undefined) {
 							uni.setStorageSync('userInfo', info.data)
-							this.getDictionary()
+							// this.getDictionary()
 							uni.switchTab({
 								url: '/pages/index/index'
 							});
@@ -206,7 +206,7 @@
 					console.log(res);
 				}).catch(err => {})
 				// 设备状态
-				this.$u.api.getDevicestatus().then(res => {
+				this.$u.api.getDevicetatus().then(res => {
 					if (res.success) uni.setStorageSync('DeviceStatus', res.data)
 					console.log(res);
 				}).catch(err => {})

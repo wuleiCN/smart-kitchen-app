@@ -38,13 +38,13 @@
 					<view>创建时间：{{item.CreatedOn}}</view>
 				</view>
 				<view class="cust_oper">
-					<button v-if="item.Status === 4" class="btn_list btn"
+					<button v-if="item.Status === 4 || item.Status === 6" class="btn_list btn"
 						@click.stop="toSaledevices(item.Id)">派单出库</button>
 				</view>
 			</view>
-			<u-empty mode="list" v-if="!orderList.length || !orderDeliver.length" />
+			<u-empty mode="list" v-if="!(orderList.length || orderDeliver.length)" margin-top="40" />
 		</view>
-		<u-empty mode="search" v-if="dataListShow" />
+		<u-empty mode="search" v-if="dataListShow" margin-top="40" />
 		<u-modal v-model="distributeShow" content="确定要接单出库吗？" show-cancel-button @confirm="distribute" />
 		<u-modal v-model="refuseShow" title="退单原因" show-cancel-button @confirm="refuseOrderBute">
 			<view class="slot-content">
@@ -83,15 +83,16 @@
 				orderList: [],
 				orderDeliver: [],
 				distributeId: '',
-				companyList: uni.getStorageSync('GetCompanyList')
+				companyList: []
 			}
 		},
 		onShow() {
+			this.$u.dictionary.getCompanyListFc().then(res => this.companyList = res)
 			this.getOrderSaleList();
 			this.getOrderDeliveringList();
 		},
 		mounted() {
-			console.log(this.warning, this.vuex_tabbar)
+			console.log(this.warning)
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {
@@ -219,7 +220,7 @@
 
 		.text-area {
 			width: 702rpx;
-			height: 320rpx;
+			height: 340rpx;
 			background: #FFFFFF;
 			border: 1rpx solid #FFFFFF;
 			border-radius: 20rpx;

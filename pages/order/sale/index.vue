@@ -75,11 +75,12 @@
 				orderId: '',
 				orderList: [],
 				distributeId: '',
-				companyList: uni.getStorageSync('GetCompanyList')
+				companyList: []
 			}
 		},
 		onShow() {
 			this.operShow = false;
+			this.$u.dictionary.getCompanyListFc().then(res => this.companyList = res)
 			this.getOrderSaleList();
 		},
 		mounted() {

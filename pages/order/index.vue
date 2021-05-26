@@ -6,11 +6,11 @@
 			</view>
 			<view class="order">
 				<view class="left MaintenanceOrder" @click="$u.route('pages/order/distribute/list')" />
-				<view class="right ConstructionOrder" />
+				<view class="right ConstructionOrder" @click="$u.route('pages/order/install/list')" />
 			</view>
 			<view class="order">
-				<view class="left RepairOrder" />
-				<view class="right DeliveryOrder" />
+				<view class="left RepairOrder" @click="$u.route('pages/order/repair/list')" />
+				<view class="right DeliveryOrder" @click="$u.route('pages/order/maintenance/list')" />
 			</view>
 		<Modal />
 	</view>

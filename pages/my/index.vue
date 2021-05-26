@@ -11,30 +11,26 @@
 				</view>
 			</view>
 			<view class="user_updata">
-				<view class="info_ud">
+				<view class="info_ud" @click="updataInfo">
 					更新公司信息
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
-				<view class="info_ud">
+				<view class="info_ud" @click="updataAdder">
 					更新公司地址
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
-				<view class="info_ud">
+				<view class="info_ud" @click="updataGPS">
 					更新公司GPS定位
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
 			</view>
 			<view class="user_updata info_top">
-				<view class="info_ud">
-					修改名称
+				<view class="info_ud" @click="$u.route('pages/my/user')">
+					修改用户信息
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
-				<view class="info_ud">
+				<view class="info_ud" @click="$u.route('pages/my/userPwd')">
 					修改密码
-					<u-icon class="u-font-24" name="arrow-right" />
-				</view>
-				<view class="info_ud">
-					修改电话
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
 			</view>
@@ -66,20 +62,26 @@
 	export default {
 		data() {
 			return {
-				user: '',
+				user: uni.getStorageSync('userInfo'),
 				sign: false,
 				log: false
 			}
 		},
 		onShow() {
-			this.user = uni.getStorageSync('userInfo')
+			console.log(this.user);
 		},
 		computed: {
 			...mapState(["vuex_tabbar"])
 		},
 		methods: {
-			setting() {
+			updataInfo() {
 				console.log('set')
+			},
+			updataAdder() {
+				console.log('1');
+			},
+			updataGPS() {
+				console.log('2');
 			},
 			signOut() {
 				this.sign = true
@@ -134,11 +136,12 @@
 		}
 	}
 	.info_top {
+		height: 150rpx;
 		top: 561rpx !important;
 	}
 	.info_top_b {
 		height: 150rpx;
-		top: 825rpx !important;
+		top: 736rpx !important;
 	}
 	.outLogin {
 		position: absolute;
@@ -151,7 +154,7 @@
 		border: 0;
 		background: #FFFFFF;
 		border-radius: 30rpx;
-		top: 990rpx;
+		top: 940rpx;
 		left: 50%;
 		transform: translateX(-50%);
 		&::after {
@@ -159,6 +162,6 @@
 		}
 	}
 	.log {
-		top: 1098rpx;
+		top: 1060rpx;
 	}
 </style>

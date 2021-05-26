@@ -40,8 +40,8 @@
 					<button class="btn" @click.stop="toCustomerInfo(item.Id)">更新</button>
 				</view>
 				<view class="cust_centent">
-					<view>公司法人：{{item.MasterId}}</view>
-					<view>公司系统管理员姓名：{{item.AdminId}}</view>
+					<view>公司法人：{{item.Master}}</view>
+					<view>公司系统管理员姓名：{{item.Admin}}</view>
 					<view>公司系统管理员联系电话：{{item.AdminPhone}}</view>
 				</view>
 			</view>

@@ -215,6 +215,7 @@
 		},
 		methods: {
 			submit() {
+				console.log('submit');
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						this.$u.api.updataCustomer(this.form).then(res => {

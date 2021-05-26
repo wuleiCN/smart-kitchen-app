@@ -176,6 +176,36 @@
 			}
 		},
 		{
+			"path": "pages/my/user",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/my/company",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/my/userPwd",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/message/New",
 			"style": {
 				"app-plus": {
@@ -196,17 +226,7 @@
 			}
 		},
 		{
-			"path": "pages/device/Device",
-			"style": {
-				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
-					"animationType": "slide-in-right"
-				}
-			}
-		},
-		{
-			"path": "pages/device/Device",
+			"path": "pages/device/index",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
@@ -226,7 +246,77 @@
 			}
 		},
 		{
-			"path": "pages/device/Warehousing",
+			"path": "pages/device/deviceScan",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataAlarm",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataDtu",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataFire",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataGas",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataGateway",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataIpc",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/device/updataDevice/updataNvr",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
@@ -377,6 +467,36 @@
 		},
 		{
 			"path": "pages/order/install/install",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/install/deviceDelivery",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/repair/list",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/order/maintenance/list",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",

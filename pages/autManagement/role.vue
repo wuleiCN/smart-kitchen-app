@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="客户注册" :title-width="300" title-color="#000000" :title-size="36" />
+		<u-navbar :is-back="true" title="角色注册" :title-width="300" title-color="#000000" :title-size="36" />
 		<u-form :model="form" ref="uForm">
 			<view class="info">
 				<u-form-item label="角色信息" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="goodsType">
@@ -33,7 +33,7 @@
 					Code: '',
 					Name: '',
 				},
-				companyList: uni.getStorageSync('GetCompanyList'),
+				// companyList: uni.getStorageSync('GetCompanyList'),
 				selectList: [],
 				rules: {
 					goodsType:[{
@@ -90,8 +90,14 @@
 			// 选择公司回调
 			companyListCK() {
 				this.selectList = []
-				this.companyList.map(v => {
-					this.selectList.push({value:v.Id, label:v.Name})
+				// this.companyList.map(v => {
+				// 	this.selectList.push({value:v.Id, label:v.Name})
+				// })
+				this.$u.dictionary.getCompanyListFc().then(res => {
+					res.map(v => {
+						this.selectList.push({value:v.Id, label:v.Name})
+					})
+					console.log('===>dis',res);
 				})
 				this.selectShow = true
 				console.log(this.selectList);

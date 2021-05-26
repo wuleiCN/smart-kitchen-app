@@ -18,11 +18,11 @@
 		</view>
 		<scroll-view class="product" show-scrollbar scroll-top="0" :scroll-y="true" :lower-threshold="5"
 			@scrolltolower="toLowFun">
-			<view class="item u-border-bottom" v-for="(item, index) in list" @click="toDevicedistribute(item.Id)">
+			<view class="item u-border-bottom" v-for="(item, index) in list" @click="toDevicedistribute(item.ModelId,item.Delivered,item.Count)">
 				<image mode="aspectFill" src="../../../static/devices/production.png" />
 				<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 				<view class="title-wrap">
-					<text>设备型号：{{ item.modelName }}</text>
+					<text>设备型号：{{ item.Model }}</text>
 					<text class="u-line-2">设备类别：{{ item.DeviceType }}</text>
 					<text>设备数量：{{item.Delivered}}/{{item.Count}}</text>
 				</view>
@@ -49,20 +49,24 @@
 				customerName: '',
 				content: '确定立刻派单出库吗？',
 				list: [],
-				deviceTypeList: uni.getStorageSync('DeviceType'),
-				modelList: uni.getStorageSync('DevicesMdole')
+				deviceTypeList: []
 			}
 		},
 		onLoad(option) {
 			this.optionId = option.Id
 			console.log(option)
 		},
-		mounted() {
+		onShow() {
+			this.getDeviceType()
 			this.getOrderInfo()
 			this.getOrderList()
 		},
 		watch: {},
 		methods: {
+			async getDeviceType() {
+				const res = await this.$u.dictionary.getDeviceTypeFc()
+				this.deviceTypeList = res
+			},
 			// 获取订单信息
 			getOrderInfo() {
 				this.$u.api.getOrderInfo({
@@ -87,17 +91,9 @@
 				}).then(res => {
 					if (!res.success) this.$u.toast('获取清单列表失败！')
 					else {
-						res.data.map(v => {
-							this.modelList.forEach(i => {
-								if (v.Model === i.Id) {
-									v.modelName = i.Name
-									v.type = i.Type
-								}
-							})
-						})
 						this.list = res.data
 						this.list.map(v => {
-							v.DeviceType = this.deviceTypeList.find(i => v.type === i.value).name
+							v.DeviceType = this.deviceTypeList.find(i => v.Type === i.value).name
 						})
 					}
 					console.log(this.list, this.deviceTypeList)
@@ -105,30 +101,39 @@
 					console.log(err)
 				})
 			},
-			// 获取指定客户信息
+			// 出库回单
 			dispatchOrder() {
-				this.dispatchShow = true
+				this.$u.api.canSaleDelivery({
+					order: this.optionId
+				}).then(res => {
+					if (res.data.Can) this.dispatchShow = true
+					else this.$u.toast('设备尚未出库完成')
+				})
 			},
 			// 派单
 			dispatch() {
-				this.$u.api.acceptSaleOrder({
+				this.$u.api.acceptSaleDelivery({
 					id: this.optionId
 				}).then(res => {
 					if (res.success) {
-						this.$u.toast('派单成功！')
-						this.$u.route({
-							type: 'navigateBack'
-						})
+						this.$u.toast('出库回单成功！')
+						setTimeout(() => {
+							this.$u.route({
+								type: 'navigateBack'
+							})
+						}, 300)
 					} else this.$u.toast(res.message)
 					console.log(res)
 				})
 			},
 			// 设备出库
-			toDevicedistribute(id) {
-				this.$u.route('pages/order/distribute/devicedistribute', {
-					order: this.optionId,
-					device: id
-				})
+			toDevicedistribute(id, d, c) {
+				if (d !== c) {
+					this.$u.route('pages/order/distribute/devicedistribute', {
+						order: this.optionId,
+						model: id
+					})
+				} else this.$u.toast('已出库,请选择未出库的设备！')
 			},
 			// 上拉加载
 			toLowFun() {

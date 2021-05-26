@@ -5,7 +5,7 @@
 			<view class="info">
 				<u-form-item label="角色信息" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="goodsType">
 					<u-input type="select" input-align="right" :select-open="selectShow" v-model="form.goodsType"
-						placeholder="请选择所属组织/公司" @click="companyListCK" />
+						placeholder="请选择所属组织/公司" @click="selectShow = true" />
 				</u-form-item>
 				<u-form-item label="角色代码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Code">
 					<u-input v-model="form.Code" input-align="right" placeholder="请输入角色代码" />
@@ -18,7 +18,8 @@
 		<view class="submit_vw">
 			<button class="submit_ck" @click="submit">更新</button>
 		</view>
-		<u-select mode="single-column" :list="selectList" v-model="selectShow" @confirm="selectConfirm" />
+		<u-select mode="single-column" :list="selectList" v-model="selectShow" value-name="Id" label-name="Name"
+			@confirm="selectConfirm" />
 		<u-modal v-model="show" content="更新成功!" @confirm="confirm" />
 	</view>
 </template>
@@ -36,20 +37,20 @@
 				},
 				optionId: null,
 				show: false,
-				companyList: uni.getStorageSync('GetCompanyList'),
+				companyList: [],
 				selectList: [],
 				rules: {
-					goodsType:[{
+					goodsType: [{
 						required: true,
 						message: '请输入角色信息',
 						trigger: ['change', 'blur']
 					}],
-					Code:[{
+					Code: [{
 						required: true,
 						message: '请输入角色代码',
 						trigger: ['change', 'blur']
 					}],
-					Name:[{
+					Name: [{
 						required: true,
 						message: '请输入角色名字',
 						trigger: ['change', 'blur']
@@ -61,16 +62,20 @@
 		},
 		onLoad(e) {
 			this.optionId = e.Id
-			this.$u.api.getRoleFind({Id: e.id}).then(res => {
+			let p1 = this.$u.dictionary.getCompanyListFc().then(res => this.companyList = res)
+			let p2 = this.$u.api.getRoleFind({
+				Id: e.id
+			}).then(res => {
 				if (res.success) {
 					this.form.Code = res.data.Code
 					this.form.Name = res.data.Name
 					this.form.Id = res.data.Id
-					this.form.goodsType = this.companyList.find(v => v.Id == res.data.OrgId).Name	
+					this.form.goodsType = this.companyList.find(v => v.Id == res.data.OrgId).Name
 				}
 				console.log(res, this.form);
-			}).catch(err => {
-				console.log(err);
+			})
+			Promise.all([p1, p2]).then(res => {
+				console.log('===>ok', res);
 			})
 			console.log(this.companyList);
 		},
@@ -97,15 +102,6 @@
 						console.log('验证失败');
 					}
 				});
-			},
-			// 选择公司回调
-			companyListCK() {
-				this.selectList = []
-				this.companyList.map(v => {
-					this.selectList.push({value:v.Id, label:v.Name})
-				})
-				this.selectShow = true
-				console.log(this.selectList);
 			},
 			selectConfirm(e) {
 				this.form.goodsType = '';
@@ -148,6 +144,7 @@
 					text-align: right;
 				}
 			}
+
 			.u-form-item__message {
 				text-align: end;
 				margin: 0 12px 6px 0;

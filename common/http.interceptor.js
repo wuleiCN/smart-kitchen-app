@@ -1,3 +1,4 @@
+import {generateReqKey,addPendingRequest,removePendingRequest} from "@/common/cancelToken.js"
 const install = (Vue, vm) => {
 	Vue.prototype.$u.http.setConfig({
 		baseUrl: 'http://175.6.77.126:9001',
@@ -6,6 +7,7 @@ const install = (Vue, vm) => {
 		originalData: true,
 		loadingText: '努力加载中~',
 		loadingTime: 800,
+		loadingMask: true,
 		// 设置自定义头部content-type
 		header: {
 			'content-type': 'application/json;charset=UTF-8'
@@ -17,14 +19,16 @@ const install = (Vue, vm) => {
 		config.header.Token = uni.getStorageSync('token');
 		config.header['Access-Control-Allow-Origin'] = 'http://127.0.0.1:8080';
 		if (config.url == '/login') config.header.noToken = true;
+		 removePendingRequest(config);
+		 addPendingRequest(config);
+		 // console.log(config);
 		return config;
 	}
 	// 响应拦截，判断状态码是否通过
 	Vue.prototype.$u.http.interceptor.response = (res) => {
-		// 如果把originalData设置为了true，这里得到将会是服务器返回的所有的原始数据
-		// 判断可能变成了res.statueCode，或者res.data.code之类的，请打印查看结果
+		// console.log('==>res',res);
+		// removePendingRequest(res.config)
 		if (res.statusCode == 200) {
-			// 如果把originalData设置为了true，这里return回什么，this.$u.post的then回调中就会得到什么
 			return res.data;
 		} else if (res.statusCode == 401) {
 			vm.$u.toast(res.data.Message)

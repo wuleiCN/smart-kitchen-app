@@ -195,7 +195,7 @@
 				this.delId = id
 			},
 			signHandleUser() {
-				this.$u.destroyCustomer({Id: this.delId}).then(res => {
+				this.$u.api.destroyCustomer({id: this.delId}).then(res => {
 					if (res.success) {
 						this.$u.toast('删除成功！');
 						this.getCurrentUserList();

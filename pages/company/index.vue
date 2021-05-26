@@ -11,22 +11,22 @@
 			</view>
 			<view class="info_card">
 				<view class="info">信息展板</view>
-				<scroll-view class="scroll-view" :scroll-x="true">
-					<view class="scroll-view-item" v-for="(v, i) in 5" :key="i">
+				<scroll-view class="scroll-view" :scroll-x="alarmUnread.length ? true : false">
+					<view class="scroll-view-item" v-for="(v, i) in alarmUnread" :key="i">
 						<view class="info_block">
 							<u-image src="/static/icon/Text01.png" />
 							<view class="info_box">
 								<view class="info_header">
-									我是信息标题{{v}}
+									{{v.Content}}
 								</view>
 								<view class="info_center">
-									{{i}}我是内容我是内容我是内容我是内容我是内容我是内容
+									处理：{{v.ProcessMessage}}
 								</view>
 							</view>
 						</view>
 						<view class="info_ck">
-							<button class="see_btn">查看</button>
-							<span>发布时间：2021-03-22</span>
+							<button class="see_btn" @click="toMessage(v.Id)">查看</button>
+							<span>发布时间：{{v.HappendOn}}</span>
 						</view>
 					</view>
 				</scroll-view>
@@ -93,6 +93,7 @@
 		mapState
 	} from "vuex"
 	import Modal from "../components/modal.vue"
+	// import { getAlarmtype } from "../../common/dictionary.js"
 	export default {
 		components: {
 			Modal
@@ -101,6 +102,7 @@
 			return {
 				title: '通知公告',
 				warning: [],
+				alarmUnread: [],
 				list: [
 					'/static/banners/banner1.jpg',
 					'/static/banners/banner2.jpg',
@@ -113,15 +115,17 @@
 					},
 					xAxis: {
 						type: 'category',
-						data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+						data: []
 					},
 					yAxis: {
+						name: '数量(次)',
+						minInterval: 1,
 						type: 'value'
 					},
 					series: [{
 						name: '报警统计',
 						type: 'bar',
-						data: [120, 200, 150, 80, 70, 110, 130],
+						data: [],
 						showBackground: true,
 						backgroundStyle: {
 							color: 'rgba(180, 180, 180, 0.2)'
@@ -144,18 +148,36 @@
 						url: 'pages/order/index'
 					},
 					{
-						text: '日志管理',
-						src: '../../static/icon/Log.png'
+						text: '设备管理',
+						src: '../../static/icon/Device.png',
+						url: 'pages/device/Detail'
 					},
 					{
-						text: '设备管理',
-						src: '../../static/icon/Device.png'
-					},
+						text: '日志管理',
+						src: '../../static/icon/Log.png'
+					}
 				]
 			}
 		},
+		created() {
+			this.getAlarmUnreadAll()
+			console.log('===>',this.alarmUnread);
+		},
 		mounted() {
-			// console.log(this.warning, this.vuex_tabbar)
+			// if (this.alarmUnread.length !== 0) {
+			// 	this.$u.dictionary.getAlarmtypeFn().then(res => {
+			// 		res.map((v,i) => {
+			// 			this.option.xAxis.data.push(v.name)
+			// 			this.alarmUnread.forEach( e => {
+			// 				if (v.value === e.AlarmType) {
+			// 					this.series[0].data[i] || (this.series[0].data[i] = 0);
+			// 					this.series[0].data[i]++;
+			// 				}
+			// 			})
+			// 		})
+			// 		console.log(res, this.alarmUnread);
+			// 	} )
+			// }
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {
@@ -169,6 +191,35 @@
 			...mapState(["vuex_tabbar"])
 		},
 		methods: {
+			// 获得当前用户未读取报警消息
+			async getAlarmUnreadAll() {
+				const res = await this.$u.api.alarmUnreadAll()
+				if (res.success) {
+					res.data.map(v => {
+						v.HappendOn = v.HappendOn.slice(0,10)
+					})
+					this.alarmUnread = res.data
+				}
+				if (this.alarmUnread.length !== 0) {
+					this.$u.dictionary.getAlarmtypeFn().then(res => {
+						res.map((v,i) => {
+							this.option.xAxis.data.push(v.name)
+							this.alarmUnread.forEach( e => {
+								if (v.value === e.AlarmType) {
+									this.option.series[0].data[i] || (this.option.series[0].data[i] = 0);
+									this.option.series[0].data[i]++;
+								}
+							})
+						})
+						console.log(res, this.alarmUnread);
+					} )
+				}
+				console.log(res);
+			},
+			// 消息详情
+			toMessage(id) {
+				console.log(id);
+			},
 			onViewClick(options) {
 				console.log(options)
 			}

@@ -51,7 +51,7 @@
 				deviceCount: null,
 				list: [],
 				orderList: [],
-				DeviceType: uni.getStorageSync('DeviceType')
+				DeviceType: []
 			}
 		},
 		onLoad(option) {
@@ -63,6 +63,11 @@
 			this.getSalingDevicesList()
 		},
 		methods: {
+			// 获取字典
+			async getDeviceType() {
+				const res = await this.$u.dictionary.getDeviceTypeFc()
+				this.DeviceType = res
+			},
 			// 获取销售设备列表
 			getSalingDevicesList() {
 				this.$u.api.getModelSaleList({

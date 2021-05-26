@@ -59,8 +59,8 @@
 				customerName: '',
 				content: '确定立刻派单出库吗？',
 				list: [],
-				deviceTypeList: uni.getStorageSync('DeviceType'),
-				modelList: uni.getStorageSync('DevicesMdole')
+				deviceTypeList: [],
+				modelList: []
 			}
 		},
 		onLoad(option) {
@@ -80,11 +80,19 @@
 				else this.$u.toast('数据加载失败!')
 				console.log(res);
 			})
+			this.getDeviceType()
 			this.getOrderList()
 			console.log(option)
 		},
 		watch: {},
 		methods: {
+			// 获取字典
+			async getDeviceType() {
+				const res = await this.$u.dictionary.getDeviceTypeFc()
+				const data = await this.$u.dictionary.getDevicesMdoleFc()
+				this.DeviceType = res
+				this.modelList = data
+			},
 			open(index) {
 				this.list[index].show = true;
 				this.list.map((val, idx) => {

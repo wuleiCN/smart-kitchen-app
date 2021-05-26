@@ -4,6 +4,8 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "axios": "^0.21.1",
+    "min-qs": "^1.4.0",
     "mqtt": "^3.0.0"
   },
   "devDependencies": {},

@@ -1,203 +1,339 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="施工工单" :title-width="300" />
-		<scroll-view class="product u-col-line" show-scrollbar :scroll-y="true" :lower-threshold="5"
-			@scrolltolower="toLowFun">
-			<view class="order u-border-bottom" v-for="(item,index) in list" :key="index">
-				<view class="customer">
-					<span><strong>客户名称：</strong>{{item.CustomerName}}</span>
-					<span><strong>销售时间：</strong>{{item.CreatedOn}}</span>
-					<span><strong>派单人：</strong>{{ModiName}}</span>
-				</view>
-				<view class="operation">
-					<span>
-						<u-button v-if="item.Status === 14" type="success" plain @click="accept(index)">接单</u-button>
-					</span>
-					<span>
-						<u-button v-if="item.Status === 20" type="success" plain @click="toProduct(item.Id)">施工
-						</u-button>
-					</span>
-					<span>
-						<u-button v-if="item.Status === 20" type="warning" plain ripple @click="finish(index)">回单
-						</u-button>
-					</span>
-					<span>
-						<u-button v-if="item.Status === 20" type="error" plain ripple>退单</u-button>
-					</span>
-					<span>
-						<u-button plain @click="toOrderDetail(item)">详情</u-button>
-					</span>
+		<u-navbar :is-back="back" :title="title" title-color="#000000" :title-size="36">
+			<view class="slot-wrap" :class="{slotSearch: solt}">
+				<slot name="right" v-if="icon">
+					<u-icon name="search" @click="searchCK" />
+				</slot>
+				<view class="search-wrap" v-if="search">
+					<u-search v-model="keyword" height="56" :action-style="{color: '#fff'}" :show-action="true"
+						action-text="返回" @blur="searchFn()" @custom="searchBK()" />
 				</view>
 			</view>
-			<u-loadmore :status="status" />
-		</scroll-view>
-		<u-modal v-model="acceptShow" :content="acceptContent" title="提示" show-cancel-button @confirm="accepted">
-		</u-modal>
-		<u-modal v-model="finishShow" :content="finishIdContent" title="提示" show-cancel-button @confirm="finished">
+		</u-navbar>
+		<view v-show="orderShow">
+			<view class="text-area" v-for="(item,index) in orderList" :key="index">
+				<view class="cust_title">
+					{{item.companyName}}
+				</view>
+				<view class="cust_centent">
+					<view>联系人：{{item.Contact}}</view>
+					<view>联系电话：{{item.Phone}}</view>
+					<view>联系地址：{{item.Address}}</view>
+					<view>创建时间：{{item.CreatedOn}}</view>
+				</view>
+				<view class="cust_oper">
+					<button class="btn_send btn" @click.stop="toProduct(item.Id)">接单</button>
+					<button class="btn_deli btn" @click.stop="refuseSale(item.Id)">退单</button>
+				</view>
+			</view>
+			<view class="text-area" v-for="(item,index) in orderDeliver" :key="index+'-only'">
+				<view class="cust_title">
+					{{item.companyName}}
+				</view>
+				<view class="cust_centent">
+					<view>联系人：{{item.Contact}}</view>
+					<view>联系电话：{{item.Phone}}</view>
+					<view>联系地址：{{item.Address}}</view>
+					<view>创建时间：{{item.CreatedOn}}</view>
+				</view>
+				<view class="cust_oper">
+					<button v-if="item.Status === 7" class="btn_list btn"
+						@click.stop="toSaledevices(item.Id)">派单施工</button>
+				</view>
+			</view>
+			<u-empty mode="list" v-if="!(orderList.length || orderDeliver.length)" margin-top="40" />
+		</view>
+		<u-empty mode="search" v-if="dataListShow" margin-top="40" />
+		<u-modal v-model="distributeShow" content="确定要接单吗？" show-cancel-button @confirm="distribute" />
+		<u-modal v-model="refuseShow" title="退单原因" show-cancel-button @confirm="refuseOrderBute">
+			<view class="slot-content">
+				<u-input v-model="commentValue" type="textarea" border />
+			</view>
 		</u-modal>
 		<Modal />
 	</view>
 </template>
 
 <script>
-	import Modal from "@/pages/components/modal.vue"
+	// import {
+	// 	mapState
+	// } from "vuex"
+	import Modal from "../../components/modal.vue"
 	export default {
 		components: {
 			Modal
 		},
 		data() {
 			return {
-				status: 'nomore',
-				acceptShow: false,
-				finishShow: false,
-				acceptContent: '确定要接单吗？',
-				finishIdContent: '确定要回单吗？',
-				list: [],
+				title: '施工定单',
+				warning: [],
+				search: false,
+				icon: true,
+				back: true,
+				solt: false,
+				dataListShow: false,
+				orderShow: true,
+				keyword: '',
+				distributeShow: false,
+				refuseShow: false,
 				orderId: '',
-				_status: '',
-				finishId: '',
-				OrderType: uni.getStorageSync('OrderType'),
-				OrderStatus: uni.getStorageSync('OrderStatus'),
-				Customer: uni.getStorageSync('GetCustomersList'),
-				ModiName: uni.getStorageSync('userInfo').Name
+				itemId: '',
+				commentValue: '',
+				orderList: [],
+				orderDeliver: [],
+				distributeId: '',
+				companyList: []
 			}
 		},
 		onShow() {
-			this.getInstallOrderList()
+			this.$u.dictionary.getCompanyListFc().then(res => this.companyList = res)
+			this.getorderDeliveried();
+			this.getorderInstalling();
+		},
+		mounted() {
+			console.log(this.warning, this.vuex_tabbar)
+		},
+		watch: {
+			'$store.state.vuex_popupShow': {
+				handler() {
+					this.warning = uni.getStorageSync('warnInfo')
+				},
+				immediate: true
+			}
+		},
+		computed: {
+
 		},
 		methods: {
-			// 获得施工工单列表
-			getInstallOrderList() {
-				uni.showLoading({
-					title: '正在加载数据',
-					mask: false
-				});
-				this.$u.api.getInstallOrders().then(res => {
-					uni.hideLoading()
-					res.map(v => {
-						this.OrderType.forEach(i => {
-							if (v.Type === i.value) v.TypeName = i.name
-						})
-						this.OrderStatus.forEach(i => {
-							if (v.Status === i.value) v.StatusName = i.name
-						})
-						this.Customer.forEach(i => {
-							if (v.CustomerId === i.Id) v.CustomerName = i.name
-							else v.CustomerName = '精安科技'
-						})
-					})
-					this.list = res
-					console.log(res)
-				}).catch(err => {
-					uni.hideLoading()
-					uni.showToast({
-						icon: 'none',
-						title: '获取数据失败！'
-					})
-				})
+			// 出库接单
+			toProduct(Id) {
+				this.itemId = Id
+				this.distributeShow = true
 			},
-			accept(index) {
-				this.orderId = this.list[index].Id
-				this._status = this.list[index].Status
-				this.acceptShow = true
-			},
-			accepted() {
-				this.$u.api.installAccept({
-					order: this.orderId
-				}).then(res => {
-					console.log(res)
-					this.Status = 20
-					uni.showToast({
-						title: '接单成功！'
-					})
-					this.getInstallOrderList()
-				}).catch(err => {
-					uni.showToast({
-						icon: 'none',
-						title: '接单失败！'
-					})
-				})
-			},
-			finish(index) {
-				this.finishId = this.list[index].Id
-				this.finishShow = true
-			},
-			finished() {
-				this.$u.api.canInstallFinish({
-					order: this.finishId
-				}).then(res => {
-					console.log(res)
-					if (res.flag === true) {
-						this.$u.api.distributeFinish({
-							order: this.finishId
-						}).then(res => {
-							if (res.success) {
-								uni.showToast({
-									title: '回单成功！'
-								})
-								this.getInstallOrderList()
-							} else {
-								uni.showToast({
-									icon: 'none',
-									title: '回单失败！'
-								})
-							}
-						}).catch(err => {})
-					}
-				}).catch(err => {})
-			},
-			toProduct(id) {
+			// 跳转销售清单
+			toSaledevices(Id) {
 				this.$u.route('pages/order/install/installDevice', {
-					id
+					Id
 				})
 			},
-			toOrderDetail(item) {
-				this.$u.route('pages/order/monitor/order_detail', {
-					item: JSON.stringify(item)
+			searchCK() {
+				this.search = true,
+					this.icon = false,
+					this.back = false,
+					this.solt = true,
+					this.dataListShow = true,
+					this.orderShow = false,
+					this.title = ''
+			},
+			searchBK() {
+				this.search = false,
+					this.icon = true,
+					this.back = true,
+					this.solt = false,
+					this.dataListShow = false,
+					this.orderShow = true,
+					this.title = '客户管理'
+			},
+			// 获得所在已销售提交的销售定单
+			getorderDeliveried() {
+				this.$u.api.getorderDeliveried().then(res => {
+					if (res.success) {
+						this.orderList = res.data
+						this.orderList.map((v, i) => {
+							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+							v.companyName = this.companyList.find(i => v.Company === i.Id).Name
+						})
+						if (!res.data.length) this.orderShow = true
+					} else this.$u.toast(res.message)
+					console.log(res)
 				})
 			},
-			toLowFun() {
-				this.$u.throttle(this.load, 2000)
+			// 获得所在未施工提交的销售定单
+			getorderInstalling() {
+				this.$u.api.getorderInstalling().then(res => {
+					if (res.success) {
+						this.orderDeliver = res.data
+						this.orderDeliver.map((v, i) => {
+							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+							v.companyName = this.companyList.find(i => v.Company === i.Id).Name
+						})
+						if (!res.data.length) this.orderShow = true
+					} else this.$u.toast(res.message)
+					console.log(res)
+				})
 			},
-			load() {
-				this.status = 'loading';
-				setTimeout(() => {
-					this.status = 'nomore';
-				}, 2000)
-				console.log("触底事件");
+			// 获得指定销售订单
+			searchFn() {
+				console.log('===> 搜索');
 			},
+			// 派单施工
+			sendToDistribute(id) {
+				this.distributeId = id
+				this.distributeShow = true
+			},
+			// 确定施工接单
+			distribute() {
+				this.$u.api.acceptSaleInstall({
+					id: this.itemId
+				}).then(res => {
+					if (res.success) {
+						this.getorderDeliveried();
+						this.getorderInstalling();
+						this.$u.toast('接单成功！')
+					} else this.$u.toast(res.message)
+					console.log(res)
+				})
+			},
+			// 退单
+			refuseSale(id) {
+				this.refuseShow = true
+				this.orderId = id
+			},
+			// 确定退单
+			refuseOrderBute() {
+				this.$u.api.refuseSaleInstall({
+					Order: this.orderId,
+					Comment: (this.commentValue || '无')
+				}).then(res => {
+					if (res.success) {
+						this.getorderDeliveried();
+						this.getorderInstalling();
+						this.$u.toast('退单成功！')
+					} else this.$u.toast(res.message)
+				})
+			}
 		}
 	}
 </script>
 
-<style scoped lang="scss">
-	.product {
-		.order {
-			height: 270rpx;
+<style lang="scss" scoped>
+	.content {
+		position: relative;
+
+		.text-area {
+			width: 702rpx;
+			height: 340rpx;
 			background: #FFFFFF;
+			border: 1rpx solid #FFFFFF;
+			border-radius: 20rpx;
+			padding: 24rpx;
+			margin-top: 24rpx;
+			margin-left: 50%;
+			transform: translateX(-50%);
 
-			.customer {
-				display: flex;
-				flex-direction: column;
-				padding: 15px 0 0 15px;
-				justify-content: center;
+			.cust_title {
+				font-weight: 600;
+				height: 39rpx;
+				width: 100%;
 
-				span {
-					margin-bottom: 5px;
-					color: #666666;
-				}
 			}
 
-			.operation {
-				display: flex;
-				justify-content: flex-end;
+			.cust_centent {
+				padding: 23rpx 0;
+				border-top: 1rpx solid #F5F5F5;
+			}
 
-				::v-deep .u-btn {
+			.cust_oper {
+				display: flex;
+				justify-content: start;
+				// align-items: center;
+
+				.btn_send {
+					background: rgba(252, 121, 48, .2);
+					color: #FC7930;
 					width: 116rpx;
-					height: 64rpx;
-					margin-right: 20rpx;
+				}
+
+				.btn_list {
+					background: rgba(54, 182, 177, .2);
+					color: #36B6B1;
+					width: 116rpx;
+				}
+
+				.btn_deli {
+					background: rgba(252, 48, 48, .2);
+					color: #FC3030;
+					width: 68rpx;
+				}
+
+				.btn {
+					width: 116rpx;
+					height: 50rpx;
+					border-radius: 10rpx;
+					font-size: 24rpx;
+					// font-weight: 600;
+					line-height: 50rpx;
+					margin: 0 12rpx 0 0;
+					border: 0;
+					padding: 0;
 				}
 			}
 		}
+
+		.slot-wrap {
+			display: flex;
+			align-items: center;
+
+			.search-wrap {
+				margin: 0 20rpx;
+				flex: 1;
+
+				::v-deep .u-action {
+					background: #f3f3f3;
+					color: #000000 !important;
+					height: 28px;
+					line-height: 28px;
+					border-radius: 5px;
+				}
+			}
+		}
+
+		::v-deep .u-slot-content {
+			justify-content: flex-end;
+			margin-right: 24rpx;
+			font-size: 36rpx;
+
+			.u-icon {
+				padding: 10rpx;
+			}
+		}
+		.slot-content {
+			width: 100%;
+			padding: 30rpx;
+		}
+
+		.operation {
+			position: absolute;
+			width: 200rpx;
+			// height: 156rpx;
+			font-size: 28rpx;
+			background: #FFFFFF;
+			box-shadow: 1rpx 1rpx 6rpx 0rpx rgba(151, 151, 151, 0.27);
+			border-radius: 10rpx;
+			top: 44px;
+			right: 15px;
+
+			.opt_ck {
+				height: 78rpx;
+				color: #000000;
+				text-align: center;
+				line-height: 78rpx;
+
+				// &:nth-child(1) {
+				// 	border-bottom: 1px solid #F5F5F5;
+				// }
+			}
+		}
+		.u-model {
+			.u-input {
+				margin: 30rpx;
+			}
+		}
+	}
+
+	.slotSearch {
+		width: 100% !important;
+		margin-left: 12px;
 	}
 </style>

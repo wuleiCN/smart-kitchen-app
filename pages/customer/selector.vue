@@ -30,19 +30,14 @@
 					backgroundImage: 'linear-gradient(45deg, rgb(28, 117, 200), rgb(21, 178, 163))'
 				},
 				value: '',
-				customers: uni.getStorageSync('GetCustomersList')
+				customers: []
 			}
 		},
 		onLoad() {
-			// this.$u.api.getCustomersList().then(res => {
-			// 	this.customers = res
-			// 	console.log(res)
-			// }).catch(err => {
-			// 	uni.showToast({
-			// 		icon: 'none',
-			// 		title: '获取数据失败！'
-			// 	})
-			// })
+			this.$u.dictionary.getCustomersListFc().then(res => {
+				this.customers = res
+				console.log(res)
+			}).catch(err => this.$u.toast('获取数据失败！'))
 		},
 		methods: {
 			toCreateOrder(data) {
