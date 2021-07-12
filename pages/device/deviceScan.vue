@@ -2,11 +2,11 @@
 	<view class="content">
 		<u-navbar :is-back="true" title="设备出库" :title-width="300" />
 		<view class="type">
-			<u-input v-model="deviceType" :select-open="typeShow" border type="select" placeholder="请填写设备类别"
+			<u-input v-model="deviceType" :select-open="typeShow" border type="select" placeholder="请选择设备类别"
 				@click="typeShow = true" />
 		</view>
 		<view class="type" v-show="model">
-			<u-input v-model="deviceModel" :select-open="modelShow" border type="select" placeholder="请填写设备型号"
+			<u-input v-model="deviceModel" :select-open="modelShow" border type="select" placeholder="请选择设备型号"
 				@click="modelShow = true" />
 		</view>
 		<view class="card">
@@ -21,7 +21,7 @@
 			@confirm="confirmSelected" />
 		<u-select mode="single-column" v-model="modelShow" :list="slectModel" value-name="Id" label-name="Name"
 			@confirm="modelSelected" />
-		<u-modal v-model="show" :content="content" @confirm="confirm" />
+		<u-modal v-model="show" :content="content" :show-cancel-button="true" @confirm="confirm" />
 		<Modal />
 	</view>
 </template>
@@ -111,10 +111,10 @@
 			// 扫码入库
 			scan() {
 				if (this.deviceType === '') {
-					this.$u.toast('请填写设备类别！')
+					this.$u.toast('请选择设备类别！')
 					return false
 				} else if (this.deviceModel === '') {
-					this.$u.toast('请填写设备型号！')
+					this.$u.toast('请选设备型号！')
 					return false
 				}
 				scaned(this.scanPut)

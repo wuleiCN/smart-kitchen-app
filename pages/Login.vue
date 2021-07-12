@@ -193,69 +193,6 @@
 					this.$u.toast('倒计时结束后再发送');
 				}
 			},
-			// sendCode() {
-			// 	this.$u.route('pages/SendSms', {
-			// 		params: JSON.stringify(this.model.iphone)
-			// 	})
-			// },
-			// 数据字典
-			getDictionary() {
-				// 设备类别
-				this.$u.api.getDeviceType().then(res => {
-					if (res.success) uni.setStorageSync('DeviceType', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 设备状态
-				this.$u.api.getDevicetatus().then(res => {
-					if (res.success) uni.setStorageSync('DeviceStatus', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 设备类型
-				this.$u.api.getDevicesMdole().then(res => {
-					if (res.success) uni.setStorageSync('DevicesMdole', res.data)
-					console.log(res);
-				}).catch(() => {})
-				// 摄像机/NVR品牌
-				this.$u.api.getIpcsdk().then(res => {
-					if (res.success) uni.setStorageSync('CameraBrand', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 角色类别
-				this.$u.api.getRoletype().then(res => {
-					if (res.success) uni.setStorageSync('CompanyType', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 角色状态
-				this.$u.api.getRolestatus().then(res => {
-					if (res.success) uni.setStorageSync('CompanyStatus', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 用户类别
-				this.$u.api.getUsertype().then(res => {
-					if (res.success) uni.setStorageSync('EmployeeType', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 用户状态
-				this.$u.api.getUserstatus().then(res => {
-					if (res.success) uni.setStorageSync('CustomerStatus', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 工单类别
-				this.$u.api.getOrderopertype().then(res => {
-					if (res.success) uni.setStorageSync('OrderType', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 工单状态
-				this.$u.api.getOrderstatus().then(res => {
-					if (res.success) uni.setStorageSync('OrderStatus', res.data)
-					console.log(res);
-				}).catch(err => {})
-				// 公司列表
-				this.$u.api.getcompanyAll().then(res => {
-					if (res.success) uni.setStorageSync('GetCompanyList', res.data)
-					console.log(res);
-				}).catch(() => {})
-			}
 		}
 	}
 </script>

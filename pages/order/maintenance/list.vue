@@ -167,13 +167,13 @@
 
 			.cust_title {
 				font-weight: 600;
-				height: 39rpx;
+				height: 48rpx;
 				width: 100%;
 
 			}
 
 			.cust_centent {
-				padding: 23rpx 0;
+				padding: 10rpx 0;
 				border-top: 1rpx solid #F5F5F5;
 			}
 

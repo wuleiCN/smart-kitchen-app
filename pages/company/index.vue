@@ -11,7 +11,8 @@
 			</view>
 			<view class="info_card">
 				<view class="info">信息展板</view>
-				<scroll-view class="scroll-view" :scroll-x="alarmUnread.length ? true : false">
+				<scroll-view class="scroll-view" v-if="alarmUnread.length"
+					:scroll-x="alarmUnread.length ? true : false">
 					<view class="scroll-view-item" v-for="(v, i) in alarmUnread" :key="i">
 						<view class="info_block">
 							<u-image src="/static/icon/Text01.png" />
@@ -32,11 +33,11 @@
 				</scroll-view>
 				<view class="info_block_b">
 					<view style="background-image: url(../../static/background/WaringInfo.png);"
-						class="info_block_b_box" />
-					<view style="background-image: url(../../static/background/Notice.png);"
-						class="info_block_b_box" />
+						class="info_block_b_box" @click="toAlarmUnread" />
+					<view style="background-image: url(../../static/background/Notice.png);" class="info_block_b_box"
+						@click="toNotification" />
 					<view style="background-image: url(../../static/background/MainInfo.png);"
-						class="info_block_b_box" />
+						class="info_block_b_box" @click="toMaintenance" />
 				</view>
 				<view class="info">报表统计</view>
 				<view class="info_block_c">
@@ -46,10 +47,10 @@
 					<!-- #endif -->
 				</view>
 			</view>
-	</view>
-	<u-tabbar :list="vuex_tabbar" bg-color="#ffffff" active-color="#FC7930" inactive-color="#aaaaaa" :mid-button="true"
-		:border-top="false" />
-	<Modal />
+		</view>
+		<u-tabbar :list="vuex_tabbar" bg-color="#ffffff" active-color="#FC7930" inactive-color="#aaaaaa"
+			:mid-button="true" :border-top="false" />
+		<Modal />
 	</view>
 </template>
 
@@ -161,23 +162,22 @@
 		},
 		created() {
 			this.getAlarmUnreadAll()
-			console.log('===>',this.alarmUnread);
 		},
 		mounted() {
-			// if (this.alarmUnread.length !== 0) {
-			// 	this.$u.dictionary.getAlarmtypeFn().then(res => {
-			// 		res.map((v,i) => {
-			// 			this.option.xAxis.data.push(v.name)
-			// 			this.alarmUnread.forEach( e => {
-			// 				if (v.value === e.AlarmType) {
-			// 					this.series[0].data[i] || (this.series[0].data[i] = 0);
-			// 					this.series[0].data[i]++;
-			// 				}
-			// 			})
-			// 		})
-			// 		console.log(res, this.alarmUnread);
-			// 	} )
-			// }
+			if (this.alarmUnread.length !== 0) {
+				this.$u.dictionary.getAlarmtypeFn().then(res => {
+					res.map((v, i) => {
+						this.option.xAxis.data.push(v.name)
+						this.alarmUnread.forEach(e => {
+							if (v.value === e.AlarmType) {
+								this.series[0].data[i] || (this.series[0].data[i] = 0);
+								this.series[0].data[i]++;
+							}
+						})
+					})
+					// console.log(res, this.alarmUnread);
+				})
+			}
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {
@@ -196,29 +196,41 @@
 				const res = await this.$u.api.alarmUnreadAll()
 				if (res.success) {
 					res.data.map(v => {
-						v.HappendOn = v.HappendOn.slice(0,10)
+						v.HappendOn = v.HappendOn.slice(0, 10)
 					})
 					this.alarmUnread = res.data
 				}
 				if (this.alarmUnread.length !== 0) {
 					this.$u.dictionary.getAlarmtypeFn().then(res => {
-						res.map((v,i) => {
+						res.map((v, i) => {
 							this.option.xAxis.data.push(v.name)
-							this.alarmUnread.forEach( e => {
+							this.alarmUnread.forEach(e => {
 								if (v.value === e.AlarmType) {
-									this.option.series[0].data[i] || (this.option.series[0].data[i] = 0);
+									this.option.series[0].data[i] || (this.option.series[0]
+										.data[i] = 0);
 									this.option.series[0].data[i]++;
 								}
 							})
 						})
-						console.log(res, this.alarmUnread);
-					} )
+						// console.log(res, this.alarmUnread);
+					})
 				}
-				console.log(res);
+				// console.log(res);
+			},
+			toAlarmUnread() {
+				this.$u.route('pages/message/Index')
+			},
+			toNotification() {
+				this.$u.route('pages/message/Notification')
+			},
+			toMaintenance() {
+				this.$u.route('pages/order/maintenance/list')
 			},
 			// 消息详情
 			toMessage(id) {
-				console.log(id);
+				this.$u.route('pages/message/Detail', {
+					id
+				})
 			},
 			onViewClick(options) {
 				console.log(options)
@@ -298,6 +310,9 @@
 								height: 120rpx;
 
 								.info_header {
+									text-overflow: ellipsis;
+									white-space: normal;
+									padding: 0 10rpx;
 									font-size: 28rpx;
 									font-weight: 600;
 									color: #333333;
@@ -305,9 +320,9 @@
 								}
 
 								.info_center {
-									height: 80rpx;
+									height: 60rpx;
 									font-size: 24rpx;
-									line-height: 80rpx;
+									line-height: 60rpx;
 									width: 320rpx;
 									color: #333333;
 									overflow: hidden;
@@ -320,8 +335,9 @@
 							display: flex;
 							justify-content: center;
 							align-items: center;
+							padding-top: 10rpx;
 							transform: translateY(50%);
-							
+
 							.see_btn {
 								color: #FFFFFF;
 								margin-right: 30rpx;
@@ -332,6 +348,7 @@
 								background: #FC7930;
 								border-radius: 18rpx;
 							}
+
 							span {
 								font-size: 20rpx;
 								color: #CCCCCC;

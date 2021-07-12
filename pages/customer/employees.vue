@@ -84,23 +84,23 @@
 				},
 				pickerShow: false,
 				rules: {
-					name: [{
+					Name: [{
 						required: true,
 						message: '请输入姓名',
 						trigger: ['change', 'blur'],
 					}],
-					credit: [{
+					CreditNo: [{
 						required: true,
 						len: 18,
 						message: '请输入统一社会信用码',
 						trigger: ['change', 'blur']
 					}],
-					bank: [{
+					Bank: [{
 						required: true,
 						message: '请输入开户银行',
 						trigger: ['change', 'blur']
 					}],
-					account: [{
+					Account: [{
 						min: 16,
 						max: 19,
 						required: true,
@@ -112,17 +112,17 @@
 						message: '请输入所在地区',
 						trigger: ['change', 'blur']
 					}],
-					address: [{
+					Address: [{
 						required: true,
 						message: '请输入详细住址',
 						trigger: ['change', 'blur']
 					}],
-					directorName: [{
+					Master: [{
 						required: true,
 						message: '请输入公司法人/负责人',
 						trigger: ['change', 'blur']
 					}],
-					directorPhone: [{
+					MasterPhone: [{
 							required: true,
 							message: '请输入公司法人/负责人电话',
 							trigger: ['change', 'blur']
@@ -137,7 +137,7 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					directorEmail: [{
+					MasterEmail: [{
 							required: true,
 							message: '请输入公司法人/负责人Email',
 							trigger: ['change', 'blur']
@@ -152,12 +152,12 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					adminName: [{
+					Admin: [{
 						required: true,
 						message: '请输入姓名',
 						trigger: ['change', 'blur']
 					}],
-					adminPhone: [{
+					AdminPhone: [{
 							required: true,
 							message: '请输入联系电话',
 							trigger: ['change', 'blur']
@@ -172,7 +172,7 @@
 							trigger: ['change', 'blur'],
 						}
 					],
-					adminEmail: [{
+					AdminEmail: [{
 							required: true,
 							message: '请输入Email',
 							trigger: ['change', 'blur']
@@ -220,6 +220,12 @@
 					if (valid) {
 						this.$u.api.updataCustomer(this.form).then(res => {
 							this.$u.toast('更新成功！')
+							setTimeout(() => {
+								this.$u.route({
+									url: 'pages/customer/index',
+									type: 'navigateBack'
+								})
+							},1000)
 						}).catch(err => {
 							this.$u.toast('更新失败！')
 						})

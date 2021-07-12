@@ -1,61 +1,28 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="更新Dtu" :title-width="300" title-color="#000000" :title-size="36" />
+		<u-navbar :is-back="true" title="更新DTU设备" :title-width="300" title-color="#000000" :title-size="36" />
 		<u-form :model="form" ref="uForm">
 			<view class="info">
-				<u-form-item label="姓名" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Name">
-					<u-input v-model="form.Name" input-align="right" placeholder="请输入名称" />
+				<u-form-item label="联系方式" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="PhoneNumber">
+					<u-input v-model="form.PhoneNumber" input-align="right" placeholder="请输入手机号" />
 				</u-form-item>
-				<u-form-item label="统一社会信用码" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="CreditNo">
-					<u-input v-model="form.CreditNo" input-align="right" placeholder="请输入统一社会信用码" />
+				<u-form-item label="设备名称" label-width="355" :label-style="{paddingLeft: '24rpx'}" prop="Name">
+					<u-input v-model="form.Name" input-align="right" placeholder="请输入设备名字" />
 				</u-form-item>
-				<u-form-item label="开户银行" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Bank">
-					<u-input v-model="form.Bank" input-align="right" placeholder="请输入开户银行" />
+				<u-form-item label="客户安装区域" label-width="310" :label-style="{paddingLeft: '24rpx'}">
+					<u-input v-if="form.CustomerAreaId" v-model="form.CustomerAreaId" input-align="right" placeholder="请输入内容" type="select"
+						:select-open="areaShow" @click="areaShow = true" />
 				</u-form-item>
-				<u-form-item label="银行账号" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Account">
-					<u-input v-model="form.Account" input-align="right" placeholder="请输入银行账号" />
-				</u-form-item>
-			</view>
-			<view class="info">
-				<u-form-item label="地区" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="region">
-					<u-input v-model="form.region" input-align="right" type="select" :select-open="pickerShow"
-						placeholder="所在地区" @click="pickerShow = true" />
-				</u-form-item>
-				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Address">
-					<u-input v-model="form.Address" input-align="right" placeholder="如道路、门牌号、小区等" />
-				</u-form-item>
-			</view>
-			<view class="info">
-				<u-form-item label="公司法人/负责人" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="Master">
-					<u-input v-model="form.Master" input-align="right" placeholder="请输入姓名" />
-				</u-form-item>
-				<u-form-item label="公司法人/负责人联系电话" label-width="355" :label-style="{paddingLeft: '24rpx'}"
-					prop="MasterPhone">
-					<u-input v-model="form.MasterPhone" input-align="right" placeholder="请输入联系电话" />
-				</u-form-item>
-				<u-form-item label="公司法人/负责人Email" label-width="350" :label-style="{paddingLeft: '24rpx'}"
+				<u-form-item label="设备维修周期(月)" label-width="350" :label-style="{paddingLeft: '24rpx'}"
 					prop="MasterEmail">
-					<u-input v-model="form.MasterEmail" input-align="right" placeholder="请输入Email" />
-				</u-form-item>
-			</view>
-			<view class="info">
-				<u-form-item label="公司系统管理员姓名" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="Admin">
-					<u-input v-model="form.Admin" input-align="right" placeholder="请输入姓名" />
-				</u-form-item>
-				<u-form-item label="公司系统管理员联系电话" label-width="350" :label-style="{paddingLeft: '24rpx'}"
-					prop="AdminPhone">
-					<u-input v-model="form.AdminPhone" input-align="right" placeholder="请输入联系电话" />
-				</u-form-item>
-				<u-form-item label="公司系统管理员Email" label-width="310" :label-style="{paddingLeft: '24rpx'}"
-					prop="AdminEmail">
-					<u-input v-model="form.AdminEmail" input-align="right" placeholder="请输入Email" />
+					<u-input v-model="form.MaintPeriod" type="number" input-align="right" placeholder="请输入内容" />
 				</u-form-item>
 			</view>
 		</u-form>
 		<view class="submit_vw">
 			<button class="submit_ck" @click="submit">提交</button>
 		</view>
-		<u-picker mode="region" v-model="pickerShow" @confirm="regionConfirm" />
+		<u-select v-model="areaShow" :list="areaList" @confirm="areaConfirm" />
 	</view>
 </template>
 
@@ -64,138 +31,51 @@
 	export default {
 		data() {
 			return {
-				form: {
-					Name: '',
-					CreditNo: '',
-					Bank: '',
-					Account: '',
-					region: '',
-					Province: '',
-					City: '',
-					Country: '',
-					Address: '',
-					Master: '',
-					MasterPhone: '',
-					MasterEmail: '',
-					Admin: '',
-					AdminPhone: '',
-					AdminEmail: '',
-					optionId: null,
-					custId: null
-				},
+				form: {},
+				optionId: null,
+				custId: null,
 				pickerShow: false,
+				areaShow: false,
+				areaList: [{
+						value: '1',
+						label: '江'
+					},
+					{
+						value: '2',
+						label: '湖'
+					}
+				],
 				rules: {
-					name: [{
+					PhoneNumber: [{
 						required: true,
-						message: '请输入姓名',
-						trigger: ['change', 'blur'],
+						message: '请输入手机号',
+						trigger: ['change','blur']
 					}],
-					credit: [{
+					CustomerAreaId: [{
 						required: true,
-						len: 18,
-						message: '请输入统一社会信用码',
+						message: '请输入客户安装区域',
 						trigger: ['change', 'blur']
 					}],
-					bank: [{
+					Name: [{
 						required: true,
-						message: '请输入开户银行',
+						message: '请输入设备姓名',
 						trigger: ['change', 'blur']
 					}],
-					account: [{
-						min: 16,
-						max: 19,
+					MaintPeriod: [{
 						required: true,
-						message: '请输入银行账号',
+						message: '请输入维修周期',
 						trigger: ['change', 'blur']
-					}],
-					region: [{
-						required: true,
-						message: '请输入所在地区',
-						trigger: ['change', 'blur']
-					}],
-					address: [{
-						required: true,
-						message: '请输入详细住址',
-						trigger: ['change', 'blur']
-					}],
-					directorName: [{
-						required: true,
-						message: '请输入公司法人/负责人',
-						trigger: ['change', 'blur']
-					}],
-					directorPhone: [{
-							required: true,
-							message: '请输入公司法人/负责人电话',
-							trigger: ['change', 'blur']
-						},
-						{
-							validator: (rule, value, callback) => {
-								// 上面有说，返回true表示校验通过，返回false表示不通过
-								return this.$u.test.mobile(value);
-							},
-							message: '手机号码不正确',
-							// 触发器可以同时用blur和change
-							trigger: ['change', 'blur'],
-						}
-					],
-					directorEmail: [{
-							required: true,
-							message: '请输入公司法人/负责人Email',
-							trigger: ['change', 'blur']
-						},
-						{
-							validator: (rule, value, callback) => {
-								// 上面有说，返回true表示校验通过，返回false表示不通过
-								return this.$u.test.email(value);
-							},
-							message: '电子邮箱不正确',
-							// 触发器可以同时用blur和change
-							trigger: ['change', 'blur'],
-						}
-					],
-					adminName: [{
-						required: true,
-						message: '请输入姓名',
-						trigger: ['change', 'blur']
-					}],
-					adminPhone: [{
-							required: true,
-							message: '请输入联系电话',
-							trigger: ['change', 'blur']
-						},
-						{
-							validator: (rule, value, callback) => {
-								// 上面有说，返回true表示校验通过，返回false表示不通过
-								return this.$u.test.mobile(value);
-							},
-							message: '手机号码不正确',
-							// 触发器可以同时用blur和change
-							trigger: ['change', 'blur'],
-						}
-					],
-					adminEmail: [{
-							required: true,
-							message: '请输入Email',
-							trigger: ['change', 'blur']
-						},
-						{
-							validator: (rule, value, callback) => {
-								// 上面有说，返回true表示校验通过，返回false表示不通过
-								return this.$u.test.email(value);
-							},
-							message: '电子邮箱不正确',
-							// 触发器可以同时用blur和change
-							trigger: ['change', 'blur'],
-						}
-					],
+					}]
 				}
 			}
 		},
 		onLoad(e) {
 			this.optionId = e.id
-			this.custId = e.cId
-			this.custId && this.getArea()
-			this.$u.api.complexfindById({device: e.id}).then(res => {
+			e.cId && this.getArea(e.cId)
+			this.$u.api.complexfindById({
+				device: e.id
+			}).then(res => {
+				if (res.success) this.form = res.data
 				console.log(res);
 			}).catch(err => {
 				console.log(err);
@@ -216,32 +96,43 @@
 		},
 		methods: {
 			// 获取客户安装区域
-			getArea() {
-				this.$u.api.getCustomrArea({customer: this.custId}).then(res => {
+			getArea(id) {
+				this.$u.api.getCustomrArea({
+					customer: id
+				}).then(res => {
 					console.log(res);
 				}).catch(err => {
 					console.log(err);
 				})
 			},
 			submit() {
-				console.log('submit');
-				// this.$refs.uForm.validate(valid => {
-				// 	if (valid) {
-				// 		this.$u.api.updataCustomer(this.form).then(res => {
-				// 			this.$u.toast('更新成功！')
-				// 		}).catch(err => {
-				// 			this.$u.toast('更新失败！')
-				// 		})
-				// 		console.log('验证通过');
-				// 	} else {
-				// 		console.log('验证失败');
-				// 	}
-				// });
+				this.form.CustomerId = "eebe43f1-6709-4d16-b7f2-ead1e1188e8a"
+				this.form.CustomerAreaId = "dd9789ec-3e7e-41d7-8d35-5caf106c0bf3"
+				this.$refs.uForm.validate(valid => {
+					if (valid) {
+						this.$u.api.updatedDviceDtu(this.form).then(res => {
+							this.$u.toast('更新成功！')
+							setTimeout(() => {
+								this.$u.route({
+									url: 'pages/device/Detail',
+									type: 'navigateBack'
+								})
+							},1000)
+							console.log(res);
+						}).catch(err => {
+							this.$u.toast('更新失败！')
+						})
+					} else {
+						console.log('验证失败');
+					}
+				});
 			},
-			// 选择地区回调
-			regionConfirm(e) {
-				this.form.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
+			selectConfirm(e) {
+				console.log(e);
 			},
+			areaConfirm(e) {
+				console.log(e);
+			}
 		}
 	}
 </script>

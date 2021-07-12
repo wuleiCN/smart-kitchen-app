@@ -4,14 +4,29 @@
 		// 下载安装方式
 		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	},
-	"pages": [
-		{
+	"pages": [{
 			"path": "pages/Login",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
 					"bounceBackground": "#0A1121",
 					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
+			"style": {
+				"disableScroll": true,
+				"app-plus": {
+					"backgroundColorTop": "transparent",
+					"background": "transparent",
+					"titleNView": false,
+					"scrollIndicator": false,
+					"popGesture": "none",
+					"animationType": "fade-in",
+					"animationDuration": 200
+
 				}
 			}
 		},
@@ -186,6 +201,16 @@
 			}
 		},
 		{
+			"path": "pages/components/u-avatar-cropper",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
 			"path": "pages/my/company",
 			"style": {
 				"app-plus": {
@@ -206,7 +231,7 @@
 			}
 		},
 		{
-			"path": "pages/message/New",
+			"path": "pages/message/Index",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",
@@ -217,6 +242,16 @@
 		},
 		{
 			"path": "pages/message/Detail",
+			"style": {
+				"app-plus": {
+					"background": "#0A1121",
+					"bounceBackground": "#0A1121",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/message/Notification",
 			"style": {
 				"app-plus": {
 					"background": "#0A1121",

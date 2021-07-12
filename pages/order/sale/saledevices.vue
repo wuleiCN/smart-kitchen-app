@@ -23,11 +23,11 @@
 					<image mode="aspectFill" src="../../../static/devices/production.png" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 					<view class="title-wrap">
-						<text>设备型号：{{ item.modelName }}</text>
+						<text>设备型号：{{ item.Model }}</text>
 						<text class="u-line-2">设备类别：{{ item.DeviceType }}</text>
 						<text>设备描述：...</text>
 						<u-number-box v-model="item.Count" disabled-input :long-press='false'
-							@change="updataDeviceCount(item.Model, item.Count)" />
+							@change="updataDeviceCount(item.ModelId, item.Count)" />
 					</view>
 				</view>
 			</u-swipe-action>
@@ -89,9 +89,8 @@
 			// 获取字典
 			async getDeviceType() {
 				const res = await this.$u.dictionary.getDeviceTypeFc()
-				const data = await this.$u.dictionary.getDevicesMdoleFc()
-				this.DeviceType = res
-				this.modelList = data
+				this.deviceTypeList = res
+				console.log(res);
 			},
 			open(index) {
 				this.list[index].show = true;
@@ -116,19 +115,10 @@
 				}).then(res => {
 					if (!res.success) this.$u.toast('获取清单列表失败！')
 					else {
-						res.data.map(v => {
-							this.modelList.forEach(i => {
-								if (v.Model === i.Id) {
-									v.modelName = i.Name
-									v.type = i.Type
-								}
-							})
-							v.show = false
-						})
 						this.list = res.data
 						this.list.map(v => {
 							this.deviceTypeList.forEach(i => {
-								if (v.type === i.value) v.DeviceType = i.name
+								if (v.Type === i.value) v.DeviceType = i.name
 							})
 						})
 					}
@@ -157,7 +147,8 @@
 					if (res.success) {
 						this.$u.toast('派单成功！')
 						this.$u.route({
-							type: 'navigateBack'
+							url: 'pages/order/sale/index',
+							type: 'redirect'
 						})
 					}
 					else this.$u.toast(res.message)

@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<company v-if="type === 1"></company>
 		<company v-if="type === 2"></company>
 		<customer v-if="type === 3"></customer>
 	</view>
@@ -10,7 +11,7 @@
 	import company from "@/pages/company/index.vue"
 	import customer from "@/pages/customer/index.vue"
 	var mqtt = require('mqtt/dist/mqtt.js')
-	var client
+	var client	
 	// const options = {
 	// 	connectTimeout: 40000,
 	// 	clientId: '',

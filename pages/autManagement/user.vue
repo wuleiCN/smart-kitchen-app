@@ -62,7 +62,7 @@
 					Token: uni.getStorageSync('token')
 				},
 				action: 'http://175.6.77.126:9001/api/file/avatar',
-				companyList: uni.getStorageSync('GetCompanyList'),
+				// companyList: uni.getStorageSync('GetCompanyList'),
 				selectList: [],
 				pickerShow: false,
 				selectShow: false,
@@ -145,11 +145,11 @@
 			// 选择公司回调
 			companyListCK() {
 				this.selectList = []
-				this.companyList.map(v => {
-					this.selectList.push({
-						value: v.Id,
-						label: v.Name
+				this.$u.dictionary.getCompanyListFc().then(res => {
+					res.map(v => {
+						this.selectList.push({value:v.Id, label:v.Name})
 					})
+					console.log('===>dis',res);
 				})
 				this.selectShow = true
 				console.log(this.selectList);

@@ -1,61 +1,160 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="警告信息" :title-width="300" />
-		<u-form :model="form" ref="uForm" :border-bottom="false" :label-style="{color: '#303133',fontWeight: '600'}">
-			<u-form-item label="设备名称 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="客户单位 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="设备类别 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="设备型号 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="安装地点 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="报警信息 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="报警时间 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="状态 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="消警时间 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
-			<u-form-item label="消警人 :" label-width="150" label-align="center">
-				<view>{{form.name}}</view>
-			</u-form-item>
+		<u-navbar :is-back="true" title="消息详情" :title-width="400" title-color="#000000" :title-size="36" />
+		<u-form v-if="Object.keys(form).length" :model="form" ref="uForm">
+			<view class="info">
+				<u-form-item label="公司" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<view>
+						{{customer}}
+					</view>
+				</u-form-item>
+				<u-form-item label="客户" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<view>
+						{{company}}
+					</view>
+				</u-form-item>
+				<u-form-item label="设备" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<view>
+						{{device}}
+					</view>
+				</u-form-item>
+				<u-form-item label="处置信息" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<view>
+						{{form.Content}}
+					</view>
+				</u-form-item>
+			</view>
+			<view class="info">
+				<u-form-item label="发送时间" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<view>
+						{{form.HappendOn}}
+					</view>
+				</u-form-item>
+				<u-form-item label="处置时间" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<view>
+						{{form.ProcessedOn}}
+					</view>
+				</u-form-item>
+			</view>
 		</u-form>
-		<u-button type="primary" style="margin: 0 20rpx;">消警</u-button>
-		<Modal />
+		<!-- <view class="submit_vw">
+			<button class="submit_ck" @click="submit">提交</button>
+		</view> -->
 	</view>
 </template>
 
 <script>
-	import Modal from "@/pages/components/modal.vue"
+	// import { mapState } from "vuex";
 	export default {
-		components: {
-			Modal
-		},
 		data() {
 			return {
-				form: {
-					name: 'test'
-				}
+				form: {},
+				optionId: null,
+				customer: '',
+				company: '',
+				device: ''
+			}
+		},
+		onLoad(e) {
+			uni.showLoading()
+			this.optionId = e.id
+			this.$u.debounce(() => {
+				this.$u.api.alarmUnreadById({
+					id: e.id
+				}).then(res => {
+					if (res.success) {
+						this.form = res.data
+						this.form.HappendOn = this.form.HappendOn.slice(0, 10)
+						this.form.ProcessedOn = this.form.ProcessedOn.slice(0, 10)
+						this.getMessageForm(res.data.Customer, res.data.Company, res.data.Device)
+					}
+					uni.hideLoading()
+					console.log(this.form);
+				}).catch(err => {
+					console.log(err);
+				})
+			}, 300)
+		},
+		onShow() {
+
+		},
+		computed: {
+
+		},
+		watch: {
+
+		},
+		methods: {
+			getMessageForm(c, e, f) {
+				this.$u.api.getCustomerById({
+					id: c
+				}).then(res => {
+					if (res.success) this.customer = res.data.Name
+				}).catch(() => {
+					this.customer = '无'
+				})
+				this.$u.dictionary.getCompanyListFc({
+					id: e
+				}).then(res => {
+					this.company = res.find(v => v.Id === e).Name
+				})
+				this.$u.api.deviceComplexfind({
+					device: f
+				}).then(res => {
+					if (res.success) this.device = res.data.Name
+				})
 			}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
-	.u-form-item {
-		padding: 0;
+<style scoped lang="scss">
+	::v-deep .u-form {
+		.info {
+			margin-top: 24rpx;
+		}
+
+		.u-form-item,
+		.u-form-item__body {
+			background: #FFFFFF;
+			padding: 0;
+			// height: 76rpx;
+
+			.u-input {
+				padding-right: 24rpx !important;
+
+				.input-placeholder {
+					text-align: right;
+				}
+			}
+
+			.u-form-item__message {
+				text-align: end;
+				margin: 0 24rpx 12rpx 0;
+			}
+			.u-form-item--right__content__slot {
+				justify-content: flex-end;
+			}
+		}
+	}
+
+	.submit_vw {
+		position: fixed;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		bottom: 0;
+		width: 750rpx;
+		height: 98rpx;
+		background: #FFFFFF;
+
+		.submit_ck {
+			width: 702rpx;
+			height: 68rpx;
+			line-height: 68rpx;
+			color: #FFFFFF;
+			background: #FC7930;
+			border-radius: 10rpx;
+		}
 	}
 </style>

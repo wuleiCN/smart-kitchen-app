@@ -204,7 +204,8 @@
 <style scoped lang="scss">
 	.info {
 		margin-top: 24rpx;
-		height: 340rpx;
+		padding-bottom: 24rpx;
+		// height: 340rpx;
 		background: #FFFFFF;
 	}
 

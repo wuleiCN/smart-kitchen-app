@@ -20,7 +20,7 @@
 			</view>
 		</u-navbar>
 		<view v-show="deviceListShow">
-			<view class="content_box" v-for="(item, index) in deviceList">
+			<view class="content_box" v-for="(item, index) in deviceList" :key="index">
 				<!-- <view class="avatar">
 					<u-avatar :src="item.Avatar" />
 				</view> -->
@@ -47,7 +47,7 @@
 			<u-loadmore :status="status" />
 		</view>
 		<view v-show="dataListShow">
-			<view class="content_box" v-for="(item, index) in searchList">
+			<view class="content_box" v-for="(item, index) in searchList" :key="index">
 				<view class="avatar">
 					<u-avatar :src="item.Avatar" />
 				</view>
@@ -96,7 +96,6 @@
 				warning: [],
 				deviceList: [],
 				searchList: [],
-				companyList: [],
 				status: 'loadmore',
 				page: 1,
 				pageSize: 10,
@@ -180,12 +179,6 @@
 					console.log(res, this.deviceList);
 				})
 			},
-			// 客户详情
-			toCustomerInfo(id) {
-				this.$u.route('pages/customer/employees', {
-					id
-				})
-			},
 			toCancelDevice(id) {
 				this.cancel = true
 				this.optionId = id
@@ -248,14 +241,18 @@
 			},
 			// 搜索回调
 			searchFn() {
-				// this.$u.api.getCustomerByName({
-				// 	name: this.keyword
-				// }).then(res => {
-				// 	this.searchList = res.data
-				// 	console.log(res);
-				// }).catch(err => {
-				// 	console.log(err);
-				// })
+				this.$u.api.getSearchbyName({
+					name: this.keyword
+				}).then(res => {
+					this.searchList = res.data
+					this.searchList.map((v, i) => {
+						v.NextMaintAt = this.$u.timeFormat(res.data.NextMaintAt, 'yyyy-mm-dd')
+						v.company = this.companyList.find(s => v.CompanyId === s.Id).Name
+					})
+					console.log(res);
+				}).catch(err => {
+					console.log(err);
+				})
 				console.log(this.keyword);
 			},
 			searchCK() {

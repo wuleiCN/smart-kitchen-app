@@ -19,7 +19,7 @@
 		</u-navbar>
 		<u-subsection :list="list" :current="0" @change="sectionChange" font-size="36" active-color="#ffffff"
 			inactive-color="#666666" />
-		<view class="content_box" v-show="role" v-for="(item, index) in currentRoleList">
+		<view class="content_box" v-show="role" v-for="(item, index) in currentRoleList" :key="index+'only'">
 			<view class="avatar">
 				<u-avatar :src="item.Avatar" />
 			</view>
@@ -153,7 +153,7 @@
 					id: v.OrgId
 				}).then(res => {
 					v.Type = res.data.Name
-					console.log(v, res);
+					// console.log(v, res);
 				})
 			},
 			toUpdataRole(id) {

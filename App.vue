@@ -1,10 +1,12 @@
 <script>
+	import upApp from "@/uni_modules/uni-upgrade-center-app/utils/check-update.js"
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			upApp()
 		},
 		onShow: function() {
-			setTimeout(()=>{
+			setTimeout(() => {
 				// #ifdef APP-PLUS 
 				plus.navigator.closeSplashscreen()
 				// #endif
@@ -20,9 +22,11 @@
 /*每个页面公共css */
 <style lang="scss">
 	@import "uview-ui/index.scss";
+
 	// *{touch-action: none;}
 	body {
 		background-color: #F5F5F5;
+
 		button::after {
 			border: none !important;
 		}

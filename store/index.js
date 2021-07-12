@@ -31,7 +31,7 @@ const store = new Vuex.Store({
 			{
 				pagePath: "/pages/my/index",
 				iconPath: "/static/tabbar/my.png",
-				selectedIconPath: "/static/tabbar/my_s.png",
+				selectedIconPath: "/static/tabbar/my_S.png",
 				text: "我的"
 			},
 		]

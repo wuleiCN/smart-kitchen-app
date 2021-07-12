@@ -172,8 +172,7 @@
 					if (res.success) {
 						this.getOrderSaleList()
 						this.$u.toast('派单成功！')
-					}
-					else this.$u.toast(res.message)
+					} else this.$u.toast(res.message)
 					this
 					console.log(res)
 				})
@@ -328,5 +327,9 @@
 	.slotSearch {
 		width: 100% !important;
 		margin-left: 12px;
+	}
+
+	.u-empty {
+		margin-top: 90rpx !important;
 	}
 </style>

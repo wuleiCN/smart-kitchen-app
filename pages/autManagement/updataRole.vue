@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-navbar :is-back="true" title="客户注册" :title-width="300" title-color="#000000" :title-size="36" />
+		<u-navbar :is-back="true" title="角色详情" :title-width="300" title-color="#000000" :title-size="36" />
 		<u-form :model="form" ref="uForm">
 			<view class="info">
 				<u-form-item label="角色信息" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="goodsType">
@@ -18,7 +18,7 @@
 		<view class="submit_vw">
 			<button class="submit_ck" @click="submit">更新</button>
 		</view>
-		<u-select mode="single-column" :list="selectList" v-model="selectShow" value-name="Id" label-name="Name"
+		<u-select mode="single-column" :list="companyList" v-model="selectShow" value-name="Id" label-name="Name"
 			@confirm="selectConfirm" />
 		<u-modal v-model="show" content="更新成功!" @confirm="confirm" />
 	</view>
@@ -38,7 +38,7 @@
 				optionId: null,
 				show: false,
 				companyList: [],
-				selectList: [],
+				// selectList: [],
 				rules: {
 					goodsType: [{
 						required: true,
@@ -75,6 +75,7 @@
 				console.log(res, this.form);
 			})
 			Promise.all([p1, p2]).then(res => {
+				// this.selectList = res
 				console.log('===>ok', res);
 			})
 			console.log(this.companyList);

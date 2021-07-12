@@ -11,8 +11,10 @@ const install = (Vue, vm) => {
 	
 	// ====更新组织信息====
 	
-	// 更新组织机构地址信息
-	let updataCurrAdderess = (params = {}) => vm.$u.post('api/org/update/current/address', params);
+	// 更新公司信息
+	let updataCompany= (params = {}) => vm.$u.post('api/company/update', params);
+	// 修改公司名称
+	let updataName= (params = {}) => vm.$u.post('api/company/updatename', params);
 	
 	// ====用户管理====
 	
@@ -20,6 +22,8 @@ const install = (Vue, vm) => {
 	let updataCurrUser= (params = {}) => vm.$u.post('api/users/current/update', params);
 	//修改用户密码
 	let userChangepassword= (params = {}) => vm.$u.post('api/users/changepassword', params);
+	// 更换当前用户头像
+	let changeAvatar= (params = {}) => vm.$u.post('api/users/current/changeavatar', params);
 	
 	// ====客户管理====
 	
@@ -136,6 +140,12 @@ const install = (Vue, vm) => {
 
 	// 获得当前用户未读取报警消息
 	let alarmUnreadAll = (params = {}) => vm.$u.get('api/message/alarm/unread/getall', params)
+	// 	获得报警消息详情
+	let alarmUnreadById = (params = {}) => vm.$u.get('api/message/alarm/getbyid', params)
+	// 报警消息处置
+	let processExecute = (params = {}) => vm.$u.post('api/message/alarm/process/execute', params)
+	// 报警消息复位
+	let processReset = (params = {}) => vm.$u.post('api/message/alarm/process/reset', params)
 	
 	// ====设备管理====
 	
@@ -163,7 +173,7 @@ const install = (Vue, vm) => {
 	let updatedDviceGas = (params = {}) => vm.$u.post('api/device/update/gas', params)
 	// 更新智能网关设备信息
 	let updatedDviceGateway= (params = {}) => vm.$u.post('api/device/update/gateway', params)
-	// 更新智能网关设备信息
+	// 更新IPC网络摄像机设备信息
 	let updatedDviceIpc = (params = {}) => vm.$u.post('api/device/update/ipc', params)
 	// 更新NVR网络硬盘机设备信息
 	let updatedDviceNvr = (params = {}) => vm.$u.post('api/device/update/nvr', params)
@@ -173,7 +183,23 @@ const install = (Vue, vm) => {
 	let deviceDestroy = (params = {}) => vm.$u.post('api/device/destroy', params)
 	// 获得客户单位所有安装区域信息
 	let getCustomrArea = (params = {}) => vm.$u.get('api/customer/area/getall', params)
-
+	// 获得所有报警主机型号
+	let getAlarm = (params = {}) => vm.$u.get('api/model/alarm/getall', params)
+	// 获得所有DTU型号
+	let getDtu = (params = {}) => vm.$u.get('api/model/dtu/getall', params)
+	// 获得所有灭火器型号
+	let getFire = (params = {}) => vm.$u.get('api/model/fire/getall', params)
+	// 获得所有燃气泄漏报警器型号
+	let getGas = (params = {}) => vm.$u.get('api/model/gas/getall', params)
+	// 获得所有智能网关
+	let getGateway = (params = {}) => vm.$u.get('api/model/gateway/getall', params)
+	// 获得所有IPC网络摄像机型号
+	let getIpc = (params = {}) => vm.$u.get('api/model/ipc/getall', params)
+	// 获得所有NVR网络硬盘录像机型号
+	let getNvr = (params = {}) => vm.$u.get('api/model/nvr/getall', params)
+	// 按设备名称查找当前组织下所有设备信息
+	let getSearchbyName = (params = {}) => vm.$u.get('api/device/searchbyname/current', params)
+	
 	// ====数据字典====
 
 	// 设备类别
@@ -271,9 +297,11 @@ const install = (Vue, vm) => {
 		Login,
 		getInfo,
 		getcompanyAll,
-		updataCurrAdderess,
+		updataCompany,
+		updataName,
 		updataCurrUser,
 		userChangepassword,
+		changeAvatar,
 		customerRegister,
 		getCustomersList,
 		getCustomerById,
@@ -306,6 +334,9 @@ const install = (Vue, vm) => {
 		installSaleNVR,
 		canSaleInstalled,
 		alarmUnreadAll,
+		alarmUnreadById,
+		processReset,
+		processExecute,
 		deviceComplexfind,
 		modelGetall,
 		stockin,
@@ -323,6 +354,14 @@ const install = (Vue, vm) => {
 		deviceLoss,
 		deviceDestroy,
 		getCustomrArea,
+		getAlarm,
+		getDtu,
+		getFire,
+		getGas,
+		getIpc,
+		getGateway,
+		getNvr,
+		getSearchbyName,
 		installSaleGateway,
 		getOrderSaleList,
 		createOrderSale,

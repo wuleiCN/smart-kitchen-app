@@ -11,8 +11,8 @@
 				</view>
 			</view>
 			<view class="sale">
-				<u-button v-if="!item.Count" ripple @click="sale(item.Id)">+加入购物车</u-button>
-				<u-number-box v-else v-model="item.Count" @change="updataDeviceCount(item.Id,item.Count)" />
+				<u-button v-show="!item.Count" ripple @click="sale(item.Id)">+加入购物车</u-button>
+				<u-number-box v-show="item.Count" v-model="item.Count" :long-press="false" @change="updataDeviceCount(item.Id,item.Count)" />
 			</view>
 		</view>
 		<u-loadmore :status="status" />
@@ -157,6 +157,7 @@
 					if (res.success) this.getSalingDevicesList()
 					console.log(res, count)
 				})
+				console.log(count);
 			},
 			// 跳转购物车清单
 			toCart() {
