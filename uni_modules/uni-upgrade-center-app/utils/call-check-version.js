@@ -7,8 +7,8 @@ export default function() {
 			uniCloud.callFunction({
 				name: 'check-version',
 				data: {
-					appid: 'uni.UNI9D024B4',
-					appVersion: '1.1.0',
+					appid: plus.runtime.appid,
+					appVersion: plus.runtime.version,
 					wgtVersion: widgetInfo.version
 				},
 				success: (e) => {

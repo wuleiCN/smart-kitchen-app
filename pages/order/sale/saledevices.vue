@@ -17,8 +17,8 @@
 			<span class="_title u-flex">销售清单</span>
 		</view>
 		<scroll-view class="product" show-scrollbar scroll-top="0" :scroll-y="true" :lower-threshold="5" @scrolltolower="toLowFun">
-			<u-swipe-action v-for="(item, index) in list" :key="index" :show="item.show" :index="index"
-				:options="options" @open="open" @click="alarm(index, item.Id)">
+			<u-swipe-action v-for="(item, index) in list" :key="index" :show="showIndex == index" :index="index"
+				:options="options" @open="open" @click="alarm(index, item.ID)">
 				<view class="item u-border-bottom">
 					<image mode="aspectFill" src="../../../static/devices/production.png" />
 					<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
@@ -36,9 +36,10 @@
 		</scroll-view>
 		<view class="dispatch">
 			<u-button hover-class="none" @click="dispatchOrder">确定派单</u-button>
-			<u-button hover-class="none">提交</u-button>
+			<u-button hover-class="none" @click="submitShow=true">提交</u-button>
 		</view>
 		<u-modal v-model="dispatchShow" :content="content" show-cancel-button @confirm="dispatch" />
+		<u-modal v-model="submitShow" content="确定要提交吗？" show-cancel-button @confirm="submited" />
 	</view>
 </template>
 
@@ -48,6 +49,8 @@
 			return {
 				status: 'nomore',
 				dispatchShow: false,
+				submitShow: false,
+				showIndex: null,
 				optionId: '',
 				options: [{
 					text: '删除',
@@ -93,10 +96,7 @@
 				console.log(res);
 			},
 			open(index) {
-				this.list[index].show = true;
-				this.list.map((val, idx) => {
-					if (index != idx) this.list[idx].show = false;
-				})
+				this.showIndex = index
 			},
 			// 更新设备
 			updataDeviceCount(id, count) {
@@ -154,6 +154,14 @@
 					else this.$u.toast(res.message)
 					console.log(res)
 				})
+			},
+			// 提交
+			submited() {
+				setTimeout(() => {
+					this.$u.route({
+						type: 'navigateBack'
+					})
+				}, 300)
 			},
 			// 上拉加载
 			toLowFun() {

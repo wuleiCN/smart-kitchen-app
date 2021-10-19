@@ -25,7 +25,7 @@
 			</view>
 			<view class="text-area">
 				<view class="cust_title">
-					<view>{{item.Type}}</view>
+					<view>{{item.name}}</view>
 					<!-- <button class="btn" @click.stop="$u.route('pages/customer/employees')">更新</button> -->
 				</view>
 				<view class="cust_centent">
@@ -49,7 +49,7 @@
 			</view>
 			<view class="text-area">
 				<view class="cust_title">
-					<view>{{item.Type}}</view>
+					<view>{{item.name}}</view>
 					<!-- <button class="btn" @click.stop="$u.route('pages/customer/employees')">更新</button> -->
 				</view>
 				<view class="cust_centent">
@@ -127,7 +127,7 @@
 				this.$u.api.getCurrentRoleList().then(res => {
 					this.currentRoleList = res.data
 					this.currentRoleList.map((v, i) => {
-						v.RegistOn = this.$u.timeFormat(res.data.RegistOn, 'yyyy-mm-dd')
+						v.RegistOn && (v.RegistOn = v.RegistOn.slice(0,10))
 						this.getCompanyById(v, i)
 					})
 					if (!res.success) this.$u.toast(res.message)
@@ -141,7 +141,7 @@
 				this.$u.api.getCurrentUserList().then(res => {
 					this.currentUserList = res.data
 					this.currentUserList.map((v, i) => {
-						v.RegistOn = this.$u.timeFormat(res.data.RegistOn, 'yyyy-mm-dd')
+						v.RegistOn && (v.RegistOn = v.RegistOn.slice(0,10))
 						this.getCompanyById(v, i)
 					})
 					console.log(res);
@@ -152,7 +152,7 @@
 				this.$u.api.getCompanyFind({
 					id: v.OrgId
 				}).then(res => {
-					v.Type = res.data.Name
+					v.name = res.data.Name
 					// console.log(v, res);
 				})
 			},

@@ -21,8 +21,11 @@
 					<u-input v-model="form.region" input-align="right" type="select" :select-open="pickerShow"
 						placeholder="所在地区" @click="pickerShow = true" />
 				</u-form-item>
-				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Address">
-					<u-input v-model="form.Address" input-align="right" placeholder="如道路、门牌号、小区等" />
+				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" right-icon="arrow-right" prop="Address">
+					<u-input v-model="form.Address" input-align="right" placeholder="如道路、门牌号、小区等" @click="getchooseLocation" />
+				</u-form-item>
+				<u-form-item label="安装区域" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Area">
+					<u-input v-model="form.Area" input-align="right" placeholder="请输入安装区域" />
 				</u-form-item>
 			</view>
 			<view class="info">
@@ -66,6 +69,7 @@
 		data() {
 			return {
 				form: {
+					Id: null,
 					Name: '',
 					CreditNo: '',
 					Bank: '',
@@ -75,13 +79,13 @@
 					City: '',
 					Country: '',
 					Address: '',
+					Area: '',
 					Master: '',
 					MasterPhone: '',
 					MasterEmail: '',
 					Admin: '',
 					AdminPhone: '',
 					AdminEmail: ''
-
 				},
 				pickerShow: false,
 				rules: {
@@ -116,6 +120,11 @@
 					address: [{
 						required: true,
 						message: '请输入详细住址',
+						trigger: ['change', 'blur']
+					}],
+					Area: [{
+						required: true,
+						message: '请输入安装区域',
 						trigger: ['change', 'blur']
 					}],
 					Master: [{
@@ -192,7 +201,7 @@
 			}
 		},
 		onLoad(e) {
-
+			this.form.Id = e.id
 		},
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
@@ -233,6 +242,23 @@
 				this.form.City = e.city.label;
 				this.form.Country = e.area.label;
 			},
+			// 获取位置信息
+			getchooseLocation() {
+				uni.chooseLocation({
+					// keyword: true,
+				    success:  res => {
+						this.form.Address = res.address;
+				        console.log('位置名称：' + res.name);
+				        console.log('详细地址：' + res.address);
+				        console.log('纬度：' + res.latitude);
+				        console.log('经度：' + res.longitude);
+						console.log(res);
+				    },
+					complete: (res) => {
+						console.log(res);
+					}
+				});
+			}
 		}
 	}
 </script>

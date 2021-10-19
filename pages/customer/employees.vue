@@ -24,6 +24,9 @@
 				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Address">
 					<u-input v-model="form.Address" input-align="right" placeholder="如道路、门牌号、小区等" />
 				</u-form-item>
+				<u-form-item label="安装区域" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Area">
+					<u-input v-model="form.Area" input-align="right" placeholder="请输入安装区域" />
+				</u-form-item>
 			</view>
 			<view class="info">
 				<u-form-item label="公司法人/负责人" label-width="310" :label-style="{paddingLeft: '24rpx'}" prop="Master">
@@ -65,6 +68,7 @@
 		data() {
 			return {
 				form: {
+					Id: null,
 					Name: '',
 					CreditNo: '',
 					Bank: '',
@@ -74,13 +78,13 @@
 					City: '',
 					Country: '',
 					Address: '',
+					Area: '',
 					Master: '',
 					MasterPhone: '',
 					MasterEmail: '',
 					Admin: '',
 					AdminPhone: '',
-					AdminEmail: '',
-					optionId: null
+					AdminEmail: ''
 				},
 				pickerShow: false,
 				rules: {
@@ -115,6 +119,11 @@
 					Address: [{
 						required: true,
 						message: '请输入详细住址',
+						trigger: ['change', 'blur']
+					}],
+					Area: [{
+						required: true,
+						message: '请输入安装区域',
 						trigger: ['change', 'blur']
 					}],
 					Master: [{
@@ -191,7 +200,7 @@
 			}
 		},
 		onLoad(e) {
-			this.optionId = e.id
+			this.form.Id = e.id
 			this.$u.api.getCustomerById({id: e.id}).then(res => {
 				this.form = res.data
 				this.form.region = res.data.Province + '-' + res.data.City + '-' + res.data.Country

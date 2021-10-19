@@ -19,12 +19,6 @@
 					更新公司名字
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
-				<view class="info_ud" @click="updataGPS">
-					更新公司GPS定位
-					<u-icon class="u-font-24" name="arrow-right" />
-				</view>
-			</view>
-			<view class="user_updata info_top">
 				<view class="info_ud" @click="$u.route('pages/my/user')">
 					修改用户信息
 					<u-icon class="u-font-24" name="arrow-right" />
@@ -35,11 +29,11 @@
 				</view>
 			</view>
 			<view class="user_updata info_top_b">
-				<view class="info_ud">
+				<view class="info_ud" @click="openPopup">
 					关于
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
-				<view class="info_ud">
+				<view class="info_ud" @click="openInfo">
 					通知
 					<u-icon class="u-font-24" name="arrow-right" />
 				</view>
@@ -52,9 +46,22 @@
 			:mid-button="true" :border-top="false" />
 		<u-modal v-model="refuseShow" title="更新公司名称" show-cancel-button @confirm="refuseOrderBute">
 			<view class="slot-content">
-				<u-input v-model="company.name" type="textarea" focus border />
+				<u-input v-model="company.name" type="textarea" focus :border="false" />
 			</view>
 		</u-modal>
+		<u-popup v-model="popupShow" mode="bottom" :safe-area-inset-bottom="true" closeable border-radius="24">
+			<view class="pupop_text">
+				<view class="pupop_view">
+					appid: {{appid}}
+				</view>
+				<view class="pupop_view">
+					version: {{version}}
+				</view>
+				<view class="pupop_view">
+					wgtVersion: {{wgtVersion}}
+				</view>
+			</view>
+		</u-popup>
 		<u-modal v-model="sign" content="确定要退出吗？" title="提示" show-cancel-button @confirm="signHandle" />
 		<u-modal v-model="log" content="确定要注销吗？" title="提示" show-cancel-button @confirm="logHandle" />
 	</view>
@@ -75,6 +82,10 @@
 				},
 				avatar: '',
 				refuseShow: false,
+				popupShow: false,
+				appid: '',
+				version: '',
+				wgtVersion: '',
 				sign: false,
 				log: false
 			}
@@ -138,9 +149,6 @@
 			updataName() {
 				this.refuseShow = true
 			},
-			updataGPS() {
-				console.log('2');
-			},
 			signOut() {
 				this.sign = true
 			},
@@ -157,6 +165,22 @@
 				console.log('===> out')
 				uni.clearStorageSync()
 				this.$u.route('pages/Login')
+			},
+			openPopup() {
+				this.popupShow = true
+				// #ifdef APP-PLUS
+				plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
+					this.appid = plus.runtime.appid
+					this.version = plus.runtime.version
+					this.wgtVersion = widgetInfo.version
+					console.log(plus.runtime.appid);
+					console.log(plus.runtime.version);
+					console.log(widgetInfo);
+				})
+				// #endif
+			},
+			openInfo() {
+				this.$u.toast('暂无通知')
 			},
 			logHandle(e) {
 				console.log(e);
@@ -176,7 +200,7 @@
 
 	.user_updata {
 		width: 702rpx;
-		height: 240rpx;
+		// height: 240rpx;
 		background: #FFFFFF;
 		border-radius: 20rpx;
 		position: absolute;
@@ -193,29 +217,20 @@
 			width: 100%;
 			height: 80rpx;
 
-			&:nth-child(1) {
-				border-bottom: 1rpx solid #F5F5F5;
-			}
-
-			&:nth-child(2) {
+			&:nth-child(n-1) {
 				border-bottom: 1rpx solid #F5F5F5;
 			}
 		}
 	}
 
-	.info_top {
-		height: 150rpx;
-		top: 561rpx !important;
-	}
-
 	.info_top_b {
 		height: 150rpx;
-		top: 736rpx !important;
+		top: 680rpx !important;
 	}
 
 	.slot-content {
 		width: 100%;
-		padding: 30rpx;
+		padding: 20rpx 60rpx;
 	}
 
 	.outLogin {
@@ -229,7 +244,7 @@
 		border: 0;
 		background: #FFFFFF;
 		border-radius: 30rpx;
-		top: 940rpx;
+		top: 890rpx;
 		left: 50%;
 		transform: translateX(-50%);
 
@@ -238,7 +253,16 @@
 		}
 	}
 
+	.pupop_text {
+		height: 600rpx;
+		padding: 30rpx 60rpx;
+
+		.pupop_view {
+			padding: 0 24rpx;
+		}
+	}
+
 	.log {
-		top: 1060rpx;
+		top: 1020rpx;
 	}
 </style>

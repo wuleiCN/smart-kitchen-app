@@ -77,6 +77,10 @@
 			}
 		},
 		onLoad() {
+			
+		},
+		onShow() {
+			this.operShow = false;
 			this.$u.api.getCustomersList().then(res => {
 				this.customersList = res.data
 				this.customerShow = true
@@ -85,11 +89,8 @@
 				this.$u.toast(res.data.Message)
 			})
 		},
-		onShow() {
-			this.operShow = false;
-		},
 		mounted() {
-			console.log(this.warning, this.vuex_tabbar)
+			
 		},
 		watch: {
 			'$store.state.vuex_popupShow': {

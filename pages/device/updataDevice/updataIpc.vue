@@ -65,15 +65,7 @@
 				areaShow: false,
 				gatewayList: [],
 				nvrList: [],
-				areaList: [{
-						value: '1',
-						label: '江'
-					},
-					{
-						value: '2',
-						label: '湖'
-					}
-				],
+				areaList: [],
 				rules: {
 					// SDK: [{
 					// 	required: true,
@@ -174,6 +166,7 @@
 				this.$u.api.getCustomrArea({
 					customer: id
 				}).then(res => {
+					if (res.success) this.areaList = res.data
 					console.log(res);
 				}).catch(err => {
 					console.log(err);

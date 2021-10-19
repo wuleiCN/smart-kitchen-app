@@ -31,11 +31,11 @@
 		</view>
 		<u-empty mode="search" v-if="dataListShow" margin-top="40" />
 		<u-modal v-model="distributeShow" content="确定要接单吗？" show-cancel-button @confirm="distribute" />
-		<u-modal v-model="refuseShow" title="退单原因" show-cancel-button @confirm="refuseOrderBute">
+<!-- 		<u-modal v-model="refuseShow" title="退单原因" show-cancel-button @confirm="refuseOrderBute">
 			<view class="slot-content">
 				<u-input v-model="commentValue" type="textarea" border />
 			</view>
-		</u-modal>
+		</u-modal> -->
 		<Modal />
 	</view>
 </template>
@@ -125,7 +125,7 @@
 					if (res.success) {
 						this.orderList = res.data
 						this.orderList.map((v, i) => {
-							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+							v.CreatedOn = v.CreatedOn.slice(0, 10)
 							v.companyName = this.companyList.find(i => v.Company === i.Id).Name
 						})
 						if (!res.data.length) this.orderShow = true

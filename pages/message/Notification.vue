@@ -11,6 +11,7 @@
 				</view>
 			</view>
 		</u-navbar>
+		</div>
 		<view v-show="orderShow">
 			<view class="text-area" v-for="(item,index) in orderDeliver" :key="index+'-only'">
 
@@ -18,15 +19,15 @@
 			<u-empty mode="list" v-if="!orderList.length" margin-top="40" />
 		</view>
 		<u-empty mode="search" v-if="dataListShow" margin-top="40" />
-		<!-- <Modal /> -->
+		<Modal />
 	</view>
 </template>
 
 <script>
-	// import {
-	// 	mapState
-	// } from "vuex"
-	// import Modal from "../../components/modal.vue"
+	import {
+		mapState
+	} from "vuex"
+	import Modal from "../components/modal.vue"
 	export default {
 		data() {
 			return {
@@ -44,8 +45,7 @@
 			}
 		},
 		onShow() {
-			// this.$u.dictionary.getCompanyListFc().then(res => this.companyList = res)
-			// this.getorderInstalled();
+			this.$u.dictionary.getCompanyListFc().then(res => this.companyList = res)
 		},
 		mounted() {
 			console.log(this.warning, this.vuex_tabbar)
@@ -91,6 +91,27 @@
 <style lang="scss" scoped>
 	.content {
 		position: relative;
+		 .user-icon {
+		    position: relative;
+		    margin: 0 auto;
+		    margin-top: 10px;
+		    width: 360px;
+		    height: 360px;
+		  }
+		  .button {
+		    width: 90vw;
+		    height: 50px;
+		    line-height: 50px;
+		    margin: 0 auto;
+		    background-color: skyblue;
+		    color: white;
+		    text-align: center;
+		    border-radius: 5px;
+		    font-size: 16px;
+		  }
+		  video, canvas { 
+		    position: absolute;
+		  }
 
 		.text-area {
 			width: 702rpx;

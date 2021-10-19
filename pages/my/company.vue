@@ -21,8 +21,16 @@
 					<u-input v-model="region" input-align="right" type="select" :select-open="pickerShow"
 						placeholder="所在地区" @click="pickerShow = true" />
 				</u-form-item>
-				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Address">
-					<u-input v-model="form.Address" input-align="right" placeholder="如道路、门牌号、小区等" />
+				<u-form-item label="详细住址" label-width="242" :label-style="{paddingLeft: '24rpx'}"
+					right-icon="arrow-right" prop="Address">
+					<u-input class="u-col-line" v-model="form.Address" input-align="right" disabled placeholder="如道路、门牌号、小区等"
+						@click="getchooseLocation" />
+				</u-form-item>
+				<u-form-item label="精度" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<u-input v-model="form.Lat" input-align="right" disabled placeholder="无数据" />
+				</u-form-item>
+				<u-form-item label="纬度" label-width="242" :label-style="{paddingLeft: '24rpx'}">
+					<u-input v-model="form.Lng" input-align="right" disabled placeholder="无数据" />
 				</u-form-item>
 			</view>
 		</u-form>
@@ -56,7 +64,9 @@
 					Province: '',
 					City: '',
 					Country: '',
-					Address: ''
+					Address: '',
+					Lat: null,
+					Lng: null
 				},
 				region: '',
 				content: '',
@@ -149,6 +159,25 @@
 				this.form.Country = e.area.label
 				this.region = e.province.label + '-' + e.city.label + '-' + e.area.label;
 			},
+			// 获取位置信息
+			getchooseLocation() {
+				uni.chooseLocation({
+					// keyword: true,
+				    success:  res => {
+						this.form.Address = res.address;
+						this.form.Lat = res.latitude;
+						this.form.Lng = res.longitude;
+				        console.log('位置名称：' + res.name);
+				        console.log('详细地址：' + res.address);
+				        console.log('纬度：' + res.latitude);
+				        console.log('经度：' + res.longitude);
+						console.log(res);
+				    },
+					complete: (res) => {
+						console.log(res);
+					}
+				});
+			}
 		}
 	}
 </script>

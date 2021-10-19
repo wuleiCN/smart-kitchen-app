@@ -8,8 +8,8 @@
 			"path": "pages/Login",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -34,8 +34,8 @@
 			"path": "pages/SendSms",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -44,8 +44,8 @@
 			"path": "pages/FindPwd",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -54,8 +54,8 @@
 			"path": "pages/index/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -64,8 +64,8 @@
 			"path": "pages/customer/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -74,8 +74,8 @@
 			"path": "pages/customer/register",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -84,8 +84,8 @@
 			"path": "pages/customer/detail",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -94,8 +94,8 @@
 			"path": "pages/customer/employees",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -104,8 +104,8 @@
 			"path": "pages/autManagement/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -114,8 +114,8 @@
 			"path": "pages/autManagement/correspondLevels",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -124,8 +124,8 @@
 			"path": "pages/autManagement/role",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -134,8 +134,8 @@
 			"path": "pages/autManagement/updataRole",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -144,8 +144,8 @@
 			"path": "pages/autManagement/updataUser",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -154,8 +154,8 @@
 			"path": "pages/autManagement/user",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -164,8 +164,8 @@
 			"path": "pages/company/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -174,8 +174,8 @@
 			"path": "pages/scan/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -184,8 +184,9 @@
 			"path": "pages/my/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
+					"bounce": "none",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -194,8 +195,8 @@
 			"path": "pages/my/user",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -204,8 +205,8 @@
 			"path": "pages/components/u-avatar-cropper",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -214,8 +215,8 @@
 			"path": "pages/my/company",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -224,8 +225,8 @@
 			"path": "pages/my/userPwd",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -234,8 +235,8 @@
 			"path": "pages/message/Index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -244,8 +245,8 @@
 			"path": "pages/message/Detail",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -254,8 +255,18 @@
 			"path": "pages/message/Notification",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
+					"animationType": "slide-in-right"
+				}
+			}
+		},
+		{
+			"path": "pages/message/Face",
+			"style": {
+				"app-plus": {
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -264,8 +275,8 @@
 			"path": "pages/device/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -274,8 +285,8 @@
 			"path": "pages/device/Detail",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -284,8 +295,8 @@
 			"path": "pages/device/deviceScan",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -294,8 +305,8 @@
 			"path": "pages/device/updataDevice/updataAlarm",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -304,8 +315,8 @@
 			"path": "pages/device/updataDevice/updataDtu",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -314,8 +325,8 @@
 			"path": "pages/device/updataDevice/updataFire",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -324,8 +335,8 @@
 			"path": "pages/device/updataDevice/updataGas",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -334,8 +345,8 @@
 			"path": "pages/device/updataDevice/updataGateway",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -344,8 +355,8 @@
 			"path": "pages/device/updataDevice/updataIpc",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -354,8 +365,8 @@
 			"path": "pages/device/updataDevice/updataNvr",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -364,28 +375,8 @@
 			"path": "pages/order/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
-					"animationType": "slide-in-right"
-				}
-			}
-		},
-		{
-			"path": "pages/order/monitor/list",
-			"style": {
-				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
-					"animationType": "slide-in-right"
-				}
-			}
-		},
-		{
-			"path": "pages/order/monitor/flow",
-			"style": {
-				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -394,8 +385,8 @@
 			"path": "pages/order/sale/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -404,8 +395,8 @@
 			"path": "pages/order/sale/selectProduction",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -414,8 +405,8 @@
 			"path": "pages/order/sale/saledevices",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -424,8 +415,8 @@
 			"path": "pages/order/sale/created",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -434,8 +425,8 @@
 			"path": "pages/customer/selector",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -444,8 +435,8 @@
 			"path": "pages/order/distribute/list",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -454,8 +445,8 @@
 			"path": "pages/order/distribute/distribute",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -464,8 +455,8 @@
 			"path": "pages/order/distribute/devicedistribute",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -474,8 +465,8 @@
 			"path": "pages/order/distribute/deviceDelivery",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -484,8 +475,8 @@
 			"path": "pages/order/install/list",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -494,8 +485,8 @@
 			"path": "pages/order/install/installDevice",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -504,8 +495,8 @@
 			"path": "pages/order/install/install",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -514,8 +505,8 @@
 			"path": "pages/order/install/deviceDelivery",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -524,8 +515,8 @@
 			"path": "pages/order/repair/list",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
@@ -534,18 +525,18 @@
 			"path": "pages/order/maintenance/list",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}
 		},
 		{
-			"path": "pages/order/monitor/order_detail",
+			"path": "pages/monitor/index",
 			"style": {
 				"app-plus": {
-					"background": "#0A1121",
-					"bounceBackground": "#0A1121",
+					"background": "#F5F5F5",
+					"bounceBackground": "#F5F5F5",
 					"animationType": "slide-in-right"
 				}
 			}

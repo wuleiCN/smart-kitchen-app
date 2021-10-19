@@ -1,9 +1,9 @@
 <script>
-	import upApp from "@/uni_modules/uni-upgrade-center-app/utils/check-update.js"
+	// import upApp from "@/uni_modules/uni-upgrade-center-app/utils/check-update.js"
 	export default {
 		onLaunch: function() {
+			// upApp()
 			console.log('App Launch')
-			upApp()
 		},
 		onShow: function() {
 			setTimeout(() => {

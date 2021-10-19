@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+require('fast-text-encoding')
 Vue.use(Vuex)
 
 const token = uni.getStorageSync('token')
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
 		// vuex_saleCar: [],
 		// 警报弹出框
 		vuex_popupShow: false,
+		vuex_popupData: '',
 		// 自定义tabbar数据
 		vuex_tabbar: [{
 				pagePath: "/pages/index/index",
@@ -41,8 +43,10 @@ const store = new Vuex.Store({
 			state.vuex_customer = data
 		},
 		setWarning(state,data) {
-			const arr = uni.getStorageSync('warnInfo')
-			if(data.v !== null) uni.setStorageSync('warnInfo', [data.v, ...arr])
+			// const arr = uni.getStorageSync('warnInfo')
+			console.log('vuex===>', data.v);
+			// if(data.v !== null) uni.setStorageSync('warnInfo', data.v)
+			state.vuex_popupData = data.v
 			state.vuex_popupShow = data.t
 		}
 	},

@@ -96,7 +96,7 @@
 				warning: [],
 				deviceList: [],
 				searchList: [],
-				status: 'loadmore',
+				status: 'nomore',
 				page: 1,
 				pageSize: 10,
 				uCancel: false,
@@ -130,12 +130,17 @@
 					page: this.page,
 					pageSize: this.pageSize
 				}).then(res => {
-					this.deviceList = res.data.rows
-					this.deviceList.map((v, i) => {
-						v.NextMaintAt = this.$u.timeFormat(res.data.NextMaintAt, 'yyyy-mm-dd')
-						v.company = c.find(s => v.CompanyId === s.Id).Name
-					})
-					this.deviceListShow = true
+					if (res.success) {
+						this.deviceList = res.data.rows
+						this.deviceList.map((v, i) => {
+							v.NextMaintAt && (v.NextMaintAt = v.NextMaintAt.slice(0, 10))
+							v.company = c.find(s => v.CompanyId === s.Id).Name
+						})
+						this.deviceListShow = true
+					}
+					else {
+						this.$u.toast(res.message)
+					}
 					console.log(res);
 				}).catch(err => {
 					this.$u.toast(err.message)
@@ -167,7 +172,7 @@
 				}).then(res => {
 					if (res.success) {
 						res.data.rows.map((v, i) => {
-							v.NextMaintAt = this.$u.timeFormat(v.NextMaintAt, 'yyyy-mm-dd')
+							v.NextMaintAt && (v.NextMaintAt = v.NextMaintAt.slice(0, 10))
 							v.company = this.companyList.find(s => v.CompanyId === s.Id).Name
 						})
 						this.deviceList = this.deviceList.concat(res.data.rows)
@@ -246,7 +251,7 @@
 				}).then(res => {
 					this.searchList = res.data
 					this.searchList.map((v, i) => {
-						v.NextMaintAt = this.$u.timeFormat(res.data.NextMaintAt, 'yyyy-mm-dd')
+						v.NextMaintAt && (v.NextMaintAt = v.NextMaintAt.slice(0, 10))
 						v.company = this.companyList.find(s => v.CompanyId === s.Id).Name
 					})
 					console.log(res);

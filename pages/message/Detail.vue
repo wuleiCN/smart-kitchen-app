@@ -52,12 +52,14 @@
 				optionId: null,
 				customer: '',
 				company: '',
-				device: ''
+				device: '',
+				src1: 'http://175.6.77.126:9001/api/file/getimage?filename=FaceEvents/1e78af5a-d08f-4b85-b598-0fd1501873d3/face_0.jpg'
 			}
 		},
 		onLoad(e) {
 			uni.showLoading()
 			this.optionId = e.id
+			console.log(e.status);
 			this.$u.debounce(() => {
 				this.$u.api.alarmUnreadById({
 					id: e.id
@@ -134,6 +136,9 @@
 			}
 			.u-form-item--right__content__slot {
 				justify-content: flex-end;
+			}
+			.u-form-item--right {
+				padding-right: 24rpx;
 			}
 		}
 	}

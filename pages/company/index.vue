@@ -94,6 +94,7 @@
 		mapState
 	} from "vuex"
 	import Modal from "../components/modal.vue"
+	import upApp from "@/uni_modules/uni-upgrade-center-app/utils/check-update.js"
 	// import { getAlarmtype } from "../../common/dictionary.js"
 	export default {
 		components: {
@@ -154,8 +155,9 @@
 						url: 'pages/device/Detail'
 					},
 					{
-						text: '日志管理',
-						src: '../../static/icon/Log.png'
+						text: '视频监控',
+						src: '../../static/icon/Log.png',
+						url: 'pages/monitor/index'
 					}
 				]
 			}
@@ -177,6 +179,11 @@
 					})
 					// console.log(res, this.alarmUnread);
 				})
+			}
+			if (uni.getStorageSync('token')) {
+				setTimeout(() => {
+					upApp()
+				},5000)
 			}
 		},
 		watch: {

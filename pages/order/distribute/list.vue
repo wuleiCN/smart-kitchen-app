@@ -141,7 +141,7 @@
 					if (res.success) {
 						this.orderList = res.data
 						this.orderList.map((v, i) => {
-							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+							v.CreatedOn = v.CreatedOn.slice(0, 10)
 							v.companyName = this.companyList.find(i => v.Company === i.Id).Name
 						})
 						if (!res.data.length) this.orderShow = true
@@ -155,12 +155,13 @@
 					if (res.success) {
 						this.orderDeliver = res.data
 						this.orderDeliver.map((v, i) => {
-							v.CreatedOn = this.$u.timeFormat(res.data.CreatedOn, 'yyyy-mm-dd')
+							v.CreatedOn = v.CreatedOn.slice(0, 10)
 							v.companyName = this.companyList.find(i => v.Company === i.Id).Name
 						})
 						if (!res.data.length) this.orderShow = true
 					} else this.$u.toast(res.message)
 					console.log(res)
+					console.log(res.data[0].CreatedOn);
 				})
 			},
 			// 获得指定销售订单

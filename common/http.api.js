@@ -4,8 +4,14 @@ const install = (Vue, vm) => {
 
 	// 登录
 	let Login = (params = {}) => vm.$u.get('api/account/loginbyaccount', params);
+	// 获取手机验证码
+	let sendloginvercode= (params = {}) => vm.$u.post('/api/account/sendloginvercode', params);
+	// 手机号码登录
+	let loginbyphone = (params = {}) => vm.$u.get('/api/account/loginbyphone', params);
 	// 当前用户信息
 	let getInfo = (params = {}) => vm.$u.get('api/users/current/getinfo');
+	// 重置用户密码
+	let resetpassword= (params = {}) => vm.$u.post('/api/account/resetpassword', params);
 	// 获得所有公司信息
 	let getcompanyAll = (params = {}) => vm.$u.get('api/company/getall');
 	
@@ -146,6 +152,12 @@ const install = (Vue, vm) => {
 	let processExecute = (params = {}) => vm.$u.post('api/message/alarm/process/execute', params)
 	// 报警消息复位
 	let processReset = (params = {}) => vm.$u.post('api/message/alarm/process/reset', params)
+	// 获得人脸消息列表
+	let faceList = (params = {}) => vm.$u.get('/api/message/face/list', params)
+	// 获得指定人脸消息内容
+	let faceGetById = (params = {}) => vm.$u.get('/api/message/face/get', params)
+	// 获得指定人脸消息详情
+	let faceeventById = (params = {}) => vm.$u.get('/api/faceevent/getbyid', params)
 	
 	// ====设备管理====
 	
@@ -195,6 +207,8 @@ const install = (Vue, vm) => {
 	let getGateway = (params = {}) => vm.$u.get('api/model/gateway/getall', params)
 	// 获得所有IPC网络摄像机型号
 	let getIpc = (params = {}) => vm.$u.get('api/model/ipc/getall', params)
+	// 获得指定IPC网络摄像机设备信息
+	let getIpcById = (params = {}) => vm.$u.get('/api/device/find/ipc', params)
 	// 获得所有NVR网络硬盘录像机型号
 	let getNvr = (params = {}) => vm.$u.get('api/model/nvr/getall', params)
 	// 按设备名称查找当前组织下所有设备信息
@@ -295,6 +309,9 @@ const install = (Vue, vm) => {
 
 	vm.$u.api = {
 		Login,
+		sendloginvercode,
+		resetpassword,
+		loginbyphone,
 		getInfo,
 		getcompanyAll,
 		updataCompany,
@@ -336,6 +353,9 @@ const install = (Vue, vm) => {
 		alarmUnreadAll,
 		alarmUnreadById,
 		processReset,
+		faceList,
+		faceGetById,
+		faceeventById,
 		processExecute,
 		deviceComplexfind,
 		modelGetall,
@@ -359,6 +379,7 @@ const install = (Vue, vm) => {
 		getFire,
 		getGas,
 		getIpc,
+		getIpcById,
 		getGateway,
 		getNvr,
 		getSearchbyName,

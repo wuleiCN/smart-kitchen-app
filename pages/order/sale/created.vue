@@ -13,8 +13,8 @@
 				<u-form-item label="联系电话" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Phone">
 					<u-input v-model="form.Phone" input-align="right" placeholder="请输入联系电话" />
 				</u-form-item>
-				<u-form-item label="联系地址" label-width="242" :label-style="{paddingLeft: '24rpx'}" prop="Address">
-					<u-input v-model="form.Address" input-align="right" placeholder="请输入联系地址" />
+				<u-form-item label="联系地址" label-width="242" :label-style="{paddingLeft: '24rpx'}" right-icon="arrow-right">
+					<u-input v-model="form.Address" input-align="right" placeholder="请输入联系地址" @click="getchooseLocation" />
 				</u-form-item>
 			</view>
 			<view class="info area">
@@ -136,6 +136,23 @@
 				})
 				console.log(e);
 			},
+			// 获取位置信息
+			getchooseLocation() {
+				uni.chooseLocation({
+					// keyword: true,
+				    success:  res => {
+						this.form.Address = res.address;
+				        console.log('位置名称：' + res.name);
+				        console.log('详细地址：' + res.address);
+				        console.log('纬度：' + res.latitude);
+				        console.log('经度：' + res.longitude);
+						console.log(res);
+				    },
+					complete: (res) => {
+						console.log(res);
+					}
+				});
+			}
 		}
 	}
 </script>

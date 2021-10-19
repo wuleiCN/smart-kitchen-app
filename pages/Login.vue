@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="Login">
-			<u-image width="100%" height="150rpx" src="/static/Logo.png" mode="aspectFit" />
+			<u-image width="150rpx" height="150rpx" src="/static/Logo.jpg" shape="circle" mode="aspectFit" />
 		</view>
 		<view class="circle"></view>
 		<view v-show="isPwd" class="Login_pwd">
@@ -22,7 +22,7 @@
 			<button class="sign_ck" @tap="login">确 定</button>
 			<view class="register">
 				<span>还没有账号？</span>
-				<a>立即注册</a>
+				<a @click="registered">立即注册</a>
 			</view>
 		</view>
 		<view v-show="!isPwd" class="Login_pwd">
@@ -32,8 +32,8 @@
 						placeholder-style="color: #CCCCCC;fontSize: 28rpx" trim />
 				</u-form-item>
 				<u-form-item lable="+86" :border-bottom="false">
-					<u-field label-width="0" placeholder-style="color: #CCCCCC;fontSize: 28rpx"
-						placeholder="请输入验证码" :border-bottom="false" trim>
+					<u-field label-width="0" v-model="code" placeholder-style="color: #CCCCCC;fontSize: 28rpx" placeholder="请输入验证码"
+						:border-bottom="false" trim>
 						<u-button size="mini" slot="right" @click="getCode">{{codeText}}
 						</u-button>
 					</u-field>
@@ -41,7 +41,7 @@
 				</u-form-item>
 			</u-form>
 			<button class="sign_ck" @tap="sendCode" :disabled="isTure">
-				获取短信验证码</button>
+				确 定</button>
 			<view class="register">
 				<a @click="ckPwd">返回密码登录</a>
 			</view>
@@ -63,6 +63,7 @@
 				},
 				smsMsg: '',
 				codeText: '',
+				code: null,
 				isPwd: true,
 				isTure: true,
 				user: uni.getStorageSync('userInfo'),
@@ -138,29 +139,32 @@
 						console.log(err)
 					})
 					console.log(res);
-					if (!res.success) {
-						this.$u.toast(res.message + ', 请重新登录');
-					}
-					if (res !== undefined) {
-						uni.setStorageSync('token', res.data.Token)
-						const info = await this.$u.api.getInfo().catch(err => {
-							console.log(err)
-						})
-						console.log(info)
-						if (info !== undefined) {
-							uni.setStorageSync('userInfo', info.data)
-							// this.getDictionary()
-							uni.switchTab({
-								url: '/pages/index/index'
-							});
-						} else {
-							this.$u.toast('发生错误，请重新登陆！')
-							return false
-						}
+					this.loginFn(res)
+				}
+			},
+			async loginFn(res) {
+				if (!res.success) {
+					this.$u.toast(res.message + ', 请重新登录');
+				}
+				if (res !== undefined) {
+					uni.setStorageSync('token', res.data.Token)
+					const info = await this.$u.api.getInfo().catch(err => {
+						console.log(err)
+					})
+					console.log(info)
+					if (info !== undefined) {
+						uni.setStorageSync('userInfo', info.data)
+						// this.getDictionary()
+						uni.switchTab({
+							url: '/pages/index/index'
+						});
 					} else {
 						this.$u.toast('发生错误，请重新登陆！')
 						return false
 					}
+				} else {
+					this.$u.toast('发生错误，请重新登陆！')
+					return false
 				}
 			},
 			ckSms() {
@@ -168,6 +172,10 @@
 			},
 			ckPwd() {
 				this.isPwd = true
+			},
+			// 注册
+			registered() {
+				this.$u.toast('暂未对外开放注册功能，请联系公司管理人员！')
 			},
 			// 忘记密码
 			findPwd() {
@@ -177,9 +185,21 @@
 			codeChange(text) {
 				this.codeText = text;
 			},
-			sendCode() {},
+			async sendCode() {
+				if (this.code) {
+					const res = await this.$u.api.loginbyphone({
+						phone: this.model.iphone,
+						vercode: this.code
+					}).catch(err => {
+						console.log(err);
+					})
+					this.loginFn(res)
+				} else {
+					this.$u.toast('请输入验证码')
+				}
+			},
 			getCode() {
-				if (this.$refs.uCode.canGetCode) {
+				if (this.$refs.uCode.canGetCode && this.model.iphone) {
 					// 模拟向后端请求验证码
 					uni.showLoading({
 						title: '正在获取验证码'
@@ -188,6 +208,11 @@
 						uni.hideLoading();
 						// 通知验证码组件内部开始倒计时
 						this.$refs.uCode.start();
+						this.$u.post(`/api/account/sendloginvercode?phone=${this.model.iphone}`).then(res => {
+							if (!res.success) this.$u.toast('获取验证码失败')
+						}).catch(err => {
+							console.log(err);
+						})
 					}, 1000);
 				} else {
 					this.$u.toast('倒计时结束后再发送');
@@ -213,7 +238,9 @@
 		background-image: url(../static/NavBar.png);
 
 		.u-image {
-			transform: translateY(150%);
+			margin-left: 50%;
+			transform: translateX(-50%);
+			top: 60%;
 			z-index: 999;
 		}
 	}
@@ -266,7 +293,7 @@
 		margin-top: 40rpx;
 
 		a {
-			font-size: 20rpx;
+			font-size: 32rpx;
 			color: #d5d5d5
 		}
 	}
@@ -287,12 +314,13 @@
 	.sign_ck {
 		width: 600rpx;
 		height: 88rpx;
-		font-size: 32rpx;
+		font-size: 36rpx;
 		background: #CCCCCC;
 		border-radius: 20rpx;
 		margin-top: 60rpx;
 		color: #FFFFFF;
 		background: #FB8D50;
+
 		&:after {
 			border: 0 !important;
 		}

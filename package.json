@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "axios": "^0.21.1",
+    "fast-text-encoding": "^1.0.3",
     "min-qs": "^1.4.0",
     "mqtt": "^3.0.0"
   },

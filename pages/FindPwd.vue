@@ -7,8 +7,8 @@
 					placeholder-style="color: #bbbbbb;fontSize: 30rpx" placeholder="请输入手机号" trim />
 			</view>
 			<view class="findPwd">
-				<u-field v-model="iphCode" label-width="0" :error-message="iphMsg" placeholder-style="color: #bbbbbb;fontSize: 30rpx"
-					placeholder="请输入验证码" trim>
+				<u-field v-model="iphCode" label-width="0" :error-message="iphMsg"
+					placeholder-style="color: #bbbbbb;fontSize: 30rpx" placeholder="请输入验证码" trim>
 					<u-button size="mini" slot="right" @click="getCode">{{codeText}}
 					</u-button>
 				</u-field>
@@ -89,7 +89,19 @@
 			codeChange(text) {
 				this.codeText = text;
 			},
-			sendCode() {},
+			sendCode() {
+				if (this.iphCode) {
+					this.$u.api.resetpassword({
+						Phone: this.iphone,
+						VerifyCode: this.iphCode,
+						Password: this.password,
+						ConfirmPassword: this.isPassword
+					}).then(res => {
+						if (res.success) this.$u.toast('重置密码成功')
+						else this.$u.toast(res.message)
+					})
+				}
+			},
 			getCode() {
 				if (this.$refs.uCode.canGetCode) {
 					// 模拟向后端请求验证码
@@ -100,6 +112,9 @@
 						uni.hideLoading();
 						// 通知验证码组件内部开始倒计时
 						this.$refs.uCode.start();
+						this.$u.post(`/api/account/sendpasswordvercode?phone=${this.iphCode}`).then(res => {
+							if (!res.success) this.$u.toast('获取验证码失败')
+						})
 					}, 1000);
 				} else {
 					this.$u.toast('倒计时结束后再发送');
